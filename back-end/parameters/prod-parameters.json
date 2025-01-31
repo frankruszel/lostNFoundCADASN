@@ -1,6 +1,10 @@
 [
     {
-      "ParameterKey": "AmplifyStage",
-      "ParameterValue": "PRODUCTION"
+        "ParameterKey": "AmplifyStage",
+        "ParameterValue": "PRODUCTION"
+    },
+    {
+        "ParameterKey": "Environment",
+        "ParameterValue": "prod"
     }
-  ]
+]

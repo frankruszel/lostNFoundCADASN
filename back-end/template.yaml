@@ -4,6 +4,8 @@ AWSTemplateFormatVersion: "2010-09-09"
 Parameters:
   AmplifyStage:
     Type: String  
+  Environment:
+    Type: String
 
 Resources:
   # ------------------------------  START Amplify Stack ------------------------------  #
@@ -12,7 +14,8 @@ Resources:
     Type: "AWS::Amplify::App"
     DeletionPolicy: "Delete"
     Properties:
-      
+      Tags:
+        - Stage: !Sub ${Environment}        
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
         - "https://github.com/${GithubOwner}/${AppRepositoryName}"
