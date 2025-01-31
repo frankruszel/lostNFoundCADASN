@@ -19,7 +19,7 @@ Metadata:
 Parameters:
   ProjectSubfolder:
     Type: String
-    Default: /dev
+    Default: /
   ResourceNamePrefix:
     Description: Please specify the prefix for all the resources
     Type: String
@@ -105,7 +105,7 @@ Resources:
               Ref: GithubBranch
           Name: Source-Action
           OutputArtifacts:
-          - Name: SourceArtifact
+          - Name: SourceCodeAsZip
           RunOrder: 1
       - Name: UpdatePipeline
         Actions:
