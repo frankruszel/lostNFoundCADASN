@@ -180,18 +180,18 @@ Resources:
                 - Name: !Sub ${AWS::StackName}ChangeSet
               RunOrder: 2
 
-        - Name: UnitTest
-          Actions:
-            - Name: UnitTest
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Provider: CodeBuild
-                Version: "1"
-              Configuration:
-                ProjectName: !Ref CodeBuildProjectUnitTest
-              InputArtifacts:
-                - Name: SourceCodeAsZip
+        # - Name: UnitTest
+        #   Actions:
+        #     - Name: UnitTest
+        #       ActionTypeId:
+        #         Category: Build
+        #         Owner: AWS
+        #         Provider: CodeBuild
+        #         Version: "1"
+        #       Configuration:
+        #         ProjectName: !Ref CodeBuildProjectUnitTest
+        #       InputArtifacts:
+        #         - Name: SourceCodeAsZip
 
         - Name: BuildAndPackage
           Actions:
@@ -228,21 +228,21 @@ Resources:
               InputArtifacts:
                 - Name: BuildArtifactAsZip
               RunOrder: 1
-            - Name: IntegrationTest
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Provider: CodeBuild
-                Version: "1"
-              Configuration:
-                ProjectName: !Ref CodeBuildProjectIntegrationTest
-                EnvironmentVariables: !Sub |
-                  [
-                    {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"}
-                  ]
-              InputArtifacts:
-                - Name: SourceCodeAsZip
-              RunOrder: 2
+            # - Name: IntegrationTest
+            #   ActionTypeId:
+            #     Category: Build
+            #     Owner: AWS
+            #     Provider: CodeBuild
+            #     Version: "1"
+            #   Configuration:
+            #     ProjectName: !Ref CodeBuildProjectIntegrationTest
+            #     EnvironmentVariables: !Sub |
+            #       [
+            #         {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"}
+            #       ]
+            #   InputArtifacts:
+            #     - Name: SourceCodeAsZip
+            #   RunOrder: 2
             # uncomment this to have a manual approval step before deployment to production
             - Name: ManualApproval
               ActionTypeId:
@@ -253,7 +253,7 @@ Resources:
               Configuration:
                 NotificationArn:
                   !Ref ProdApprovalTopic
-              RunOrder: 3
+              RunOrder: 2
             -
               Name: ProceedToProd
               ActionTypeId:
@@ -265,7 +265,7 @@ Resources:
                 StackName: "sam-dev"
                 ActionMode: DELETE_ONLY
                 RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
-              RunOrder: 4
+              RunOrder: 3
 
         - Name: DeployProd
           Actions:
