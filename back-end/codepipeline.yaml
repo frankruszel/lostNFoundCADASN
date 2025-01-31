@@ -417,7 +417,20 @@ Resources:
                   - cloudformation:ValidateTemplate
                 Resource:
                   - !Sub "arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${AWS::StackName}/*"
-
+              - Effect: Allow
+                Action: 
+                  - cloudformation:CreateStack
+                  - cloudformation:DescribeStacks
+                  - cloudformation:DeleteStack
+                  - cloudformation:UpdateStack
+                  - cloudformation:CreateChangeSet
+                  - cloudformation:ExecuteChangeSet
+                  - cloudformation:DeleteChangeSet
+                  - cloudformation:DescribeChangeSet
+                  - cloudformation:SetStackPolicy
+                  - cloudformation:SetStackPolicy
+                  - cloudformation:ValidateTemplate
+                Resource: ["arn:aws:cloudformation:us-east-1:992382578667:stack/sam-dev",arn:aws:cloudformation:us-east-1:992382578667:stack/sam-prod]
   # PipelineStackCloudFormationExecutionRole is used for the pipeline to self mutate
   PipelineStackCloudFormationExecutionRole:
     Type: AWS::IAM::Role
@@ -437,11 +450,7 @@ Resources:
               - Effect: Allow
                 Action: "*"
                 Resource: "*"
-              - Effect: Allow
-                Action: 
-                  - cloudformation:DeleteStack
-				          - cloudformation:Describe*
-                Resource: "*"
+
 
   #   ____          _      ____        _ _     _
   #  / ___|___   __| | ___| __ ) _   _(_| | __| |

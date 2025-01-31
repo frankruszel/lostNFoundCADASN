@@ -12,6 +12,7 @@ Resources:
     Type: "AWS::Amplify::App"
     DeletionPolicy: "Delete"
     Properties:
+      
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
         - "https://github.com/${GithubOwner}/${AppRepositoryName}"
