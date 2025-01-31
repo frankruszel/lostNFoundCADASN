@@ -229,6 +229,18 @@ Resources:
               InputArtifacts:
                 - Name: SourceCodeAsZip
               RunOrder: 2
+            -
+              Name: ProceedToProd
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Version: 1
+                Provider: CloudFormation
+              Configuration:
+                StackName: "sam-dev"
+                ActionMode: DELETE_ONLY
+                RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
+              RunOrder: 3
 
         - Name: DeployProd
           Actions:
