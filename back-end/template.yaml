@@ -10,7 +10,7 @@ Resources:
     Properties:
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
-        - "${GithubOwner}/${AppRepositoryName}"
+        - "https://github.com/${GithubOwner}/${AppRepositoryName}"
         - GithubOwner: !ImportValue GithubOwnerOutput
           AppRepositoryName: !ImportValue AppRepositoryNameOutput
       # EnvironmentVariables:
