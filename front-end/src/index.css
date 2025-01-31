@@ -12,4 +12,23 @@ body, html {
     font-weight: 400;
     font-style: normal;
   }
+
+
+
+  .AppBar a {
+    color: black;
+    text-decoration: none;
+    margin-right: 16px;
+  }
+  
+  .AppBar button {
+    color: inherit;
+    margin-left: 12px;
+  }
+  .pac-container {
+    z-index: 9999;
+  }
+  
+  
+  
   

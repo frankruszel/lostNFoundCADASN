@@ -3,9 +3,14 @@ import Homepage from './pages/Homepage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import PasswordResetPage from './pages/PasswordResetPage'
+import StaffDashboard from './pages/StaffDashboard'
 
 const PublicRoutes = [
    
+    {
+        path: "/staff/dashboard",
+        element: <StaffDashboard />,
+    },
     {
         path: "/home",
         element: <Homepage />,
