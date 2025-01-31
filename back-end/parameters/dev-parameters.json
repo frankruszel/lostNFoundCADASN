@@ -1,5 +1,6 @@
 [
     {
-        "AmplifyStage": "DEVELOPMENT"
+      "ParameterKey": "AmplifyStage",
+      "ParameterValue": "PRODUCTION"
     }
-]
+  ]
