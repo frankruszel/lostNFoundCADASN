@@ -1,0 +1,108 @@
+Description: Root Stack, contains all the resources needed for the application
+AWSTemplateFormatVersion: "2010-09-09"
+
+Resources:
+  # ------------------------------  START Amplify Stack ------------------------------  #
+  AmplifyApp:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Amplify::App"
+    DeletionPolicy: "Retain"
+    Properties:
+      AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
+      Repository: !Sub
+        - "${GithubOwner}/${AppRepositoryName}"
+        - GithubOwner: !ImportValue GithubOwner
+        - AppRepositoryName: !ImportValue AppRepositoryName
+      # EnvironmentVariables:
+      # - Name: REACT_APP_ADMIN_SECRET_KEY_ID
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_ADMIN_SECRET_KEY_ID}}'
+      # - Name: REACT_APP_GOOGLE_AUTH_PROVIDER_CLIENT_ID
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_GOOGLE_AUTH_PROVIDER_CLIENT_ID}}'
+      # - Name: REACT_APP_COGNITO_CLIENT_ID
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_COGNITO_CLIENT_ID}}'
+      # - Name: AMPLIFY_MONOREPO_APP_ROOT
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:AMPLIFY_MONOREPO_APP_ROOT}}'
+      # - Name: REACT_APP_COGNITO_AUTH_FLOW
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_COGNITO_AUTH_FLOW}}'
+      # - Name: REACT_APP_REDIRECT_URI
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_REDIRECT_URI}}'
+      # - Name: AMPLIFY_DIFF_DEPLOY
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:AMPLIFY_DIFF_DEPLOY}}'
+      # - Name: REACT_APP_ADMIN_ACCESS_KEY_ID
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_ADMIN_ACCESS_KEY_ID}}'
+      # - Name: REACT_APP_COGNITO_REFRESH_TOKEN_FLOW
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_COGNITO_REFRESH_TOKEN_FLOW}}'
+      # - Name: REACT_APP_AWS_REGION
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_AWS_REGION}}'
+      # - Name: REACT_APP_FACEBOOK_SSO_APP_ID
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_FACEBOOK_SSO_APP_ID}}'
+      # - Name: REACT_APP_ECOWISE_API_URL
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_ECOWISE_API_URL}}'
+      # - Name: REACT_APP_COGNITO_OAUTH_DOMAIN
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_COGNITO_OAUTH_DOMAIN}}'
+      # - Name: REACT_APP_COGNITO_SMS_MFA_CHALLENGE
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_COGNITO_SMS_MFA_CHALLENGE}}'
+      # - Name: REACT_APP_USER_POOL_ID
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_USER_POOL_ID}}'
+      # - Name: REACT_APP_ECOWISE_PREFERENCE_API_URL
+      #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_ECOWISE_PREFERENCE_API_URL}}'
+      Platform: "WEB"
+      EnableBranchAutoDeletion: false
+      BuildSpec: |
+        version: 1
+        applications:
+          - frontend:
+              phases:
+                preBuild:
+                  commands:
+                    - npm ci --cache .npm --prefer-offline
+                build:
+                  commands:
+                    - npm run build
+              artifacts:
+                baseDirectory: build
+                files:
+                  - "**/*"
+              cache:
+                paths:
+                  - .npm/**/*
+            appRoot: front-end
+      CustomRules:
+        - Status: "404-200"
+          Target: "/index.html"
+          Source: "/<*>"
+        - Status: "200"
+          Target: "/index.html"
+          Source: "</^[^.]+$|\\.(?!(css|gif|ico|jpg|jpeg|webp|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/>"
+      CacheConfig:
+        Type: "AMPLIFY_MANAGED"
+      CustomHeaders: ""
+      Name: "ClaimIt"
+
+  AmplifyBranch:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::Amplify::Branch"
+    DeletionPolicy: "Retain"
+    DependsOn:
+      - AmplifyApp
+    Properties:
+      Backend: {}
+      AppId: !GetAtt AmplifyApp.AppId
+      EnablePullRequestPreview: false
+      EnableAutoBuild: true
+      EnablePerformanceMode: false
+      Stage: "prod"
+      BranchName: "main"
+      Framework: "React"
+  # ------------------------------  END Amplify Stack  ------------------------------  #
+# Outputs:
+#   TriggerCheckBudgetCostOverrunTopicOutput:
+#     Description: "TriggerCheckBudgetCostOverrunTopic"
+#     Value: !GetAtt TriggerCheckBudgetCostOverrunTopic.TopicArn
+#     Export:
+#       Name: TriggerCheckBudgetCostOverrunTopicOutput
+#   TriggerNotificationSendTopicOutput:
+#     Description: "TriggerNotificationSendTopic"
+#     Value: !GetAtt TriggerNotificationSendTopic.TopicArn
+#     Export:
+#       Name: TriggerNotificationSendTopicOutput
