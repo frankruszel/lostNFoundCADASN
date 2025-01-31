@@ -208,64 +208,64 @@ Resources:
               OutputArtifacts:
                 - Name: BuildArtifactAsZip
 
-        - Name: DeployTest
-          Actions:
-            - Name: DeployTest
-              ActionTypeId:
-                Category: Build
-                Owner: AWS
-                Provider: CodeBuild
-                Version: "1"
-              Configuration:
-                ProjectName: !Ref CodeBuildProjectDeploy
-                EnvironmentVariables: !Sub |
-                  [
-                    {"name": "ENV_NAME", "value": "prod"},
-                    {"name": "ENV_CONFIG_NAME", "value": "${TestConfigEnvName}"},
-                    {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"},
-                    {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${TestingCloudFormationExecutionRole}"}
-                  ]
-              InputArtifacts:
-                - Name: BuildArtifactAsZip
-              RunOrder: 1
-            # - Name: IntegrationTest
-            #   ActionTypeId:
-            #     Category: Build
-            #     Owner: AWS
-            #     Provider: CodeBuild
-            #     Version: "1"
-            #   Configuration:
-            #     ProjectName: !Ref CodeBuildProjectIntegrationTest
-            #     EnvironmentVariables: !Sub |
-            #       [
-            #         {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"}
-            #       ]
-            #   InputArtifacts:
-            #     - Name: SourceCodeAsZip
-            #   RunOrder: 2
-            # uncomment this to have a manual approval step before deployment to production
-            - Name: ManualApproval
-              ActionTypeId:
-               Category: Approval
-               Owner: AWS
-               Provider: Manual
-               Version: "1"
-              Configuration:
-                NotificationArn:
-                  !Ref ProdApprovalTopic
-              RunOrder: 2
-            -
-              Name: ProceedToProd
-              ActionTypeId:
-                Category: Deploy
-                Owner: AWS
-                Version: 1
-                Provider: CloudFormation
-              Configuration:
-                StackName: "sam-dev"
-                ActionMode: DELETE_ONLY
-                RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
-              RunOrder: 3
+        # - Name: DeployTest
+        #   Actions:
+        #     - Name: DeployTest
+        #       ActionTypeId:
+        #         Category: Build
+        #         Owner: AWS
+        #         Provider: CodeBuild
+        #         Version: "1"
+        #       Configuration:
+        #         ProjectName: !Ref CodeBuildProjectDeploy
+        #         EnvironmentVariables: !Sub |
+        #           [
+        #             {"name": "ENV_NAME", "value": "prod"},
+        #             {"name": "ENV_CONFIG_NAME", "value": "${TestConfigEnvName}"},
+        #             {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"},
+        #             {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${TestingCloudFormationExecutionRole}"}
+        #           ]
+        #       InputArtifacts:
+        #         - Name: BuildArtifactAsZip
+        #       RunOrder: 1
+        #     # - Name: IntegrationTest
+        #     #   ActionTypeId:
+        #     #     Category: Build
+        #     #     Owner: AWS
+        #     #     Provider: CodeBuild
+        #     #     Version: "1"
+        #     #   Configuration:
+        #     #     ProjectName: !Ref CodeBuildProjectIntegrationTest
+        #     #     EnvironmentVariables: !Sub |
+        #     #       [
+        #     #         {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"}
+        #     #       ]
+        #     #   InputArtifacts:
+        #     #     - Name: SourceCodeAsZip
+        #     #   RunOrder: 2
+        #     # uncomment this to have a manual approval step before deployment to production
+        #     - Name: ManualApproval
+        #       ActionTypeId:
+        #        Category: Approval
+        #        Owner: AWS
+        #        Provider: Manual
+        #        Version: "1"
+        #       Configuration:
+        #         NotificationArn:
+        #           !Ref ProdApprovalTopic
+        #       RunOrder: 2
+        #     -
+        #       Name: ProceedToProd
+        #       ActionTypeId:
+        #         Category: Deploy
+        #         Owner: AWS
+        #         Version: 1
+        #         Provider: CloudFormation
+        #       Configuration:
+        #         StackName: "sam-dev"
+        #         ActionMode: DELETE_ONLY
+        #         RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
+        #       RunOrder: 3
 
         - Name: DeployProd
           Actions:
