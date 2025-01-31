@@ -58,10 +58,13 @@ export const lambdaHandler = async (event, context) => {
     }
 
     // Generate UUID for item and process rooms
+    const itemId = uuidv4();
+
 
     const itemData = {
       userId,
-      name: item.title,
+      itemId:itemId,
+      name: item.name,
       description: item.description,
       image_url: item.image_url,
       status: item.status, // lost (someone is finding this), found (someone has found a lost item), claimed (someone claimed a lost item)

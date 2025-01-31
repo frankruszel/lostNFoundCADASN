@@ -1,5 +1,5 @@
 import { useState, useEffect, React } from 'react';
-import { Container, AppBar, Toolbar, Typography, Box, Button, IconButton, Avatar, MenuItem } from '@mui/material';
+import { Container,Grid, AppBar, Toolbar, Typography, Box, Button, IconButton, Avatar, MenuItem } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -21,14 +21,14 @@ function ActualNavbar() {
     };
 
     return (
-        <AppBar position="static" className="AppBar" sx={{ backgroundColor: "primaryColor"}} > 
+        <AppBar position="static" className="AppBar" sx={{ backgroundColor: "white", display:'flex' }} > 
 
             {
                 (!user || user.role != "Staff" && user.role != "Company") &&
-                <Container sx={{}}>
+                <Grid sx={{ padding:0, mr:0, width:"inherit"}}> 
                     <Toolbar disableGutters={true}>
-                        <Link to="/" >
-                            <img src="https://i.ibb.co/4R8WzBs/ecowise.png" alt="UPlay" width="110px" />
+                        <Link to="/" style={{marginLeft:150}}>
+                            <img src="https://i.ibb.co/gMrcy0cr/download-10.png" alt="UPlay" width="110px" />
                         </Link>
                         {
                             user &&
@@ -39,14 +39,10 @@ function ActualNavbar() {
                             <Box sx={{ flexGrow: 0.37 }}></Box>
                         }
 
-                        <Link to="/events" ><Typography color="white" variant='navbar'>Browse Activites</Typography></Link>
-                        <Box sx={{ flexGrow: 0.1 }}></Box>
-                        <Link to="/posts" ><Typography color="white" variant='navbar'>Forum</Typography></Link>
-                        <Box sx={{ flexGrow: 0.1 }}></Box>
-                        <Link to="/faq" ><Typography color="white" variant='navbar'>Contact Us </Typography></Link>
-                        <Box sx={{ flexGrow: 0.1 }}></Box>
-                        <Link to="/membership" ><Typography color="white" variant='navbar'>Membership </Typography></Link>
-                        <Box sx={{ flexGrow: 0.35 }}></Box>
+                        <Link to="/events" ><Typography color="grey" variant='navbar'>Browse Items</Typography></Link>
+                        <Box sx={{ flexGrow: 0.2 }}></Box>
+                        <Link to="/faq" ><Typography color="grey" variant='navbar'> Found Item </Typography></Link>
+                        <Box sx={{ flexGrow: 0.65}}></Box>
 
 
                         {user && (
@@ -70,6 +66,7 @@ function ActualNavbar() {
 
 
                                 <Menu
+                                sx={{mr:150}}
                                     id="simple-menu"
                                     anchorEl={anchorEl}
                                     keepMounted
@@ -112,7 +109,7 @@ function ActualNavbar() {
                             </>
                         )}
                     </Toolbar>
-                </Container>
+                </Grid>
             }
 
             {
