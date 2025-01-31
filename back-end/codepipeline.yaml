@@ -204,13 +204,12 @@ Resources:
                 Version: "1"
               Configuration:
                 ProjectName: !Ref CodeBuildProjectDeploy
-                EnvironmentVariables: 
-                  - Name: ENV_CONFIG_NAME
-                    Value: !Sub "${TestConfigEnvName}"
-                  - Name: ENV_PIPELINE_EXECUTION_ROLE
-                    Value: !Sub "${TestingPipelineExecutionRole}"
-                  - Name: ENV_CLOUDFORMATION_EXECUTION_ROLE
-                    Value: !Sub "${TestingCloudFormationExecutionRole}"
+                EnvironmentVariables: !Sub |
+                  [
+                    {"name": "ENV_CONFIG_NAME", "value": "${TestConfigEnvName}"},
+                    {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"},
+                    {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${TestingCloudFormationExecutionRole}"}
+                  ]
               InputArtifacts:
                 - Name: BuildArtifactAsZip
               RunOrder: 1
@@ -425,10 +424,6 @@ Resources:
             Statement:
               - Effect: Allow
                 Action: "*"
-                Resource: "*"
-              - Effect: Allow
-                Action:
-                  - "cloudformation:*"
                 Resource: "*"
 
   #   ____          _      ____        _ _     _
@@ -695,5 +690,5 @@ Outputs:
   AppRepositoryName:
     Value: !Ref AppRepositoryName
     Export:
-      Name: AppRepositoryNameOutput
+      Name: AppRepositoryName
 
