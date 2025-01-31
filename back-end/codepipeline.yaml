@@ -78,6 +78,9 @@ Parameters:
     Type: String
     Description: "Github branch name e.g. development"
     Default: "main"
+  ProdApprovalSNSEmail:
+    Type: String
+    Default: "frankruszel@gmail.com"
 
 Resources:
   GithubConnection:
@@ -85,6 +88,17 @@ Resources:
     Properties:
       ConnectionName: !Sub ${ResourceNamePrefix}-GithubConnection
       ProviderType: GitHub
+  ProdApprovalTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub "${ResourceNamePrefix}-prod-approval-topic"
+      DisplayName: !Sub "${ResourceNamePrefix}-prod-approval"
+      Subscription:
+        - 
+          Endpoint:
+            Ref: ProdApprovalSNSEmail
+          Protocol: "email"
+
   #  ____  _            _ _
   # |  _ \(_)_ __   ___| (_)_ __   ___
   # | |_) | | '_ \ / _ | | | '_ \ / _ \
@@ -229,6 +243,17 @@ Resources:
               InputArtifacts:
                 - Name: SourceCodeAsZip
               RunOrder: 2
+            # uncomment this to have a manual approval step before deployment to production
+            - Name: ManualApproval
+              ActionTypeId:
+               Category: Approval
+               Owner: AWS
+               Provider: Manual
+               Version: "1"
+              Configuration:
+                NotificationArn:
+                  !Ref ProdApprovalTopicArn
+              RunOrder: 3
             -
               Name: ProceedToProd
               ActionTypeId:
@@ -240,7 +265,7 @@ Resources:
                 StackName: "sam-dev"
                 ActionMode: DELETE_ONLY
                 RoleArn: !GetAtt PipelineStackCloudFormationExecutionRole.Arn
-              RunOrder: 3
+              RunOrder: 4
 
         - Name: DeployProd
           Actions:
