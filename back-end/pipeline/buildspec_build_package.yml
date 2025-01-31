@@ -13,7 +13,8 @@ phases:
     commands:
       - cd "${PROJECT_SUBFOLDER}"
       - ls
-      - SAM_PARAMETERS=$( cat parameters/prod-parameters.json | jq -r '.[] | "\(.ParameterKey)=\(.ParameterValue)"' )
+      - cat parameters/${ENV_NAME}-parameters.json
+      - SAM_PARAMETERS=$( cat parameters/prod-parameters.json | jq -r '[ .[] | "\(.ParameterKey)=\(.ParameterValue)" ] | join(" ")' )
       - sam build   --use-container --template "template.yaml" --parameter-overrides $SAM_PARAMETERS
       - . pipeline/assume-role.sh "${TESTING_PIPELINE_EXECUTION_ROLE}" test-package
       - sam package --config-file pipeline/samconfig-pipeline.toml 
