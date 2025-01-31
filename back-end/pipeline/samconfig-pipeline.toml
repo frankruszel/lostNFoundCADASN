@@ -1,0 +1,45 @@
+version = 0.1
+
+[2]
+[2.global]
+[2.global.parameters]
+stack_name = "sam-dev"
+s3_prefix = "sam-dev"
+s3_bucket = "aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-7l0mopz3wnp7"
+region = "us-east-1"
+
+[2.deploy]
+[2.deploy.parameters]
+template = "packaged-testing.yaml"
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+# parameter_overrides = ""
+
+# ############################################## #
+
+[1]
+[1.global]
+[1.global.parameters]
+stack_name = "sam-prod"
+s3_prefix = "sam-prod"
+s3_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-iwglhilsinhd"
+region = "us-east-1"
+
+[1.deploy]
+[1.deploy.parameters]
+template = "packaged-prod.yaml"
+fail_on_empty_changeset = false
+capabilities = "CAPABILITY_IAM"
+# parameter_overrides = ""
+
+# ############################################## #
+
+[pipeline]
+[pipeline.deploy]
+[pipeline.deploy.parameters]
+stack_name = "SAM-Pipeline-Stack"
+s3_prefix = "SAM-Pipeline-Stack"
+resolve_s3 = true
+fail_on_empty_changeset = false
+template = "codepipeline.yaml"
+capabilities = "CAPABILITY_IAM"
