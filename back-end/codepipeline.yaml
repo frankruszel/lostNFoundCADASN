@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion : '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >
   This template deploys a CodePipeline with its required resources.
@@ -78,7 +78,7 @@ Parameters:
     Type: String
     Description: "Github branch name e.g. development"
     Default: "main"
-    
+
 Resources:
   GithubConnection:
     Type: AWS::CodeStarConnections::Connection
@@ -116,7 +116,7 @@ Resources:
               OutputArtifacts:
                 - Name: SourceCodeAsZip
               RunOrder: 1
-          
+
         # - Name: Source
         #   Actions:
         #     - Name: SourceCodeRepo
@@ -206,6 +206,7 @@ Resources:
                 ProjectName: !Ref CodeBuildProjectDeploy
                 EnvironmentVariables: !Sub |
                   [
+                    {"name": "ENV_NAME", "value": "prod"},
                     {"name": "ENV_CONFIG_NAME", "value": "${TestConfigEnvName}"},
                     {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${TestingPipelineExecutionRole}"},
                     {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${TestingCloudFormationExecutionRole}"}
@@ -250,6 +251,7 @@ Resources:
                 ProjectName: !Ref CodeBuildProjectDeploy
                 EnvironmentVariables: !Sub |
                   [
+                    {"name": "ENV_NAME", "value": "prod"},
                     {"name": "ENV_CONFIG_NAME", "value": "${ProdConfigEnvName}"},
                     {"name": "ENV_PIPELINE_EXECUTION_ROLE", "value": "${ProdPipelineExecutionRole}"},
                     {"name": "ENV_CLOUDFORMATION_EXECUTION_ROLE", "value": "${ProdCloudFormationExecutionExeRole}"}
@@ -265,8 +267,7 @@ Resources:
       VersioningConfiguration:
         Status: Enabled
       LoggingConfiguration:
-        DestinationBucketName:
-          !Ref PipelineArtifactsLoggingBucket
+        DestinationBucketName: !Ref PipelineArtifactsLoggingBucket
         LogFilePrefix: "artifacts-logs"
       BucketEncryption:
         ServerSideEncryptionConfiguration:
@@ -283,7 +284,7 @@ Resources:
             Action: s3:*
             Principal: "*"
             Resource:
-              - !Sub  "${PipelineArtifactsBucket.Arn}/*"
+              - !Sub "${PipelineArtifactsBucket.Arn}/*"
               - !GetAtt PipelineArtifactsBucket.Arn
             Condition:
               Bool:
@@ -305,7 +306,7 @@ Resources:
       AccessControl: "LogDeliveryWrite"
       OwnershipControls:
         Rules:
-          - ObjectOwnership:  ObjectWriter
+          - ObjectOwnership: ObjectWriter
       VersioningConfiguration:
         Status: Enabled
       BucketEncryption:
@@ -354,8 +355,7 @@ Resources:
           PolicyDocument:
             Version: "2012-10-17"
             Statement:
-              -
-                Effect: "Allow"
+              - Effect: "Allow"
                 Action:
                   - codestar-connections:UseConnection
                 Resource:
@@ -507,6 +507,8 @@ Resources:
         Image: !Ref CodeBuildImage
         PrivilegedMode: true
         EnvironmentVariables:
+          - Name: env
+            Value: "dev"
           - Name: PROJECT_SUBFOLDER
             Value: !Ref ProjectSubfolder
           - Name: TESTING_PIPELINE_EXECUTION_ROLE
@@ -556,12 +558,12 @@ Resources:
         Type: CODEPIPELINE
         BuildSpec: !Sub "${ProjectSubfolder}/pipeline/buildspec_deploy.yml"
 
-  #    _____                      __________                      
-  #   /     \   ____   ____   ____\______   \ ____ ______   ____  
-  #  /  \ /  \ /  _ \ /    \ /  _ \|       _// __ \\____ \ /  _ \ 
+  #    _____                      __________
+  #   /     \   ____   ____   ____\______   \ ____ ______   ____
+  #  /  \ /  \ /  _ \ /    \ /  _ \|       _// __ \\____ \ /  _ \
   # /    Y    (  <_> )   |  (  <_> )    |   \  ___/|  |_> >  <_> )
-  # \____|__  /\____/|___|  /\____/|____|_  /\___  >   __/ \____/ 
-  #         \/            \/              \/     \/|__|           
+  # \____|__  /\____/|___|  /\____/|____|_  /\___  >   __/ \____/
+  #         \/            \/              \/     \/|__|
   MonorepoTriggerFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -641,7 +643,7 @@ Resources:
           PIPELINE_NAME: !Ref Pipeline
           APP_DIR_IN_MONOREPO: !Ref ProjectSubfolder
       Policies:
-        - CodeCommitReadPolicy: 
+        - CodeCommitReadPolicy:
             RepositoryName: !Ref CodeCommitRepositoryName
         - SSMParameterReadPolicy:
             ParameterName: !Sub "${MonorepoSsmPrefix}/*"
@@ -661,8 +663,11 @@ Resources:
               Type: SQS
             Pattern:
               source: [aws.codecommit]
-              detail-type: ['CodeCommit Repository State Change']
-              resources: [!Sub "arn:${AWS::Partition}:codecommit:${AWS::Region}:${AWS::AccountId}:${CodeCommitRepositoryName}"]
+              detail-type: ["CodeCommit Repository State Change"]
+              resources:
+                [
+                  !Sub "arn:${AWS::Partition}:codecommit:${AWS::Region}:${AWS::AccountId}:${CodeCommitRepositoryName}",
+                ]
               detail:
                 event:
                   - referenceCreated
@@ -691,4 +696,3 @@ Outputs:
     Value: !Ref AppRepositoryName
     Export:
       Name: AppRepositoryNameOutput
-

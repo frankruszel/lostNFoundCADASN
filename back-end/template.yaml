@@ -1,6 +1,10 @@
 Description: Root Stack, contains all the resources needed for the application
 AWSTemplateFormatVersion: "2010-09-09"
 
+Parameters:
+  AmplifyStage:
+    Type: String  
+
 Resources:
   # ------------------------------  START Amplify Stack ------------------------------  #
   AmplifyApp:
@@ -91,7 +95,7 @@ Resources:
       EnablePullRequestPreview: false
       EnableAutoBuild: true
       EnablePerformanceMode: false
-      Stage: "PRODUCTION"
+      Stage: !Ref AmplifyStage
       BranchName: "main"
       Framework: "React" 
   # ------------------------------  END Amplify Stack  ------------------------------  #
