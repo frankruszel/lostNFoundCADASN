@@ -27,7 +27,7 @@ Metadata:
 Parameters:
   ProjectSubfolder:
     Type: String
-    Default: "/"
+    Default: ""
   ResourceNamePrefix:
     Description: Please specify the prefix for all the resources
     Type: String
