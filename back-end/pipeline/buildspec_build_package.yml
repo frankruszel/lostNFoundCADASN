@@ -21,6 +21,7 @@ phases:
       - sam package --config-file pipeline/samconfig-pipeline.toml 
                     --config-env "${PROD_ENV_CONFIG_NAME}"
                     --output-template-file "packaged-prod.yaml"
+      - ls 
 
 artifacts:
   files:
