@@ -27,7 +27,7 @@ Metadata:
 Parameters:
   ProjectSubfolder:
     Type: String
-    Default: "pipeline-stack-Pipel/SourceCode/"
+    Default: "pipeline-stack-Pipel/SourceCode"
   ResourceNamePrefix:
     Description: Please specify the prefix for all the resources
     Type: String
