@@ -1,16 +1,6 @@
 Description: Root Stack, contains all the resources needed for the application
 AWSTemplateFormatVersion: "2010-09-09"
 
-Parameters:
-  GithubOwner:
-    AllowedPattern: ".+"
-    Type: String
-    Description: "Github repo owner"
-    Default: "frankruszel"
-  AppRepositoryName:
-    Description: Name of the Github Repository
-    Type: String
-    Default: "lostNFoundCADASN"
 Resources:
   # ------------------------------  START Amplify Stack ------------------------------  #
   AmplifyApp:

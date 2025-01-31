@@ -683,11 +683,11 @@ Outputs:
     Value: !Ref PipelineArtifactsBucket
   PipelineArtifactsLoggingBucketName:
     Value: !Ref PipelineArtifactsLoggingBucket
-  GithubOwnerOutput:
+  GithubOwner:
     Value: !Ref GithubOwner
     Export:
       Name: GithubOwnerOutput
-  AppRepositoryNameOutput:
+  AppRepositoryName:
     Value: !Ref AppRepositoryName
     Export:
       Name: AppRepositoryNameOutput

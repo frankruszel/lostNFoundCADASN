@@ -9,8 +9,8 @@ import { jwtDecode } from 'jwt-decode';
 function Homepage() {
   return (
     <>
-    <Box ml={10} mt={5}>
-    <Typography>
+    <Box >
+    <Typography color={'black'}>
         testwadasdawd
       </Typography>
     </Box>
