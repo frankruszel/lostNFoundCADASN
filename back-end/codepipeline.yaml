@@ -455,7 +455,9 @@ Resources:
                   - cloudformation:SetStackPolicy
                   - cloudformation:SetStackPolicy
                   - cloudformation:ValidateTemplate
-                Resource: ["arn:aws:cloudformation:us-east-1:992382578667:stack/sam-dev",arn:aws:cloudformation:us-east-1:992382578667:stack/sam-prod]
+                Resource: 
+                  - "arn:aws:cloudformation:us-east-1:992382578667:stack/sam-dev/*"
+                  - "arn:aws:cloudformation:us-east-1:992382578667:stack/sam-prod/*"
   # PipelineStackCloudFormationExecutionRole is used for the pipeline to self mutate
   PipelineStackCloudFormationExecutionRole:
     Type: AWS::IAM::Role
