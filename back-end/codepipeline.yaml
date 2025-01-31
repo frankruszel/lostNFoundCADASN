@@ -252,7 +252,7 @@ Resources:
                Version: "1"
               Configuration:
                 NotificationArn:
-                  !Ref ProdApprovalTopicArn
+                  !Ref ProdApprovalTopic
               RunOrder: 3
             -
               Name: ProceedToProd
