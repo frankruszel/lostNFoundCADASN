@@ -15,7 +15,8 @@ Resources:
     DeletionPolicy: "Delete"
     Properties:
       Tags:
-        - Stage: !Sub ${Environment}        
+        - Key: Stage
+          Value: !Ref Environment   
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
         - "https://github.com/${GithubOwner}/${AppRepositoryName}"
