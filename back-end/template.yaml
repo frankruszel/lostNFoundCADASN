@@ -93,7 +93,7 @@ Resources:
       EnablePerformanceMode: false
       Stage: "PRODUCTION"
       BranchName: "main"
-      Framework: "React"
+      Framework: "React" 
   # ------------------------------  END Amplify Stack  ------------------------------  #
 # Outputs:
 #   TriggerCheckBudgetCostOverrunTopicOutput:
