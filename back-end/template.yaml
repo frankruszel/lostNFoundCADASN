@@ -1,6 +1,16 @@
 Description: Root Stack, contains all the resources needed for the application
 AWSTemplateFormatVersion: "2010-09-09"
 
+Parameters:
+  GithubOwner:
+    AllowedPattern: ".+"
+    Type: String
+    Description: "Github repo owner"
+    Default: "frankruszel"
+  AppRepositoryName:
+    Description: Name of the Github Repository
+    Type: String
+    Default: "lostNFoundCADASN"
 Resources:
   # ------------------------------  START Amplify Stack ------------------------------  #
   AmplifyApp:
@@ -11,8 +21,10 @@ Resources:
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
         - "${GithubOwner}/${AppRepositoryName}"
-        - GithubOwner: !ImportValue GithubOwnerOutput
-        - AppRepositoryName: !ImportValue AppRepositoryNameOutput
+        - GithubOwner: !Ref GithubOwner
+          AppRepositoryName: !Ref AppRepositoryName
+        # - GithubOwner: !ImportValue GithubOwnerOutput
+        # - AppRepositoryName: !ImportValue AppRepositoryNameOutput
       # EnvironmentVariables:
       # - Name: REACT_APP_ADMIN_SECRET_KEY_ID
       #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_ADMIN_SECRET_KEY_ID}}'
