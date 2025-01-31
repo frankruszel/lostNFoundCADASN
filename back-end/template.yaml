@@ -10,9 +10,9 @@ Resources:
     Properties:
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
-        - "${GithubOwner}/${AppRepositoryName}"
-        - GithubOwner: !ImportValue GithubOwner
-          AppRepositoryName: !ImportValue AppRepositoryName
+        - "${GithubOwnerOutput}/${AppRepositoryNameOutput}"
+        - GithubOwner: !ImportValue GithubOwnerOutput
+          AppRepositoryName: !ImportValue AppRepositoryNameOutput
       # EnvironmentVariables:
       # - Name: REACT_APP_ADMIN_SECRET_KEY_ID
       #   Value: '{{resolve:secretsmanager:AmplifyAppEnvVar:SecretString:REACT_APP_ADMIN_SECRET_KEY_ID}}'
