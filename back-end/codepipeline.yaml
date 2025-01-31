@@ -437,6 +437,11 @@ Resources:
               - Effect: Allow
                 Action: "*"
                 Resource: "*"
+              - Effect: Allow
+                Action: 
+                  - cloudformation:DeleteStack
+				          - cloudformation:Describe*
+                Resource: "*"
 
   #   ____          _      ____        _ _     _
   #  / ___|___   __| | ___| __ ) _   _(_| | __| |

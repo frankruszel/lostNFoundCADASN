@@ -10,7 +10,7 @@ Resources:
   AmplifyApp:
     UpdateReplacePolicy: "Retain"
     Type: "AWS::Amplify::App"
-    DeletionPolicy: "Retain"
+    DeletionPolicy: "Delete"
     Properties:
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
