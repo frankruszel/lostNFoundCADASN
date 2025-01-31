@@ -9,7 +9,12 @@ import { jwtDecode } from 'jwt-decode';
 function Homepage() {
   return (
     <>
-      test
+    <Box ml={10} mt={5}>
+    <Typography>
+        testwadasdawd
+      </Typography>
+    </Box>
+     
 
     </>
   )

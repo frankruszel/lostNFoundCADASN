@@ -19,7 +19,7 @@ Resources:
     DeletionPolicy: "Retain"
     Properties:
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
-      Repository: !Sub "${GithubOwner}/${AppRepositoryName}"
+      Repository: "frankruszel/lostNFoundCADASN" #dont hardcode
 
         # - AppRepositoryName: !ImportValue AppRepositoryNameOutput
       # EnvironmentVariables:

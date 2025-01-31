@@ -7,7 +7,7 @@ import PasswordResetPage from './pages/PasswordResetPage'
 const PublicRoutes = [
    
     {
-        path: "",
+        path: "/home",
         element: <Homepage />,
     },
     {

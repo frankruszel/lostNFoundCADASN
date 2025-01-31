@@ -53,7 +53,6 @@ function Root() {
                                     }}
                                 >
                                     <Outlet />
-                                    <GreyBackground />
                                 </Box>
                                 <Footer />
                                 <ScrollRestoration />
