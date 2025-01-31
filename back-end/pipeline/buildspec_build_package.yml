@@ -24,8 +24,4 @@ phases:
 
 artifacts:
   files:
-    - /dev/packaged-testing.yaml
-    - /dev/packaged-prod.yaml
-    - /dev/pipeline/*
-    - /samconfig-pipeline.toml
-    - /buildspec_deploy.yml
+    - '**/*'
