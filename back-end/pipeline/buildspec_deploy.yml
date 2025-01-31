@@ -11,6 +11,7 @@ phases:
       - cd "${PROJECT_SUBFOLDER}"
       - . pipeline/assume-role.sh "${ENV_PIPELINE_EXECUTION_ROLE}" deploy
       - SAM_PARAMETERS=$( cat parameters/${ENV_NAME}-parameters.json | jq -r '.[] | "\(.ParameterKey)=\(.ParameterValue)"' )
+      - echo $SAM_PARAMETERS
       - sam deploy --debug --config-file pipeline/samconfig-pipeline.toml --parameter-overrides $SAM_PARAMETERS
                     --config-env "${ENV_CONFIG_NAME}"
                     --role-arn "${ENV_CLOUDFORMATION_EXECUTION_ROLE}"
