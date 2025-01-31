@@ -473,7 +473,7 @@ Resources:
                 Action:
                   - codeconnections:GetConnectionToken
                 Resource:
-                  - arn:aws:codeconnections:us-east-1:${AWS::AccountId}:connection/43606f29-691f-445e-9ce9-066096cb4932
+                  - "arn:aws:codeconnections:us-east-1:${AWS::AccountId}:connection/43606f29-691f-445e-9ce9-066096cb4932"
         - PolicyName: CodeBuildArtifactsBucket
           PolicyDocument:
             Version: "2012-10-17"
