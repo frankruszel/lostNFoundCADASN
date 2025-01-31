@@ -2,21 +2,21 @@ import AWS from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid'; // UUID library for generating unique IDs
 
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
-const tableName = 'PreferenceTable';
+const tableName = 'ItemTable';
 
 // Function to insert data into DynamoDB
-const insertPreferenceDataIntoDynamoDB = async (preferenceData) => {
+const insertItemDataIntoDynamoDB = async (itemData) => {
   try {
     const params = {
       TableName: tableName,
-      Item: preferenceData,
+      Item: itemData,
     };
 
     await dynamoDB.put(params).promise();
-    console.log(`Inserted preference data into DynamoDB: ${JSON.stringify(preferenceData)}`);
+    console.log(`Inserted item data into DynamoDB: ${JSON.stringify(itemData)}`);
   } catch (error) {
-    console.error('Error inserting preference data into DynamoDB:', error);
-    throw new Error('Failed to insert preference data into DynamoDB.');
+    console.error('Error inserting item data into DynamoDB:', error);
+    throw new Error('Failed to insert item data into DynamoDB.');
   }
 };
 
@@ -28,7 +28,7 @@ export const lambdaHandler = async (event, context) => {
 
   try {
     // Use event directly if it's already an object, otherwise parse event.body
-    requestBody = typeof event === 'object' && event.budgets ? event : JSON.parse(event.body);
+    requestBody = typeof event === 'object' && event.item ? event : JSON.parse(event.body);
   } catch (error) {
     console.error('Invalid JSON in event or event.body:', event.body || event);
     return {
@@ -45,10 +45,10 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { userId, budgets } = requestBody;
+    const { userId, item } = requestBody;
     // console.log(userId,budgets, typeof(budgets) === 'object')
     // Validate input
-    if ( !userId || typeof(budgets) !== 'object' ) {
+    if ( !userId || typeof(item) !== 'object' ) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -57,20 +57,21 @@ export const lambdaHandler = async (event, context) => {
       };
     }
 
-    // Generate UUID for preference and process rooms
-    const preferenceUuid = uuidv4();
-    const budgetData = budgets;
+    // Generate UUID for item and process rooms
 
-    const preferenceData = {
-      uuid: preferenceUuid,
+    const itemData = {
       userId,
-      budgets: budgetData,
+      name: item.title,
+      description: item.description,
+      image_url: item.image_url,
+      status: item.status, // lost (someone is finding this), found (someone has found a lost item), claimed (someone claimed a lost item)
+      category: item.category,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     // Insert into DynamoDB
-    await insertPreferenceDataIntoDynamoDB(preferenceData);
+    await insertItemDataIntoDynamoDB(itemData);
 
     return {
       statusCode: 200,
@@ -80,12 +81,12 @@ export const lambdaHandler = async (event, context) => {
         "Access-Control-Allow-Headers": "Content-Type, Authorization", 
       },
       body: JSON.stringify({
-        message: 'Preference data successfully created and stored in DynamoDB.',
-        preferenceData,
+        message: 'item data successfully created and stored in DynamoDB.',
+        itemData,
       }),
     };
   } catch (error) {
-    console.error('Error processing preference data:', error);
+    console.error('Error processing item data:', error);
     return {
       statusCode: 500,
       body: JSON.stringify({

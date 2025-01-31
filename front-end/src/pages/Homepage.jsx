@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { Box, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
-import { AccessTime, Favorite, FavoriteBorder, LocationOn, Clear, Room, KeyboardArrowDown } from '@mui/icons-material';
+import { Box,TextField,Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
+import { AccessTime, CalendarTodayRounded, Favorite, FavoriteBorder, LocationOn, Clear, Room, KeyboardArrowDown } from '@mui/icons-material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { jwtDecode } from 'jwt-decode';
 import SearchIcon from '@mui/icons-material/Search';
 import DepartureBoardIcon from '@mui/icons-material/DepartureBoard';
 import CalendarToday from '@mui/icons-material/CalendarToday';
 import { useUserContext } from '../contexts/UserContext';
+import DatePicker, { DateObject } from "react-multi-date-picker";
+import Toolbar from "react-multi-date-picker/plugins/toolbar";
+
 
 
 function Homepage() {
@@ -16,32 +19,57 @@ function Homepage() {
 
   const handleCategoryChange = (e) => {
     if (e != categorySelected) {
-        setCategorySelected(e)
+      setCategorySelected(e)
     }
     else {
-        setCategorySelected('All Activities')
+      setCategorySelected('All Activities')
     }
 
-};
+  };
   return (
     <>
       <Paper
 
-        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '52.5%', height: "58px", position: "absolute", borderRadius: 3, mx: 'auto', left: 0, right: 0, top: 102 }}
+        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '52.5%', height: "65px", position: "absolute", borderRadius: 3, mx: 'auto', left: 0, right: 0, top: 102 }}
       >
-        <IconButton type="button" sx={{ pl: '20px', pt: "10px" }} aria-label="search"
+        <IconButton type="button" sx={{ pl: '20px', pt: "10px" }} aria-label="search" 
         // onClick={onClickSearch}
         >
           <SearchIcon />
         </IconButton>
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder=""
+        <AutocompleteMUI
+          freeSolo
+          id="free-solo-2-demo"
           inputProps={{ 'aria-label': 'search google maps' }}
-        // value={search}
-        // onChange={onSearchChange}
-        // onKeyDown={onSearchKeyDown}
-        // onClick={onClickSearch}
+          sx={{
+            ml: 1, flex: 1, "& .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline": {
+              border: "0px solid #eee"
+            }, "& .MuiAutocomplete-inputFocused": { border: "0px solid #eee" }, '& .MuiOutlinedinput-inputFocused': { border: "0px solid #eee" }, '& .Mui-focused': { border: "0px solid #eee" },
+            "& .MuiOutlinedInput-root": { border: "0px solid #eee" }, "& .MuiInputBase-root-MuiOutlinedInput": { border: "0px solid #eee" }, "& .MuiInput-underline:after": {
+              border: "0px solid #eee"
+            }, "& .MuiOutlinedInput-root": {
+              "&.Mui-focused fieldset": {
+                border: "0px solid #eee"
+              }
+            }
+          }}
+          style={{ border: "0px solid #eee" }}
+          // placeholder=""
+          // options={eventListForAutocomplete.map((option) => option.title)}
+          // value={search}
+          // onChange={onSearchChange}
+          // onKeyDown={onSearchKeyDown}
+          // onClick={onClickSearch}
+          disableClearable
+
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              sx={{ '& MuiInputBase-fullWidth ': { border: "0px solid #eee" }, '& .Mui-focused': { border: "0px solid #eee" }, "& .MuiOutlinedInput-root": { border: "0px solid #eee" } }}
+
+            />
+          )}
+
         />
         <IconButton type="button" sx={{ p: '10px' }}
         // onClick={onClickClear}
@@ -51,7 +79,7 @@ function Homepage() {
         <Divider sx={{ height: 34, m: 0.5 }} orientation="vertical" />
 
 
-        {/* <DatePicker
+        <DatePicker
           // value={dateRangeValues}
           // onChange={setDateRangeValues}
 
@@ -72,15 +100,15 @@ function Homepage() {
           render={<IconButton >
             <CalendarTodayRounded color="primary" sx={{ pt: '10px', pb: '10px', pl: 1 }} /><Typography color={'black'} sx={{ pl: 1.4, pr: 1 }}>When</Typography> <KeyboardArrowDown />
           </IconButton>}
-        /> */}
+        />
 
-
+        {/* 
         <Divider sx={{ height: 34, mr: 0.2 }} orientation="vertical" />
         <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions" onClick={() => { }
           // handleOpenLocationMap()
         }>
-          <Room /><Typography color={'black'} pr={1} sx={{ pt: '10px', pb: '10px', pl: 1 }}>Location</Typography><KeyboardArrowDown />
-        </IconButton>
+          <Room /><Typography color={'black'} pr={1} sx={{ pt: '10px', pb: '10px', pl: 1 }}>Date</Typography><KeyboardArrowDown />
+        </IconButton> */}
 
 
       </Paper>
@@ -103,7 +131,7 @@ function Homepage() {
 
       <Grid container spacing={4} px={10} mb={10}>
 
-        <Grid item xs={12} md={6} lg={4} sx={{ height: 330 }} >
+        <Grid item xs={12} md={6} lg={4} sx={{ height: 330, mb: 2 }} >
 
           <Box sx={{
             color: "#FFFFFF",
@@ -135,14 +163,13 @@ function Homepage() {
             <DepartureBoardIcon fontSize="20px" sx={{ pr: 0.7, pt: 0.85, }} />
 
             <Typography sx={{ display: "inline", verticalAlign: '07%' }} fontSize={15} textAlign={"center"}>
-              23
+              Duration
             </Typography>
 
           </Box>
 
 
-
-          <Link to={`/event/}`} style={{ textDecoration: 'none' }}>
+          <Link to={`/event/`} style={{ textDecoration: 'none' }}>
 
 
 
@@ -150,14 +177,12 @@ function Homepage() {
 
             <Card sx={{ borderColor: '#D3D3D3', borderStyle: 'solid', borderWidth: 0.3 }}>
 
-              <Box sx={{ borderColor: '#D3D3D3', borderBottomStyle: 'solid', borderWidth: 0.3, minHeight: 300 }}>
-                test
-                {/* {event.imageFile && (
-                  <img alt="test" src={`${import.meta.env.VITE_FILE_BASE_URL}${event.imageFile}`} sx={{ display: 'flex' }}
-                  />
-                )} */}
+              <Box className="aspect-ratio-container" sx={{ borderColor: '#D3D3D3', borderBottomStyle: 'solid', borderWidth: 0.3 }}>
 
 
+
+                <img alt="test" src="https://avionrx.blob.core.windows.net/avalon/74444e4c-0331-418a-bf7b-87043a002c0b?v=20231017064750" sx={{ display: 'flex' }}
+                />
 
 
 
@@ -175,7 +200,7 @@ function Homepage() {
 
 
                   <Typography sx={{ flexGrow: 1, fontSize: 20, fontWeight: 'bold', letterSpacing: 0.4 }} noWrap>
-                    test
+                    title
 
                   </Typography>
 
@@ -184,8 +209,6 @@ function Homepage() {
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.3 }}
                   color="text.secondary">
                   <CalendarToday sx={{ mr: 1 }} />
-
-
 
 
                   <Typography>Multiple Dates</Typography>
@@ -197,14 +220,14 @@ function Homepage() {
                   <LocationOn sx={{ mr: 1 }} />
 
                   <Typography noWrap>
-                    testlocation
+                    location
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
                   color="text.secondary">
                   <AccessTime sx={{ mr: 1 }} />
                   <Typography>
-                    12:00pm to 1:00pm
+                    startDate to endDate
                   </Typography>
                 </Box>
 
@@ -214,7 +237,7 @@ function Homepage() {
                 <Grid item>
 
 
-                  <Typography sx={{ pb: 1, fontSize: 28 }}>$23</Typography>
+                  <Typography sx={{ pb: 1, fontSize: 28 }}>price </Typography>
 
 
                 </Grid>
@@ -228,14 +251,22 @@ function Homepage() {
           </Link>
 
 
+
           <Checkbox
-            checked={null}
-            // onChange={(change) => handleFavoriteChange({ checked: change.target.checked, event: event })}
+            checked={true}
+            onChange={(change) => { }}
             sx={{ position: "relative", left: '81%', bottom: "19%" }}
             icon={<FavoriteBorder
               style={{ fontSize: '2rem' }} />}
             checkedIcon={<Favorite style={{ fontSize: '2rem' }} />} />
+          {/* 
+                                        </>
+                                    )
+                                } */}
 
+
+          {/* maybe put outside and absoultely position it */}
+          {/* <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} /> */}
         </Grid>
       </Grid>
 
