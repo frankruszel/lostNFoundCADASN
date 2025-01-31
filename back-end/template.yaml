@@ -3,11 +3,73 @@ AWSTemplateFormatVersion: "2010-09-09"
 
 Parameters:
   AmplifyStage:
-    Type: String  
+    Type: String
   Environment:
     Type: String
 
+Globals:
+  Function:
+    Timeout: 3
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,DELETE,OPTIONS,PUT'"
+      AllowHeaders: "'content-type'"
+      AllowOrigin: "'*'"
+
 Resources:
+  # ------------------------------ START Function  creation------------------------------  #
+  CreateItemFunction:
+    DependsOn: ItemTable
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: CreateItemFunction/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: ItemTable
+      Handler: app.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        CreatePreferenceApiResource:
+          Type: Api
+          Properties:
+            Path: /Item/CreateItem
+            Method: Post
+            RestApiId: !Ref ServerlessRestApi
+  # ------------------------------ START Fcuntion  creation------------------------------  #
+  # ------------------------------ START Preference Table creation------------------------------  #
+  ItemTable:
+    UpdateReplacePolicy: Retain
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: "Delete"
+    Properties:
+      SSESpecification:
+        SSEEnabled: false
+      TableName: ItemTable
+      AttributeDefinitions:
+        - AttributeType: S
+          AttributeName: itemId
+      ContributorInsightsSpecification:
+        Enabled: false
+      BillingMode: PAY_PER_REQUEST
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      WarmThroughput:
+        ReadUnitsPerSecond: 12000
+        WriteUnitsPerSecond: 4000
+      KeySchema:
+        - KeyType: HASH
+          AttributeName: itemId
+      DeletionProtectionEnabled: false
+      TableClass: STANDARD
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+
+      TimeToLiveSpecification:
+        Enabled: false
+  # ------------------------------ END Preference Table creation------------------------------  #
   # ------------------------------  START Amplify Stack ------------------------------  #
   AmplifyApp:
     UpdateReplacePolicy: "Retain"
@@ -16,7 +78,7 @@ Resources:
     Properties:
       Tags:
         - Key: Stage
-          Value: !Ref Environment   
+          Value: !Ref Environment
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
         - "https://github.com/${GithubOwner}/${AppRepositoryName}"
@@ -102,16 +164,5 @@ Resources:
       EnablePerformanceMode: false
       Stage: !Ref AmplifyStage
       BranchName: "main"
-      Framework: "React" 
+      Framework: "React"
   # ------------------------------  END Amplify Stack  ------------------------------  #
-# Outputs:
-#   TriggerCheckBudgetCostOverrunTopicOutput:
-#     Description: "TriggerCheckBudgetCostOverrunTopic"
-#     Value: !GetAtt TriggerCheckBudgetCostOverrunTopic.TopicArn
-#     Export:
-#       Name: TriggerCheckBudgetCostOverrunTopicOutput
-#   TriggerNotificationSendTopicOutput:
-#     Description: "TriggerNotificationSendTopic"
-#     Value: !GetAtt TriggerNotificationSendTopic.TopicArn
-#     Export:
-#       Name: TriggerNotificationSendTopicOutput
