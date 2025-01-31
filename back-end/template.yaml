@@ -91,7 +91,7 @@ Resources:
       EnablePullRequestPreview: false
       EnableAutoBuild: true
       EnablePerformanceMode: false
-      Stage: "prod"
+      Stage: "PRODUCTION"
       BranchName: "main"
       Framework: "React"
   # ------------------------------  END Amplify Stack  ------------------------------  #
