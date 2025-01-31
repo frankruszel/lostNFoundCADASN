@@ -1,0 +1,15 @@
+body, html {
+    background-color: #f0f0f0;
+  }
+  
+  #root {
+    background-color: #f0f0f0;
+  }
+
+  @font-face {
+    font-family: 'Poppins';
+    src: url('./components/fonts/poppins/Poppins-Medium.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+  }
+  
