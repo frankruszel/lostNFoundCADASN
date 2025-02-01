@@ -13,7 +13,9 @@ import GreyBackground from './components/GreyBackground';
 import ShowNavBar from './components/common/ShowNavBar';
 import ShowActualNavBar from './components/common/ShowActualNavBar';
 import ActualNavbar from './components/common/ActualNavbar';
+import {  QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
+const queryClient = new QueryClient()
 const theme = createTheme({
     typography: {
         fontFamily: 'Poppins, Arial, sans-serif'
@@ -180,41 +182,45 @@ const theme = createTheme({
 function Root() {
     return (
         <>
-            <GoogleSSOProvider>
-                <ThemeProvider theme={theme}>
-                    <AlertProvider>
-                        <UserProvider>
-                            <SnackbarProvider maxSnack={3}>
-                                <CssBaseline />
-                                <ShowNavBar>
-                                    <SideNav />
-                                </ShowNavBar>
-                                <ShowActualNavBar>
-                                    <ActualNavbar />
-                                </ShowActualNavBar>
-                                <AlertComponenet />
+            <QueryClientProvider client={queryClient}>
 
-                                <Box
-                                    sx={{
-                                        minHeight: "84vh",
-                                        ml: 8.5,
-                                        mt: 8,
-                                        color: "#f0f0f0"
-                                    }}
-                                >
-                                    <Outlet />
-                                </Box>
-                                <ShowActualNavBar>
-                                    <Footer />
-                                </ShowActualNavBar>
+                <GoogleSSOProvider>
+                    <ThemeProvider theme={theme}>
+                        <AlertProvider>
+                            <UserProvider>
+                                <SnackbarProvider maxSnack={3}>
+                                    <CssBaseline />
+                                    <ShowNavBar>
+                                        <SideNav />
+                                    </ShowNavBar>
+                                    <ShowActualNavBar>
+                                        <ActualNavbar />
+                                    </ShowActualNavBar>
+                                    <AlertComponenet />
 
-                                <ScrollRestoration />
+                                    <Box
+                                        sx={{
+                                            minHeight: "84vh",
+                                            ml: 8.5,
+                                            mt: 8,
+                                            color: "#f0f0f0"
+                                        }}
+                                    >
+                                        <Outlet />
+                                    </Box>
+                                    <ShowActualNavBar>
+                                        <Footer />
+                                    </ShowActualNavBar>
 
-                            </SnackbarProvider>
-                        </UserProvider>
-                    </AlertProvider>
-                </ThemeProvider>
-            </GoogleSSOProvider>
+                                    <ScrollRestoration />
+
+                                </SnackbarProvider>
+                            </UserProvider>
+                        </AlertProvider>
+                    </ThemeProvider>
+                </GoogleSSOProvider>
+
+            </QueryClientProvider>
         </>
     );
 }

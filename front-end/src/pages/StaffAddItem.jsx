@@ -24,6 +24,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { enqueueSnackbar } from "notistack";
 import { UploadImageApi } from '../api/item/UploadImageApi';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { Uploader } from '../components/Uploader';
 
 function StaffAddItem() {
     const [loading, setLoading] = useState(false);
@@ -225,36 +226,13 @@ function StaffAddItem() {
 
 
 
-                                                    <Box>
-                                                        <Button className="aspect-ratio-container" variant="outlined-error" component="label" sx={{ height: 250, width: "100%" }}>
-
-                                                            <img alt="tutorial"
-
-                                                                src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png">
-
-                                                            </img>
-
-
-                                                            <input hidden accept="image/*" multiple type="file" onChange={onFileChange} />
-                                                        </Button>
-                                                        <Typography textAlign={"start"} fontSize={16} sx={{ color: "#d9534f", pl: 1 }}>Image is required</Typography>
-                                                    </Box>
+                                                   <Uploader />
                                                 )
                                             }
                                             {
                                                 (!imageFile && !imageError) && (
 
-                                                    <Button className="aspect-ratio-container" variant="outlined-striped" component="label" sx={{ height: 250, width: "100%" }}>
-
-                                                        <img alt="tutorial"
-
-                                                            src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png">
-
-                                                        </img>
-
-
-                                                        <input hidden accept="image/*" multiple type="file" onChange={onFileChange} />
-                                                    </Button>
+                                                    <Uploader />
                                                 )
                                             }
 
