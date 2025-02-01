@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { Box,TextField,Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
+import { Box, TextField, Button, Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
 import { AccessTime, CalendarTodayRounded, Favorite, FavoriteBorder, LocationOn, Clear, Room, KeyboardArrowDown } from '@mui/icons-material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { jwtDecode } from 'jwt-decode';
@@ -10,6 +10,7 @@ import CalendarToday from '@mui/icons-material/CalendarToday';
 import { useUserContext } from '../contexts/UserContext';
 import DatePicker, { DateObject } from "react-multi-date-picker";
 import Toolbar from "react-multi-date-picker/plugins/toolbar";
+import CategoryIcon from '@mui/icons-material/Category';
 
 
 
@@ -32,7 +33,7 @@ function Homepage() {
 
         sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '52.5%', height: "65px", position: "absolute", borderRadius: 3, mx: 'auto', left: 0, right: 0, top: 102 }}
       >
-        <IconButton type="button" sx={{ pl: '20px', pt: "10px" }} aria-label="search" 
+        <IconButton type="button" sx={{ pl: '20px', pt: "10px" }} aria-label="search"
         // onClick={onClickSearch}
         >
           <SearchIcon />
@@ -131,9 +132,9 @@ function Homepage() {
 
       <Grid container spacing={4} px={10} mb={10}>
 
-        <Grid item xs={12} md={6} lg={4} sx={{ height: 330, mb: 2 }} >
+        <Grid item xs={12} md={6} lg={3} sx={{ height: 330, mb: 2 }} >
 
-          <Box sx={{
+          {/* <Box sx={{
             color: "#FFFFFF",
             opacity: 1,
             position: 'relative',
@@ -166,7 +167,7 @@ function Homepage() {
               Duration
             </Typography>
 
-          </Box>
+          </Box> */}
 
 
           <Link to={`/event/`} style={{ textDecoration: 'none' }}>
@@ -175,8 +176,8 @@ function Homepage() {
 
 
 
-            <Card sx={{ borderColor: '#D3D3D3', borderStyle: 'solid', borderWidth: 0.3 }}>
-
+            <Card sx={{ borderColor: '#D3D3D3', borderStyle: 'solid', borderWidth: 0.3, height: 400, borderRadius:4 }}>
+                          
               <Box className="aspect-ratio-container" sx={{ borderColor: '#D3D3D3', borderBottomStyle: 'solid', borderWidth: 0.3 }}>
 
 
@@ -195,7 +196,7 @@ function Homepage() {
 
 
 
-              <CardContent sx={{ pb: 0, pt: 1 }}>
+              <CardContent sx={{ pb: 0, pt: 1, mb:10 }}>
                 <Box sx={{ display: 'flex', mb: 1 }}>
 
 
@@ -208,6 +209,13 @@ function Homepage() {
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.3 }}
                   color="text.secondary">
+                  <CategoryIcon sx={{ mr: 1 }} />
+                  <Typography>
+                    Category
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.3 }}
+                  color="text.secondary">
                   <CalendarToday sx={{ mr: 1 }} />
 
 
@@ -215,7 +223,7 @@ function Homepage() {
 
 
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.3 }}
+                <Box sx={{ display: 'flex', alignItems: 'center'}}
                   color="text.secondary" >
                   <LocationOn sx={{ mr: 1 }} />
 
@@ -223,24 +231,18 @@ function Homepage() {
                     location
                   </Typography>
                 </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}
-                  color="text.secondary">
-                  <AccessTime sx={{ mr: 1 }} />
-                  <Typography>
-                    startDate to endDate
-                  </Typography>
-                </Box>
+                
 
 
               </CardContent>
-              <Grid container sx={{ px: 2.5, display: "flex" }}>
-                <Grid item>
-
-
-                  <Typography sx={{ pb: 1, fontSize: 28 }}>price </Typography>
-
-
+              
+              <Grid justifySelf={'end'} container direction={'row'} display={'flex'} justifyContent={'space-between'} px={3}  >
+                <Grid item lg={12}>
+                  <Button sx={{wdith:"100%", height:50, borderRadius:4, backgroundColor:'primaryColor'}} variant='contained' fullWidth >
+                    Claim
+                  </Button>
                 </Grid>
+
 
 
               </Grid>
@@ -252,13 +254,13 @@ function Homepage() {
 
 
 
-          <Checkbox
+          {/* <Checkbox
             checked={true}
             onChange={(change) => { }}
             sx={{ position: "relative", left: '81%', bottom: "19%" }}
             icon={<FavoriteBorder
               style={{ fontSize: '2rem' }} />}
-            checkedIcon={<Favorite style={{ fontSize: '2rem' }} />} />
+            checkedIcon={<Favorite style={{ fontSize: '2rem' }} />} /> */}
           {/* 
                                         </>
                                     )
@@ -267,6 +269,14 @@ function Homepage() {
 
           {/* maybe put outside and absoultely position it */}
           {/* <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} /> */}
+        </Grid>
+
+        <Grid>
+          <Card>
+            <Typography>
+              test
+            </Typography>
+          </Card>
         </Grid>
       </Grid>
 

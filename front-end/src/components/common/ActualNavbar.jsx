@@ -32,17 +32,18 @@ function ActualNavbar() {
                         </Link>
                         {
                             user &&
-                            <Box sx={{ flexGrow: 0.56 }}></Box>
+                            <Box sx={{ flexGrow: 0.025 }}></Box>
                         }
                         {
                             !user &&
-                            <Box sx={{ flexGrow: 0.37 }}></Box>
+                            <Box sx={{ flexGrow: 0.025 }}></Box>
                         }
 
                         <Link to="/events" ><Typography color="grey" variant='navbar'>Browse Items</Typography></Link>
-                        <Box sx={{ flexGrow: 0.2 }}></Box>
+                        <Box sx={{ flexGrow: 0.008}}></Box>
+
                         <Link to="/faq" ><Typography color="grey" variant='navbar'> Found Item </Typography></Link>
-                        <Box sx={{ flexGrow: 0.65}}></Box>
+                        <Box sx={{ flexGrow: 0.9}}></Box>
 
 
                         {user && (
