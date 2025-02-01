@@ -39,7 +39,7 @@ function ActualNavbar() {
                             <Box sx={{ flexGrow: 0.025 }}></Box>
                         }
 
-                        <Link to="/events" ><Typography color="grey" variant='navbarLink' className='navbarLink'>
+                        <Link to="/home" ><Typography color="grey" variant='navbarLink' className='navbarLink'>
                             <p class="navbarLink">
                                 Browse Items </p>
                         </Typography></Link>

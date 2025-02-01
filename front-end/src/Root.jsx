@@ -11,6 +11,7 @@ import { UserProvider } from './contexts/UserContext';
 import { GoogleSSOProvider } from './contexts/GoogleSSOContext';
 import GreyBackground from './components/GreyBackground';
 import ShowNavBar from './components/common/ShowNavBar';
+import ShowActualNavBar from './components/common/ShowActualNavBar';
 import ActualNavbar from './components/common/ActualNavbar';
 
 const theme = createTheme({
@@ -187,7 +188,9 @@ function Root() {
                                 <ShowNavBar>
                                     <SideNav />
                                 </ShowNavBar>
-                                <ActualNavbar />
+                                <ShowActualNavBar>
+                                    <ActualNavbar />
+                                </ShowActualNavBar>
                                 <AlertComponenet />
 
                                 <Box
