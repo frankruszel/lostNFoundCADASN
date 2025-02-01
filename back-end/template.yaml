@@ -6,6 +6,9 @@ Parameters:
     Type: String
   Environment:
     Type: String
+  S3StoreItemImagesName:
+    Type: String
+    Default: "lostNfound-store-item-images"
 
 Globals:
   Function:
@@ -17,6 +20,36 @@ Globals:
       AllowOrigin: "'*'"
 
 Resources:
+  S3StoreItemImages:
+    Type: 'AWS::S3::Bucket'
+    DeletionPolicy: Delete
+    Properties:
+      BucketName: !Sub "${Environment}-${S3StoreItemImagesName}"
+  # MyBucketPolicy:
+  #   Type: AWS::S3::BucketPolicy
+  #   Properties:
+  #     Bucket: !Ref S3StoreItemImages
+  #     PolicyDocument:
+  #       Version: '2012-10-17'
+  #       Statement:
+  #         - Effect: Allow
+  #           Principal:
+  #             AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+  #           Action:
+  #             - s3:PutObject
+  #             - s3:GetObject*
+  #             - s3:DeleteObject
+  #           Resource:
+  #             - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}/*
+
+  #         - Effect: Allow
+  #           Principal:
+  #             AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
+  #           Action:
+  #             - s3:GetBucket*
+  #             - s3:List*
+  #           Resource:
+  #             - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}
   # ------------------------------ START Function  creation------------------------------  #
   # Create
   CreateItemFunction:
