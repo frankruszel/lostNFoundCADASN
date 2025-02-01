@@ -64,10 +64,10 @@ export const lambdaHandler = async (event, context) => {
     const itemData = {
       userId,
       itemId:itemId,
-      name: item.name,
+      title: item.title,
       description: item.description,
       image_url: item.image_url,
-      status: item.status, // lost (someone is finding this), found (someone has found a lost item), claimed (someone claimed a lost item)
+      itemStatus: item.itemStatus, // lost (someone is finding this), found (someone has found a lost item), claimed (someone claimed a lost item)
       category: item.category,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),

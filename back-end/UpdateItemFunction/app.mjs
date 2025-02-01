@@ -13,19 +13,19 @@ const updateItemDataInDynamoDB = async (itemId, userId, updatedData) => {
       Key: { itemId },
       UpdateExpression: `
         SET 
-          name = :name,
+          title = :title,
           description = :description,
           image_url = :image_url,
           category = :category,
-          status = :status,
+          itemStatus = :itemStatus,
           updatedAt = :updatedAt
       `,
       ExpressionAttributeValues: {
-        ':name': updatedData.name,
+        ':title': updatedData.title,
         ':description': updatedData.description,
         ':image_url': updatedData.image_url,
         ':category': updatedData.category,
-        ':status': updatedData.status,
+        ':itemStatus': updatedData.itemStatus,
         ':updatedAt': new Date().toISOString(),
       },
       ReturnValues: 'ALL_NEW', // Returns the updated item
@@ -69,10 +69,10 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { itemId, userId, category, description, image_url, name, status } = requestBody;
+    const { itemId, userId, category, description, image_url, title, itemStatus } = requestBody;
 
     // Validate input
-    if (!itemId || !userId || !category || !description || !image_url || !name || !status) {
+    if (!itemId || !userId || !category || !description || !image_url || !title || !itemStatus) {
       return {
         statusCode: 400,
         headers: {
@@ -81,18 +81,20 @@ export const lambdaHandler = async (event, context) => {
           "Access-Control-Allow-Headers": "Content-Type, Authorization", 
         },
         body: JSON.stringify({
-          message: 'Missing or invalid itemid, userId, or budgets in request body.',
+          message: 'Missing or invalid itemid, userId,description,image_url,title,itemStatus or category in request body.',
         }),
       };
     }
 
     // Process budgets data
-    const updatedBudgets = budgets;
-
-    console.log("Processed budgets data:", JSON.stringify(updatedBudgets, null, 2));
-
     const updatedData = {
-      budgets: updatedBudgets
+      "itemId": itemId,
+      "userId": userId,
+      "title": title,
+      "description": description,
+      "image_url": image_url,
+      "itemStatus": itemStatus,
+      "category": category
     };
 
     // Update DynamoDB
