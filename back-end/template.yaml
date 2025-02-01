@@ -27,43 +27,62 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       BucketName: !Sub "${Environment}-${S3StoreItemImagesName}"
-  # MyBucketPolicy:
-  #   Type: AWS::S3::BucketPolicy
-  #   Properties:
-  #     Bucket: !Ref S3StoreItemImages
-  #     PolicyDocument:
-  #       Version: '2012-10-17'
-  #       Statement:
-  #         - Effect: Allow
-  #           Principal:
-  #             AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
-  #           Action:
-  #             - s3:PutObject
-  #             - s3:GetObject*
-  #             - s3:DeleteObject
-  #           Resource:
-  #             - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}/*
-
-  #         - Effect: Allow
-  #           Principal:
-  #             AWS: !Sub arn:aws:iam::${AWS::AccountId}:root
-  #           Action:
-  #             - s3:GetBucket*
-  #             - s3:List*
-  #           Resource:
-  #             - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}
+  S3StoreItemImagesPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3StoreItemImages
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: "*"
+            Action:
+              - s3:GetObject
+            Resource:
+              - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}/*
+  # Upload Image Function
+  UploadImageFunction:
+    DependsOn: 
+      - S3StoreItemImages
+    Type: AWS::Serverless::Function
+    Properties:
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+      CodeUri: UploadImageFunction/
+      Policies:
+        - S3CrudPolicy:
+            BucketName: !Ref S3StoreItemImages
+      Handler: app.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        UploadImageFunctionApiResource:
+          Type: Api
+          Properties:
+            Path: /Image
+            Method: Post
+            RestApiId: !Ref ServerlessRestApi
   # ------------------------------ END S3  creation------------------------------  #
 
   # ------------------------------ START Function  creation------------------------------  #
   # Create
   CreateItemFunction:
-    DependsOn: ItemTable
+    DependsOn: 
+      - ItemTable
+      - S3StoreItemImages
     Type: AWS::Serverless::Function
     Properties:
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
       CodeUri: CreateItemFunction/
       Policies:
         - DynamoDBCrudPolicy:
             TableName: ItemTable
+        - S3CrudPolicy:
+            BucketName: !Ref S3StoreItemImages
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
       Architectures:
@@ -80,6 +99,9 @@ Resources:
     DependsOn: ItemTable
     Type: AWS::Serverless::Function
     Properties:
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
       CodeUri: RetrieveItemFunction/
       Policies:
         - DynamoDBCrudPolicy:
@@ -100,6 +122,12 @@ Resources:
     DependsOn: ItemTable
     Type: AWS::Serverless::Function
     Properties:
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
       CodeUri: UpdateItemFunction/
       Policies:
         - DynamoDBCrudPolicy:
@@ -120,6 +148,9 @@ Resources:
     DependsOn: ItemTable
     Type: AWS::Serverless::Function
     Properties:
+      Tags:
+        - Key: Environment
+          Value: !Ref Environment
       CodeUri: DeleteItemFunction/
       Policies:
         - DynamoDBCrudPolicy:

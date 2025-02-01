@@ -1,22 +1,24 @@
 import AWS from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid'; // UUID library for generating unique IDs
 
-const dynamoDB = new AWS.DynamoDB.DocumentClient();
-const tableName = 'ItemTable';
+const s3 = new AWS.S3();
+const bucketName = 'prod-lostnfound-store-item-images';
 
-// Function to insert data into DynamoDB
-const insertItemDataIntoDynamoDB = async (itemData) => {
+// Function to insert data into S3
+const uploadImageToS3 = async (userId,file) => {
   try {
-    const params = {
-      TableName: tableName,
-      Item: itemData,
-    };
-
-    await dynamoDB.put(params).promise();
-    console.log(`Inserted item data into DynamoDB: ${JSON.stringify(itemData)}`);
+    let params = {
+      Bucket: bucketName,
+      Key: `${userId}/${file.filename}`,// key
+      ContentType: 'image/jpeg',
+      Body: file.content
+    }
+    await s3.putObject(params).promise();
+    // await dynamoDB.put(params).promise();
+    console.log(`Uploaded image to S3`);
   } catch (error) {
-    console.error('Error inserting item data into DynamoDB:', error);
-    throw new Error('Failed to insert item data into DynamoDB.');
+    console.error('Error inserting item data into S3:', error);
+    throw new Error('Failed to insert item data into S3.');
   }
 };
 
@@ -45,10 +47,10 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { userId, item, file } = requestBody;
+    const { userId, file } = requestBody;
     // console.log(userId,budgets, typeof(budgets) === 'object')
     // Validate input
-    if ( !userId || typeof(item) !== 'object' || !file ) {
+    if ( !userId || !file ) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -57,28 +59,9 @@ export const lambdaHandler = async (event, context) => {
       };
     }
 
-    // Generate UUID for item and process rooms
-    const itemId = uuidv4();
-
-    const s3ImageKey = `${userId}/${file.filename}`;
-
-
-    const itemData = {
-      userId,
-      itemId:itemId,
-      title: item.title,
-      description: item.description,
-      image_url: item.image_url,
-      itemStatus: item.itemStatus, // lost (someone is finding this), found (someone has found a lost item), claimed (someone claimed a lost item)
-      category: item.category,
-      dateFound: new Date(item.dateFound).toISOString(),
-      dateClaimed: item.dateClaimed != null ? new Date(item.dateClaimed).toISOString() : null,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    // Insert into DynamoDB
-    await insertItemDataIntoDynamoDB(itemData);
+  
+    // Upload into S3
+    await uploadImageToS3(userId,file);
 
     return {
       statusCode: 200,
@@ -88,7 +71,7 @@ export const lambdaHandler = async (event, context) => {
         "Access-Control-Allow-Headers": "Content-Type, Authorization", 
       },
       body: JSON.stringify({
-        message: 'item data successfully created and stored in DynamoDB.',
+        message: 'item data successfully created and stored in S3.',
         itemData,
       }),
     };

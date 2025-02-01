@@ -127,15 +127,25 @@ function StaffAddItem() {
         setCategory(event.target.value);
     };
     const onFileChange = (e) => {
+        console.log("e")
+        console.log(e)
         let file = e.target.files[0];
+        console.log("file")
+        console.log(file)
         if (file) {
             if (file.size > 1024 * 1024) {
-                toast.error('Maximum file size is 1MB');
+                enqueueSnackbar('Maximum file size is 1MB', { variant: "error" });
                 return;
             }
 
             let formData = new FormData();
             formData.append('file', file);
+            console.log(`formData HERE`)
+            console.log(file.filename)
+
+            // uplaod function to s3 with userId 
+            
+            
             // http.post('/file/upload', formData, {
             //     headers: {
             //         'Content-Type': 'multipart/form-data'
