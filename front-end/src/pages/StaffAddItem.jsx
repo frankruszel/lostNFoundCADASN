@@ -17,28 +17,46 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import Collapse from '@mui/material/Collapse';
 import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 
 
 function StaffAddItem() {
     const [loading, setLoading] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("")
 
     // bookingId
     const formik = useFormik({
         initialValues: {
-            email: "",
-            password: "",
+            title: 'My title',
+            description: 'My description',
+            date: dayjs(),
         },
         validationSchema: Yup.object({
-            email: Yup.string().email("Invalid email address").required("Required"),
-            password: Yup.string().required("Password is required"),
+            title: Yup.string().trim()
+                .min(3, 'Title must be at least 3 characters')
+                .max(100, 'Title must be at most 100 characters')
+                .required('Title is required'),
+            description: Yup.string().trim()
+                .min(3, 'Description must be at least 3 characters')
+                .max(500, 'Description must be at most 500 characters')
+                .required('Description is required'),
+            date: Yup.date().typeError('Invalid date').required('Date is required'),
         }),
         onSubmit: (data) => {
-            // setLoading(true);
-            data.email = data.email.trim();
-            data.password = data.password.trim();
+            if (imageFile) {
+                data.imageFile = imageFile;
+            }
+            // create a new object for submission
 
-            handleAddEvent(data);
+            let dataToSubmit = { ...data };
+            dataToSubmit.title = data.title.trim();
+            dataToSubmit.description = data.description.trim();
+            dataToSubmit.date = data.date.format('YYYY-MM-DD');
+            console.log(`submitted ItemDate: ${data}`)
+            handleAddEvent(data)
+            // toast.success('Form submitted successfully');
         }
 
     })
@@ -127,33 +145,54 @@ function StaffAddItem() {
 
                         </Grid>
                         <Divider sx={{ borderBottomWidth: 3, py: 0 }} />
-                        <Card sx={{ minHeight: 450, pt: 2, border: "0px solid", boxShadow: 0 }}>
+                        <Box component="form" onSubmit={formik.handleSubmit}>
 
 
-                            <Grid container direction={'column'} spacing={2} sx={{ px: 2 }}  >
-
-                                <Grid>
-                                    <Box sx={{ textAlign: 'center', mt: 2 }} >
-                                        {
-
-                                            imageFile && (
-                                                <Button className="aspect-ratio-container" variant="outlined" component="label" sx={{ height: 250, width: "100%" }}>
-
-                                                    <img alt="tutorial"
-                                                        src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}>
-                                                    </img>
-                                                    <input hidden accept="image/*" multiple type="file" onChange={onFileChange} />
-                                                </Button>
-
-                                            )
-                                        }
-                                        {
-                                            (!imageFile && imageError) && (
+                            <Card sx={{ minHeight: 450, pt: 2, border: "0px solid", boxShadow: 0 }} >
 
 
+                                <Grid container direction={'column'} spacing={2} sx={{ px: 2 }}  >
 
-                                                <Box>
-                                                    <Button className="aspect-ratio-container" variant="outlined-error" component="label" sx={{ height: 250, width: "100%" }}>
+                                    <Grid>
+                                        <Box sx={{ textAlign: 'center', mt: 2 }} >
+                                            {
+
+                                                imageFile && (
+                                                    <Button className="aspect-ratio-container" variant="outlined" component="label" sx={{ height: 250, width: "100%" }}>
+
+                                                        <img alt="tutorial"
+                                                            src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}>
+                                                        </img>
+                                                        <input hidden accept="image/*" multiple type="file" onChange={onFileChange} />
+                                                    </Button>
+
+                                                )
+                                            }
+                                            {
+                                                (!imageFile && imageError) && (
+
+
+
+                                                    <Box>
+                                                        <Button className="aspect-ratio-container" variant="outlined-error" component="label" sx={{ height: 250, width: "100%" }}>
+
+                                                            <img alt="tutorial"
+
+                                                                src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png">
+
+                                                            </img>
+
+
+                                                            <input hidden accept="image/*" multiple type="file" onChange={onFileChange} />
+                                                        </Button>
+                                                        <Typography textAlign={"start"} fontSize={16} sx={{ color: "#d9534f", pl: 1 }}>Image is required</Typography>
+                                                    </Box>
+                                                )
+                                            }
+                                            {
+                                                (!imageFile && !imageError) && (
+
+                                                    <Button className="aspect-ratio-container" variant="outlined-striped" component="label" sx={{ height: 250, width: "100%" }}>
 
                                                         <img alt="tutorial"
 
@@ -164,132 +203,138 @@ function StaffAddItem() {
 
                                                         <input hidden accept="image/*" multiple type="file" onChange={onFileChange} />
                                                     </Button>
-                                                    <Typography textAlign={"start"} fontSize={16} sx={{ color: "#d9534f", pl: 1 }}>Image is required</Typography>
-                                                </Box>
-                                            )
-                                        }
-                                        {
-                                            (!imageFile && !imageError) && (
-
-                                                <Button className="aspect-ratio-container" variant="outlined-striped" component="label" sx={{ height: 250, width: "100%" }}>
-
-                                                    <img alt="tutorial"
-
-                                                        src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png">
-
-                                                    </img>
-
-
-                                                    <input hidden accept="image/*" multiple type="file" onChange={onFileChange} />
-                                                </Button>
-                                            )
-                                        }
+                                                )
+                                            }
 
 
 
 
-                                    </Box>
-                                </Grid>
-                                <Grid>
-                                    <Stack spacing={2} sx={{ marginTop: 2, overflow: "auto" }}>
-                                        <TextField
-                                            type="email"
-                                            fullWidth
-                                            label="E-mail Address"
-                                            variant="outlined"
-                                            name="email"
-                                            value={formik.values.email}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.email && Boolean(formik.errors.email)}
-                                            helperText={formik.touched.email && formik.errors.email}
-                                        />
-                                        <FormControl fullWidth>
-                                            <InputLabel id="eventType">Category</InputLabel>
-                                            <Select
-                                                labelId="category"
-                                                id="category-select"
-                                                value={category}
-                                                label="category"
-                                                onChange={handleCategoryChange}
-                                            >
-                                                <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
-                                                <MenuItem value={'Electronics'}>Electronics</MenuItem>
-                                                <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
-                                                <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem>
-                                            </Select>
-                                        </FormControl>
-                                        <TextField
-                                            type="email"
-                                            fullWidth
-                                            label="Description"
-                                            multiline
-                                            rows={3}
-                                            variant="outlined"
-                                            name="email"
-                                            value={formik.values.email}
-                                            onChange={formik.handleChange}
-                                            error={formik.touched.email && Boolean(formik.errors.email)}
-                                            helperText={formik.touched.email && formik.errors.email}
-                                        />
-                                        <Box sx={{
-                                            display: "flex",
-                                            alignItems: "center",
-                                        }}>
-                                            <Grid container direction={'column'} display={'flex'} >
+                                        </Box>
+                                    </Grid>
+                                    <Grid>
+                                        <Stack spacing={2} sx={{ marginTop: 2, overflow: "auto" }}>
+                                            <TextField
+                                                type="string"
+                                                fullWidth
+                                                label="Title"
+                                                variant="outlined"
+                                                name="title"
+                                                value={formik.values.title}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.title && Boolean(formik.errors.title)}
+                                                helperText={formik.touched.title && formik.errors.title}
+                                            />
+                                            <Grid container direction={'row'} display={'flex'} >
+                                                <Grid lg={5.75}>
+                                                    <FormControl fullWidth margin="dense" sx={{ position: 'relative', bottom: 7 }}>
+                                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                                            <DatePicker format="DD/MM/YYYY"
+                                                                label="Date Lost"
+                                                                name="date"
+                                                                value={formik.values.date}
+                                                                onChange={(date) => formik.setFieldValue('date', date)}
+                                                                onBlur={() => formik.setFieldTouched('date', true)}
+                                                                slotProps={{
+                                                                    textField: {
+                                                                        error: formik.touched.date && Boolean(formik.errors.date),
+                                                                        helperText: formik.touched.date && formik.errors.date
+                                                                    }
+                                                                }}
+                                                            />
+                                                        </LocalizationProvider>
+                                                    </FormControl>
+                                                </Grid>
+                                                <Grid lg={0.5}>
 
-                                                <Grid container direction={'column'} mt={2}  >
-                                                    <Grid item display={'flex'} >
-                                                        <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >Add Item</LoadingButton>
-                                                    </Grid>
-                                                    {/* <Grid item display={'flex'} >
+                                                </Grid>
+                                                <Grid lg={5.75}>
+                                                    <FormControl fullWidth>
+                                                        <InputLabel id="eventType">Category</InputLabel>
+                                                        <Select
+                                                            labelId="category"
+                                                            id="category-select"
+                                                            value={category}
+                                                            label="category"
+                                                            onChange={handleCategoryChange}
+                                                        >
+                                                            <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
+                                                            <MenuItem value={'Electronics'}>Electronics</MenuItem>
+                                                            <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
+                                                            <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem>
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+                                            </Grid>
+
+                                            <TextField
+                                                type="string"
+                                                fullWidth
+                                                label="Description"
+                                                multiline
+                                                rows={3}
+                                                variant="outlined"
+                                                name="Description"
+                                                value={formik.values.Description}
+                                                onChange={formik.handleChange}
+                                                error={formik.touched.Description && Boolean(formik.errors.Description)}
+                                                helperText={formik.touched.Description && formik.errors.Description}
+                                            />
+                                            <Box sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                            }}>
+                                                <Grid container direction={'column'} display={'flex'} >
+
+                                                    <Grid container direction={'column'} mt={2}  >
+                                                        <Grid item display={'flex'} >
+                                                            <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
+                                                                Add Item
+                                                            </LoadingButton>
+                                                        </Grid>
+                                                        {/* <Grid item display={'flex'} >
                                     <Button fullWidth variant="contained" color="primary" href="/" startIcon={<AddIcon />} LinkComponent={Link} to="/register">Register</Button>
                                 </Grid> */}
 
 
 
-                                                </Grid>
-                                                <Grid my={3}>
+                                                    </Grid>
 
-                                                    <Divider />
 
                                                 </Grid>
 
 
-                                            </Grid>
+                                                {/* <Button sx={{ marginTop: 1, fontSize: "0.8rem" }} variant="outlined" color="primary" onClick={handleResetPasswordDialog}>Reset Password</Button> */}
+
+                                            </Box>
+
+                                            <Collapse in={open}>
+                                                <Alert
+                                                    severity="error"
+                                                    action={
+                                                        <IconButton
+                                                            aria-label="close"
+                                                            color="inherit"
+                                                            size="small"
+                                                            onClick={() => {
+                                                                setOpen(false);
+                                                            }}
+                                                        >
+                                                            <CloseIcon fontSize="inherit" />
+                                                        </IconButton>
+                                                    }
+                                                >
+                                                    test
+                                                </Alert>
+                                            </Collapse>
+                                        </Stack>
+                                    </Grid>
 
 
-                                            {/* <Button sx={{ marginTop: 1, fontSize: "0.8rem" }} variant="outlined" color="primary" onClick={handleResetPasswordDialog}>Reset Password</Button> */}
 
-                                        </Box>
-
-                                        <Collapse in={open}>
-                                            <Alert
-                                                severity="error"
-                                                action={
-                                                    <IconButton
-                                                        aria-label="close"
-                                                        color="inherit"
-                                                        size="small"
-                                                        onClick={() => {
-                                                            setOpen(false);
-                                                        }}
-                                                    >
-                                                        <CloseIcon fontSize="inherit" />
-                                                    </IconButton>
-                                                }
-                                            >
-                                                {errorMessage}
-                                            </Alert>
-                                        </Collapse>
-                                    </Stack>
                                 </Grid>
+                            </Card>
 
-
-
-                            </Grid>
-                        </Card>
-
-
+                        </Box>
 
 
 
@@ -298,11 +343,12 @@ function StaffAddItem() {
                     </CardContent>
 
                 </Card>
+
             </Box>
 
 
 
-        </Box>
+        </Box >
 
 
 

@@ -19,7 +19,6 @@ import UserMFAPage from './UserMFAPage';
 import PhoneLockedIcon from '@mui/icons-material/PhoneLocked';
 import UserPasswordLoginPage from './UserPasswordLoginPage';
 import NotFoundPage from '../NotFoundPage'
-import NotificationSettingsPage from './NotificationSettingsPage'
 
 export const ProfileContext = createContext(null)
 function UserProfileRoutesPage() {
@@ -107,9 +106,9 @@ function UserProfileRoutesPage() {
                         <Routes>
                             <Route path="/" element={<ViewProfilePage />} />
                         </Routes>
-                        <Routes>
+                        {/* <Routes>
                             <Route path="/notification" element={<NotificationSettingsPage />} />
-                        </Routes>
+                        </Routes> */}
                         <Routes>
                             <Route path="/mfa" element={<UserMFAPage />} />
                         </Routes>

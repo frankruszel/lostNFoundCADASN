@@ -56,21 +56,21 @@ const theme = createTheme({
                     style: {
                         textTransform: 'none',
                         backgroundColor: '#FFFFFF',
-                        color: "#001f3f",
-                        border: "1px solid #001f3f",
+                        color: "#0e4194",
+                        border: "1px solid #0e4194",
                     },
                 },
                 {
                     props: { variant: 'claimit_primary' },
                     style: {
                         textTransform: 'none',
-                        backgroundColor: '#001f3f',
+                        backgroundColor: '#0e4194',
                         color: "#FFFFFF",
                         '&:hover': {
 
 
-                            border: "1.5px solid #001f3f",
-                            color: "#001f3f",
+                            border: "1.5px solid #0e4194",
+                            color: "#0e4194",
 
                             backgroundColor: "#FFFFFF",
                             '& .MuiChip-label':
@@ -133,14 +133,14 @@ const theme = createTheme({
                             fontSize: "14px"
                         },
                         textTransform: 'none',
-                        backgroundColor: '#001f3f',
+                        backgroundColor: '#0e4194',
                         color: "#FFFFFF",
                         '&:hover': {
                             minWidth: "150px",
                             minWidth: '150px',
                             height: '38px',
-                            border: "1.5px solid #001f3f",
-                            color: "#001f3f",
+                            border: "1.5px solid #0e4194",
+                            color: "#0e4194",
                             borderRadius: 18,
                             backgroundColor: "#FFFFFF",
                             '& .MuiChip-label':
@@ -172,7 +172,8 @@ const theme = createTheme({
         },
     },
     palette: {
-        primaryColor: "#001f3f"
+        primaryColor: "#0e4194",
+        secondaryColor: "#001f3f"
     },
 });
 
@@ -203,7 +204,10 @@ function Root() {
                                 >
                                     <Outlet />
                                 </Box>
-                                <Footer />
+                                <ShowActualNavBar>
+                                    <Footer />
+                                </ShowActualNavBar>
+
                                 <ScrollRestoration />
 
                             </SnackbarProvider>

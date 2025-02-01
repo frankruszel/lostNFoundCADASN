@@ -130,7 +130,7 @@ p.navbarLink::after {
     bottom: 0;
     color: black;
     width: 0;
-    background: #001f3f;
+    background: #0e4194;
     transition: width .2s;
     
 }

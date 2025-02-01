@@ -75,8 +75,8 @@ function LogInLeftCard(props) {
         < >
             <Grid mt={-7}>
                 <a href="/">
-                    <Box sx={{ backgroundColor: "primaryColor", height: 100, boxShadow: 5 }} container direction={'row'} display={'flex'} justifyContent={'center'} >
-                        <img src="https://i.ibb.co/4R8WzBs/ecowise.png" alt="EcoWise" height={'32'} style={{ margin: 'auto' }} />
+                    <Box sx={{ backgroundColor: "secondaryColor", height: 100, boxShadow: 5 }} container direction={'row'} display={'flex'} justifyContent={'center'} >
+                        <img src="https://i.ibb.co/HTD2T9gF/image-removebg-preview-5.png" alt="EcoWise" height={'32'} style={{ margin: 'auto' }} />
 
                     </Box>
                 </a>
@@ -130,7 +130,7 @@ function LogInLeftCard(props) {
                                         </Grid>
                                         <Grid container direction={'column'} mt={2}  >
                                             <Grid item display={'flex'} >
-                                                <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height:45 }} >Login</LoadingButton>
+                                                <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'secondaryColor', height:45 }} >Login</LoadingButton>
                                             </Grid>
                                             {/* <Grid item display={'flex'} >
                                     <Button fullWidth variant="contained" color="primary" href="/" startIcon={<AddIcon />} LinkComponent={Link} to="/register">Register</Button>

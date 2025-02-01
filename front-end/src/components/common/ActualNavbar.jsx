@@ -21,43 +21,46 @@ function ActualNavbar() {
     };
 
     return (
-        <AppBar position="static" className="AppBar" sx={{ backgroundColor: "white", display: 'flex' }} >
+        <>
+            <AppBar position="static" className="AppBar" sx={{ backgroundColor: "white", display: 'flex' }} >
 
-            {
-                (!user || user.role != "Staff" && user.role != "Company") &&
-                <Grid sx={{ padding: 0, mr: 0, width: "inherit" }}>
-                    <Toolbar disableGutters={true}>
-                        <Link to="/" style={{ marginLeft: 150 }}>
-                            <img src="https://i.ibb.co/gMrcy0cr/download-10.png" alt="UPlay" width="110px" />
-                        </Link>
-                        {
-                            user &&
-                            <Box sx={{ flexGrow: 0.025 }}></Box>
-                        }
-                        {
-                            !user &&
-                            <Box sx={{ flexGrow: 0.025 }}></Box>
-                        }
+                {
+                    (!user || user.role != "Staff" && user.role != "Company") &&
+                    <Grid sx={{ padding: 0, mr: 0, width: "inherit" }}>
+                        <Toolbar disableGutters={true}>
+                            <Link to="/" style={{ marginLeft: 150 }}>
+                                {/* <img src="https://i.ibb.co/gMrcy0cr/download-10.png" alt="UPlay" width="110px" /> */}
+                                <img src="https://i.ibb.co/tPcdxFmH/image-removebg-preview-4.png" alt="UPlay" width="80px" />
 
-                        <Link to="/home" ><Typography color="grey" variant='navbarLink' className='navbarLink'>
-                            <p class="navbarLink">
-                                Browse Items </p>
-                        </Typography></Link>
-                        <Box sx={{ flexGrow: 0.008 }}></Box>
+                            </Link>
+                            {
+                                user &&
+                                <Box sx={{ flexGrow: 0.025 }}></Box>
+                            }
+                            {
+                                !user &&
+                                <Box sx={{ flexGrow: 0.025 }}></Box>
+                            }
 
-                        <Link to="/faq" ><Typography color="grey" variant='navbarLink' className='navbarLink'
+                            <Link to="/home" ><Typography color="grey" variant='navbarLink' className='navbarLink'>
+                                <p class="navbarLink">
+                                    Browse Items </p>
+                            </Typography></Link>
+                            <Box sx={{ flexGrow: 0.008 }}></Box>
 
-                        >
-                            <p class="navbarLink">
-                                Found Item </p> </Typography></Link>
-                        <Box sx={{ flexGrow: 0.9 }}></Box>
+                            <Link to="/faq" ><Typography color="grey" variant='navbarLink' className='navbarLink'
 
-
-                        {user && (
-                            <>
+                            >
+                                <p class="navbarLink">
+                                    Found Item </p> </Typography></Link>
+                            <Box sx={{ flexGrow: 0.9 }}></Box>
 
 
-                                {/* <IconButton sx={{ mx: 0, px: 0 }}>
+                            {user && (
+                                <>
+
+
+                                    {/* <IconButton sx={{ mx: 0, px: 0 }}>
                                     <img height="25px" src="https://cdn-icons-png.flaticon.com/128/1170/1170678.png" alt="" />
 
                                 </IconButton>
@@ -73,59 +76,63 @@ function ActualNavbar() {
                                 </IconButton> */}
 
 
-                                <Menu
-                                    sx={{ mr: 150 }}
-                                    id="simple-menu"
-                                    anchorEl={anchorEl}
-                                    keepMounted
-                                    open={Boolean(anchorEl)}
-                                    onClose={handleClose}
-                                >
-                                    <MenuItem><Link to={`/profile/${user.id}`} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Profile</Typography></Link></MenuItem>
-                                    <MenuItem >Logout</MenuItem>
-                                </Menu>
-                                <IconButton aria-label="menu" onClick={handleClick} sx={{ mr: 2 }}>
-                                    {/* <MenuIcon /> */}
-                                    {/* <Avatar alt="" /> */}
-                                    {
-                                        user.profilePicture && user.profilePicture != "null" && (
-                                            <img alt="Profile Picture"
-                                                // src={`${import.meta.env.VITE_FILE_BASE_URL}${profilePicture}`} 
-                                                style={{ height: '40px', width: '40px', borderRadius: '50%' }}
-                                                onClick={handleClose}>
-                                            </img>
-                                        )
-                                    }
-                                    {
-                                        (!user.profilePicture || user.profilePicture == "null") && (
-                                            <Avatar alt="" />
-                                        )
-                                    }
-                                    <ArrowDropDownIcon />
-                                </IconButton>
-                                {/* <Link to={`/profile/${user.id}`}>
+                                    <Menu
+                                        sx={{ mr: 150 }}
+                                        id="simple-menu"
+                                        anchorEl={anchorEl}
+                                        keepMounted
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
+                                    >
+                                        <MenuItem><Link to={`/profile/${user.id}`} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Profile</Typography></Link></MenuItem>
+                                        <MenuItem >Logout</MenuItem>
+                                    </Menu>
+                                    <IconButton aria-label="menu" onClick={handleClick} sx={{ mr: 2 }}>
+                                        {/* <MenuIcon /> */}
+                                        {/* <Avatar alt="" /> */}
+                                        {
+                                            user.profilePicture && user.profilePicture != "null" && (
+                                                <img alt="Profile Picture"
+                                                    // src={`${import.meta.env.VITE_FILE_BASE_URL}${profilePicture}`} 
+                                                    style={{ height: '40px', width: '40px', borderRadius: '50%' }}
+                                                    onClick={handleClose}>
+                                                </img>
+                                            )
+                                        }
+                                        {
+                                            (!user.profilePicture || user.profilePicture == "null") && (
+                                                <Avatar alt="" />
+                                            )
+                                        }
+                                        <ArrowDropDownIcon />
+                                    </IconButton>
+                                    {/* <Link to={`/profile/${user.id}`}>
 
                     </Link> */}
 
-                            </>
-                        )
-                        }
-                        {!user && (
-                            <>
-                                <Link to="/register" ><Typography>Register</Typography></Link>
-                                <Link to="/login" ><Typography>Login</Typography></Link>
-                            </>
-                        )}
-                    </Toolbar>
-                </Grid>
-            }
+                                </>
+                            )
+                            }
+                            {!user && (
+                                <>
+                                    <Link to="/register" ><Typography>Register</Typography></Link>
+                                    <Link to="/login" ><Typography>Login</Typography></Link>
+                                </>
+                            )}
+                        </Toolbar>
+                    </Grid>
+                }
 
-            {
-                user && user.role == "Staff" &&
-                <SideNav />
-            }
+                {
+                    user && user.role == "Staff" &&
+                    <SideNav />
+                }
 
-        </AppBar>
+            </AppBar>
+            <Box ><img sx={{ display: 'flex' }} src="https://i.ibb.co/GfSFJZLY/image.png" alt="" height='62px' width='100%' /></Box>
+
+
+        </>
     );
 }
 

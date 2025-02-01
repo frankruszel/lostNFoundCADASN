@@ -260,7 +260,10 @@ function StaffListItems() {
     ];
 
     const rows = itemList;
-
+    const handleAddItem = () => {
+        console.log("handleAddItem")
+        navigate("/staff/list/add")
+    }
     if (user == null) {
         return (
 
@@ -271,20 +274,26 @@ function StaffListItems() {
                 <Box px={10}>
                     <Card sx={{}}>
                         <CardContent sx={{ mb: 4, px: 5, py: 5 }}>
-                            <Grid container direction='row' >
+                            <Grid container direction='row' sx={{ flexGrow: 1, display: 'flex' }} justifyContent={'space-between'}>
 
-                                <Grid sx={{ flexGrow: 1 }} item >
-                                    <Tabs
-                                        value={tabState}
-                                        onChange={handleTabChange}
-                                        textColor="secondary"
+                                <Grid sx={{ flexGrow: 1 }} display={'flex'} justifyContent={'space-between'} >
+                                    <Grid>
+                                        <Tabs
+                                            value={tabState}
+                                            onChange={handleTabChange}
+                                            textColor="secondary"
 
-                                    >
-                                        <Tab value="All" label="All" />
-                                        <Tab value="Today" label="Today" />
-                                        <Tab value="Upcoming" label="Upcoming" />
-                                        <Tab value="Completed" label="Completed" />
-                                    </Tabs>
+                                        >
+                                            <Tab value="All" label="All" />
+                                            <Tab value="Today" label="Today" />
+                                            <Tab value="Upcoming" label="Upcoming" />
+                                            <Tab value="Completed" label="Completed" />
+                                        </Tabs>
+                                    </Grid>
+                                    <Grid>
+                                        <Button alignSelf="flex-end" variant="claimit_primary" onClick={handleAddItem}  >Add Item</Button>
+                                    </Grid>
+
                                 </Grid>
 
 

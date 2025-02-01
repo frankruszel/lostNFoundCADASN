@@ -132,8 +132,8 @@ function RegisterPage() {
         <>
             <Grid mt={-7} mb={2}>
                 <a href="/">
-                    <Box sx={{ margin: "auto",backgroundColor: "primaryColor", height: 100, boxShadow: 5,maxWidth: 459 }} container direction={'row'} display={'flex'} justifyContent={'center'}  >
-                        <img src="https://i.ibb.co/4R8WzBs/ecowise.png" alt="EcoWise" height={'32'} style={{ margin: 'auto' }} />
+                    <Box sx={{ margin: "auto",backgroundColor: "secondaryColor", height: 100, boxShadow: 5,maxWidth: 459 }} container direction={'row'} display={'flex'} justifyContent={'center'}  >
+                        <img src="https://i.ibb.co/HTD2T9gF/image-removebg-preview-5.png" alt="EcoWise" height={'32'} style={{ margin: 'auto' }} />
 
                     </Box>
                 </a>
@@ -205,7 +205,7 @@ function RegisterPage() {
                                         </ListItem>
                                     ))}
                                 </List>
-                                <LoadingButton type="submit" loadingPosition="start" fullWidth loading={loading} variant="contained" color="primary" sx={{ backgroundColor: 'primaryColor', height:45 }} >Sign up</LoadingButton>
+                                <LoadingButton type="submit" loadingPosition="start" fullWidth loading={loading} variant="contained" color="primary" sx={{ backgroundColor: 'secondaryColor', height:45 }} >Sign up</LoadingButton>
                             </Stack>
                         </Box>
                     </CardContent>

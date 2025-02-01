@@ -115,7 +115,7 @@ export default function SideNav() {
         <>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <AppBar position="fixed" sx={{ backgroundColor: 'primaryColor' }}  >
+                <AppBar position="fixed" sx={{ backgroundColor: 'secondaryColor' }}  >
                     <Toolbar sx={{ display: 'flex', ml: 0, pl: 0 }} style={{ paddingLeft: "0.5%" }}>
                         <IconButton
                             color="inherit"
@@ -127,7 +127,8 @@ export default function SideNav() {
                             <MenuIcon />
                         </IconButton>
                         <a href="/staff/dashboard">
-                            <img src="https://i.ibb.co/jkKYxDxR/image-removebg-preview-2.png" alt="ClaimIt" height={'32'} />
+                            {/* <img src="https://i.ibb.co/jkKYxDxR/image-removebg-preview-2.png" alt="ClaimIt" height={'32'} /> */}
+                            <img src="https://jobtech-images.s3-ap-southeast-1.amazonaws.com/logo/nyp/nyp-white.png" alt="ClaimIt" height={'32'} />
                         </a>
                         {/*} <Typography variant="h6" noWrap component="div">
               Uplay
@@ -151,14 +152,14 @@ export default function SideNav() {
                         )}
                     </Toolbar>
                 </AppBar>
-                <Drawer variant="permanent" open={open} sx={{ backgroundColor: 'primaryColor' }} >
+                <Drawer variant="permanent" open={open} sx={{ backgroundColor: 'secondaryColor' }} >
                     <DrawerHeader>
                         <IconButton onClick={() => { setOpen(!open) }}>
                             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                         </IconButton>
                     </DrawerHeader>
-                    <Divider sx={{ backgroundColor: 'primaryColor' }} />
-                    <List sx={{ backgroundColor: 'primaryColor', height: '100%' }} >
+                    <Divider sx={{ backgroundColor: 'secondaryColor' }} />
+                    <List sx={{ backgroundColor: 'secondaryColor', height: '100%' }} >
 
                         <ListItem onClick={handleClickHome} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton

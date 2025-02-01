@@ -1,15 +1,15 @@
-import EcoWiseApi from "../APIRequest";
+import ClaimItApi from "../APIRequestItem";
 
-export const StoreHomeApi = async (requestBody) => {
+export const CreateItemApi = async (requestBody) => {
     try {
   
       // Make the POST request using the APIRequest class
-      const response = await EcoWiseApi.post('/Home/StoreHome', requestBody);
+      const response = await ClaimItApi.post('/Item/CreateItem', requestBody);
   
       // Return the successful response
       return response.data;
     } catch (error) {
-      console.error('Error creating home:', error);
+      console.error('Error creating Item:', error);
       // Re-throw the error for higher-level handling
       throw error;
     }
