@@ -13,6 +13,7 @@ import Toolbar from "react-multi-date-picker/plugins/toolbar";
 import CategoryIcon from '@mui/icons-material/Category';
 import { GetItemApi } from '../api/item/GetItemApi';
 import dayjs from 'dayjs';
+import { enqueueSnackbar } from "notistack";
 
 
 function Homepage() {
@@ -64,6 +65,9 @@ function Homepage() {
         // console.log(`res.data:${JSON.stringify(res.data)}`)
         setitemList(res.data)
         setItemListForAutoComplete(res.data)
+      }).catch((error) => {
+        console.error("Error fetching Items:", error);
+        enqueueSnackbar('Failed to fetch Items', { variant: "error" })  
       })
   }, [])
   useEffect(() => {
@@ -188,7 +192,7 @@ function Homepage() {
               ? itemList.map((item, i) => {
                 return (
                   <>
-                    <Grid item xs={12} md={6} lg={3} sx={{ height: 330, mb: 2 }} >
+                    <Grid item xs={12} md={6} lg={3.5} sx={{ height: 330, mb: 2 }} >
 
                       {/* <Box sx={{
   color: "#FFFFFF",

@@ -19,12 +19,28 @@ import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {CreateItemApi} from '../api/item/CreateItemApi';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import { enqueueSnackbar } from "notistack";
 
 
 function StaffAddItem() {
     const [loading, setLoading] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [rowID, setRowID] = useState();
+    const [search, setSearch] = useState('');
+    const [user, setUser] = useState(null);
+    const [deleteOpen, setDeleteOpen] = useState(false);
+    const [activateOpen, setActivateOpen] = useState(false);
+    const [imageQR, setImageQR] = useState();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [qrOpen, setQrOpen] = useState(false)
+    const [currentTicket, setCurrentTicket] = useState()
+    const [tabState, setTabState] = useState('All')
+    const [imageFile, setImageFile] = useState(null);
+    const [imageError, setImageError] = useState(false);
+    const [category, setCategory] = useState('');
 
     // bookingId
     const formik = useFormik({
@@ -45,25 +61,48 @@ function StaffAddItem() {
             date: Yup.date().typeError('Invalid date').required('Date is required'),
         }),
         onSubmit: (data) => {
+            console.log(`submitStart: ${JSON.stringify(data)}`)
+            console.log(`typeof imageFile: ${imageFile}`)
             if (imageFile) {
-                data.imageFile = imageFile;
+                data.image_url = imageFile;
+
             }
             // create a new object for submission
 
-            let dataToSubmit = { ...data };
-            dataToSubmit.title = data.title.trim();
-            dataToSubmit.description = data.description.trim();
-            dataToSubmit.date = data.date.format('YYYY-MM-DD');
-            console.log(`submitted ItemDate: ${data}`)
-            handleAddEvent(data)
+            let dataToSubmit = {};
+            dataToSubmit["userId"] = "testUser" // user
+            dataToSubmit["item"] = { ...data };
+
+            dataToSubmit["item"]["title"] = data.title.trim();
+            dataToSubmit["item"]["description"] = data.description.trim();
+            dataToSubmit["item"]["category"] = category
+            dataToSubmit["item"]["date"] = data.date.format('YYYY-MM-DD');
+            dataToSubmit["item"]["image_url"] = imageFile;
+            dataToSubmit["item"]["itemStatus"] = "lost"
+            console.log(`dataToSubmASDASDASDit:${JSON.stringify(dataToSubmit)}`)
+            handleAddEvent(dataToSubmit)
             // toast.success('Form submitted successfully');
         }
 
     })
     const componentRef = useRef();
 
-    const handleAddEvent = () => {
-        console.log("handleAddEvent")
+    const handleAddEvent = (data) => {
+        console.log(`handleAddEvent: ${data}`)
+        CreateItemApi(data)
+            .then((res) => {
+                console.log(`res.data: ${JSON.stringify(res.data)}`)
+                // toast.success('Form submitted successfully');
+                enqueueSnackbar("Created item succesfully.", { variant: "success" });
+
+
+            })
+            .catch((error) => {
+                console.error("Error creating Item:", error);
+                enqueueSnackbar('Failed to create item', { variant: "error" })
+
+            });
+        // CreateItemApi
     }
 
     const [userList, setUserList] = useState([]);
@@ -82,21 +121,7 @@ function StaffAddItem() {
 
 
     }]);
-    const [open, setOpen] = useState(false);
-    const [rowID, setRowID] = useState();
-    const [search, setSearch] = useState('');
-    const [user, setUser] = useState(null);
-    const [deleteOpen, setDeleteOpen] = useState(false);
-    const [activateOpen, setActivateOpen] = useState(false);
-    const [imageQR, setImageQR] = useState();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [qrOpen, setQrOpen] = useState(false)
-    const [currentTicket, setCurrentTicket] = useState()
-    const [tabState, setTabState] = useState('All')
-    const [imageFile, setImageFile] = useState(null);
-    const [imageError, setImageError] = useState(false);
-    const [category, setCategory] = useState('');
+
     const handleCategoryChange = (event) => {
         // setCategoryError(false)
         setCategory(event.target.value);

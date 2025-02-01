@@ -11,7 +11,8 @@ import PrintIcon from '@mui/icons-material/Print';
 import qrcode from "qrcode";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import dayjs from 'dayjs';
-
+import { enqueueSnackbar } from "notistack";
+import { GetItemApi } from '../api/item/GetItemApi';
 
 function StaffListItems() {
     // bookingId
@@ -98,16 +99,19 @@ function StaffListItems() {
 
     const from = location.state?.from?.pathname || "/";
     useEffect(() => {
-        if (localStorage.getItem("accessToken")) {
-
-        }
+        GetItemApi()
+            .then((res) => {
+                console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
+                setItemList(res.data)
+            }).catch((error) => {
+                console.error("Error fetching Items:", error);
+                enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+            })
     }, []);
     const handleTabChange = (event, newValue) => {
 
     };
-    useEffect(() => {
 
-    }, [user]);
     const generateQRCode = async (ticketInfo) => {
         // console.log(JSON.parse(JSON.stringify(myNewInfo)))
         // console.log("test")
@@ -307,11 +311,11 @@ function StaffListItems() {
 
                                     {
                                         (itemList.length > 0)
-                                            ? itemList.map((ticket, i) => {
+                                            ? itemList.map((item, i) => {
                                                 return (
                                                     <>
                                                         <Grid sx={{ flexGrow: 1 }} item>
-                                                            <Link style={{ textDecoration: 'none' }} onClick={() => generateQRCode(ticket)}>
+                                                            <Link style={{ textDecoration: 'none' }} onClick={() => generateQRCode(item)}>
 
                                                                 <Paper pt={3} sx={{
                                                                     display: "flex", borderRadius: 3.5, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, height: "140px", boxShadow: 2,
@@ -322,34 +326,46 @@ function StaffListItems() {
 
                                                                         </Grid>
                                                                         <Grid item>
-                                                                            {ticket.event.imageFile && (
-                                                                                <img style={{ paddingTop: "25%" }} height="90px" width="100px" alt="test" src={`${ticket.event.imageFile}`} sx={{ display: 'flex' }} />
+                                                                            {item.image_url && (
+                                                                                <img style={{ paddingTop: "25%" }} height="90px" width="100px" alt="test" src={`${item.image_url}`} sx={{ display: 'flex' }} />
 
                                                                             )}
+                                                                            {
+                                                                                !item.image_url && (
+                                                                                    <>
+
+                                                                                        <img alt="tutorial"
+                                                                                            style={{ paddingTop: "25%" }} height="90px" width="100px" alt="test" src={`${item.image_url}`} sx={{ display: 'flex' }}
+                                                                                            src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png"/>
+
+                                                                                     
+
+
+                                                                                    </>
+                                                                                )
+                                                                            }
                                                                             {/* <img style={{ paddingTop: "25%" }} height="90px" width="100px" src="https://cdn.peatix.com/event/3809236/cover-emZ6HSFyivsV6F0lkmWGmqcxSeZX87w9.jpeg" alt="" /> */}
                                                                         </Grid>
                                                                         <Grid lg={6.2} item >
                                                                             <Box sx={{ mt: 3 }}>
                                                                                 <Typography sx={{ fontWeight: "bold", fontSize: 20 }}>
-                                                                                    {ticket.event.title} Ticket
+                                                                                    {item.title}
                                                                                 </Typography>
                                                                                 <Typography sx={{ fontSize: 15, color: "grey", pl: 0 }}>
                                                                                     {/* 16 January 2024 */}
-                                                                                    {/* {console.log(ticket.timeSlot.event_StartTime)} */}
-                                                                                    {dayjs(ticket.timeSlot.event_StartTime).format('DD MMM YYYY')}
+                                                                                    {/* {console.log(item.timeSlot.event_StartTime)} */}
+                                                                                    {dayjs(item.dateFound).format('DD MMM YYYY')}
                                                                                 </Typography>
                                                                                 <Typography sx={{ fontSize: 15, color: "grey", pl: 0.37 }}>
-                                                                                    {/* 6:00 PM - 8:00 PM */}
-                                                                                    {dayjs(ticket.timeSlot.event_StartTime).format("h:mm A")} - {dayjs(ticket.timeSlot.event_EndTime).format("h:mm A")}
-                                                                                    {/* {dayjs(timeslot.event_StartTime).format("h:mm A")} - {dayjs(timeslot.event_EndTime).format("h:mm A")} */}
+                                                                                    {item.category}
                                                                                 </Typography>
                                                                             </Box>
 
                                                                         </Grid>
                                                                         <Grid item sx={{ flexGrow: 1, display: "flex", justifyContent: 'end', mt: 3.2, mr: 2 }}>
                                                                             {
-                                                                                ticket.attended
-                                                                                    ? <Chip label=" Attended" color="success" />
+                                                                                item.status == "claimed"
+                                                                                    ? <Chip label=" Claimed" color="success" />
                                                                                     : <Chip label="Not Claimed" sx={{ backgroundColor: "#DC3545", color: "#FFFFFF" }} />
                                                                             }
 
@@ -393,12 +409,18 @@ function StaffListItems() {
                                                                         (tabState != "Completed")
                                                                             ?
                                                                             <>
-                                                                                <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} ><a href={`/event/${ticket.event.id}/rate/${ticket.id}/edit`} style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Edit Review</Typography></a> </Grid>
+                                                                                <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
+                                                                                    <a
+                                                                                        //  href={`/event/${item.event.id}/rate/${item.id}/edit`} 
+                                                                                        style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Edit Review</Typography></a> </Grid>
                                                                             </>
-                                                                            : <><Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} ><a href={`/event/${ticket.event.id}/rate/${ticket.id}`} style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Add Review</Typography></a> </Grid></>
+                                                                            : <><Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
+                                                                                <a
+                                                                                    //  href={`/event/${item.event.id}/rate/${item.id}`} 
+                                                                                    style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Add Review</Typography></a> </Grid></>
                                                                     }
 
-                                                                    <Grid item flexGrow={1} align={'end'} px={3} pt={1} ><Typography sx={{ fontWeight: "bold", fontSize: 19 }}>$ {ticket.event.guest_Price.toFixed(2)}</Typography> </Grid>
+                                                                    <Grid item flexGrow={1} align={'end'} px={3} pt={1} ><Typography sx={{ fontWeight: "bold", fontSize: 19 }}>$ price</Typography> </Grid>
                                                                 </Grid>
                                                             </Paper>
 
@@ -421,7 +443,7 @@ function StaffListItems() {
                                     }
 
 
-                                    <Dialog open={qrOpen} onClose={handleCloseQR} PaperProps={{
+                                    {/* <Dialog open={qrOpen} onClose={handleCloseQR} PaperProps={{
                                         style: {
 
                                             maxWidth: 350, maxHeight: 700
@@ -457,7 +479,7 @@ function StaffListItems() {
 
 
                                         </DialogActions>
-                                    </Dialog>
+                                    </Dialog> */}
                                 </Grid>
                             </Card>
                             {/* <Box sx={{ maxWidth: "100%", pt: 2 }} >
