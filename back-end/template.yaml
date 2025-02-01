@@ -18,6 +18,7 @@ Globals:
 
 Resources:
   # ------------------------------ START Function  creation------------------------------  #
+  # Create
   CreateItemFunction:
     DependsOn: ItemTable
     Type: AWS::Serverless::Function
@@ -37,7 +38,28 @@ Resources:
             Path: /Item/CreateItem
             Method: Post
             RestApiId: !Ref ServerlessRestApi
+  # Update
+  UpdateItemFunction:
+    DependsOn: ItemTable
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: UpdateItemFunction/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: ItemTable
+      Handler: app.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        UpdatePreferenceApiResource:
+          Type: Api
+          Properties:
+            Path: /Item/UpdateItem
+            Method: Put
+            RestApiId: !Ref ServerlessRestApi
   # ------------------------------ START Fcuntion  creation------------------------------  #
+  
   # ------------------------------ START Preference Table creation------------------------------  #
   ItemTable:
     UpdateReplacePolicy: Retain
