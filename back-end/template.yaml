@@ -47,7 +47,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Key: Environment
+        - Key: Stage
           Value: !Ref Environment
       CodeUri: UploadImageFunction/
       Policies:
@@ -75,7 +75,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Key: Environment
+        - Key: Stage
           Value: !Ref Environment
       CodeUri: CreateItemFunction/
       Policies:
@@ -100,7 +100,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Key: Environment
+        - Key: Stage
           Value: !Ref Environment
       CodeUri: RetrieveItemFunction/
       Policies:
@@ -123,10 +123,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Key: Environment
-          Value: !Ref Environment
-      Tags:
-        - Key: Environment
+        - Key: Stage
           Value: !Ref Environment
       CodeUri: UpdateItemFunction/
       Policies:
@@ -149,7 +146,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Key: Environment
+        - Key: Stage
           Value: !Ref Environment
       CodeUri: DeleteItemFunction/
       Policies:
@@ -194,7 +191,7 @@ Resources:
       DeletionProtectionEnabled: false
       TableClass: STANDARD
       Tags:
-        - Key: Environment
+        - Key: Stage
           Value: !Ref Environment
 
       TimeToLiveSpecification:
