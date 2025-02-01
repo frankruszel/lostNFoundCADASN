@@ -47,7 +47,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Stage: !Sub "${Environment}"
+        Stage: !Sub "${Environment}"
       CodeUri: UploadImageFunction/
       Policies:
         - S3CrudPolicy:
@@ -74,7 +74,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Stage: !Sub "${Environment}"
+        Stage: !Sub "${Environment}"
       CodeUri: CreateItemFunction/
       Policies:
         - DynamoDBCrudPolicy:
@@ -98,7 +98,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Stage: !Sub "${Environment}"
+        Stage: !Sub "${Environment}"
       CodeUri: RetrieveItemFunction/
       Policies:
         - DynamoDBCrudPolicy:
@@ -120,7 +120,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Stage: !Sub "${Environment}"
+        Stage: !Sub "${Environment}"
       CodeUri: UpdateItemFunction/
       Policies:
         - DynamoDBCrudPolicy:
@@ -142,7 +142,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        - Stage: !Sub "${Environment}"
+        Stage: !Sub "${Environment}"
       CodeUri: DeleteItemFunction/
       Policies:
         - DynamoDBCrudPolicy:
@@ -186,7 +186,7 @@ Resources:
       DeletionProtectionEnabled: false
       TableClass: STANDARD
       Tags:
-        - Stage: !Sub "${Environment}"
+        Stage: !Sub "${Environment}"
 
       TimeToLiveSpecification:
         Enabled: false
@@ -225,7 +225,8 @@ Resources:
     Properties:
       IAMServiceRole: !GetAtt AutomationServiceRole.Arn
       Tags:
-        - Stage: !Sub "${Environment}"
+        - Key: Stage
+          Value: !Ref Environment
       AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
       Repository: !Sub
         - "https://github.com/${GithubOwner}/${AppRepositoryName}"
