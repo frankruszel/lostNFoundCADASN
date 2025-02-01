@@ -78,7 +78,7 @@ function StaffAddItem() {
             dataToSubmit["item"]["title"] = data.title.trim();
             dataToSubmit["item"]["description"] = data.description.trim();
             dataToSubmit["item"]["category"] = category
-            dataToSubmit["item"]["date"] = data.date.format('YYYY-MM-DD');
+            dataToSubmit["item"]["dateFound"] = new Date(data.date).toISOString();
             dataToSubmit["item"]["image_url"] = imageFile;
             dataToSubmit["item"]["itemStatus"] = "lost"
             console.log(`dataToSubmASDASDASDit:${JSON.stringify(dataToSubmit)}`)

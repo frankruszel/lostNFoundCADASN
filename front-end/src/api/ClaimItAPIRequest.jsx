@@ -6,7 +6,7 @@ export class APIRequest {
         this.apiClient = axios.create({
             baseURL: baseURL,  // Your API base URL
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
                 // Add any additional headers here (like Authorization token)
             },
         });
