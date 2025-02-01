@@ -78,7 +78,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
         flexShrink: 0,
         whiteSpace: 'nowrap',
         boxSizing: 'border-box',
-        position:'relative',
+        position: 'relative',
         ...(open && {
             ...openedMixin(theme),
             '& .MuiDrawer-paper': openedMixin(theme),
@@ -106,7 +106,7 @@ export default function SideNav() {
         navigate("/")
     }
     const handleManageEvents = () => {
-        navigate("/")
+        navigate("/staff/list")
     }
 
 
@@ -126,7 +126,9 @@ export default function SideNav() {
                         >
                             <MenuIcon />
                         </IconButton>
-                        <img src="https://i.ibb.co/4R8WzBs/ecowise.png" alt="EcoWise" height={'32'} />
+                        <a href="/staff/dashboard">
+                            <img src="https://i.ibb.co/jkKYxDxR/image-removebg-preview-2.png" alt="ClaimIt" height={'32'} />
+                        </a>
                         {/*} <Typography variant="h6" noWrap component="div">
               Uplay
             </Typography>*/}
@@ -202,7 +204,7 @@ export default function SideNav() {
                                 </ListItemIcon>
                                 {open && (
                                     <>
-                                        <ListItemText primary="Manage Events" sx={{ color: '#ffffff' }} />
+                                        <ListItemText primary="Manage Items" sx={{ color: '#ffffff' }} />
                                     </>
                                 )}
                             </ListItemButton>
@@ -210,7 +212,7 @@ export default function SideNav() {
                     </List>
                 </Drawer>
             </Box>
-            
+
         </>
     );
 }
