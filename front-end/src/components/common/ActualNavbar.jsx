@@ -1,5 +1,5 @@
 import { useState, useEffect, React } from 'react';
-import { Container,Grid, AppBar, Toolbar, Typography, Box, Button, IconButton, Avatar, MenuItem } from '@mui/material';
+import { Container, Grid, AppBar, Toolbar, Typography, Box, Button, IconButton, Avatar, MenuItem } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Menu from '@mui/material/Menu';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -21,13 +21,13 @@ function ActualNavbar() {
     };
 
     return (
-        <AppBar position="static" className="AppBar" sx={{ backgroundColor: "white", display:'flex' }} > 
+        <AppBar position="static" className="AppBar" sx={{ backgroundColor: "white", display: 'flex' }} >
 
             {
                 (!user || user.role != "Staff" && user.role != "Company") &&
-                <Grid sx={{ padding:0, mr:0, width:"inherit"}}> 
+                <Grid sx={{ padding: 0, mr: 0, width: "inherit" }}>
                     <Toolbar disableGutters={true}>
-                        <Link to="/" style={{marginLeft:150}}>
+                        <Link to="/" style={{ marginLeft: 150 }}>
                             <img src="https://i.ibb.co/gMrcy0cr/download-10.png" alt="UPlay" width="110px" />
                         </Link>
                         {
@@ -39,11 +39,18 @@ function ActualNavbar() {
                             <Box sx={{ flexGrow: 0.025 }}></Box>
                         }
 
-                        <Link to="/events" ><Typography color="grey" variant='navbar'>Browse Items</Typography></Link>
-                        <Box sx={{ flexGrow: 0.008}}></Box>
+                        <Link to="/events" ><Typography color="grey" variant='navbarLink' className='navbarLink'>
+                            <p class="navbarLink">
+                                Browse Items </p>
+                        </Typography></Link>
+                        <Box sx={{ flexGrow: 0.008 }}></Box>
 
-                        <Link to="/faq" ><Typography color="grey" variant='navbar'> Found Item </Typography></Link>
-                        <Box sx={{ flexGrow: 0.9}}></Box>
+                        <Link to="/faq" ><Typography color="grey" variant='navbarLink' className='navbarLink'
+
+                        >
+                            <p class="navbarLink">
+                                Found Item </p> </Typography></Link>
+                        <Box sx={{ flexGrow: 0.9 }}></Box>
 
 
                         {user && (
@@ -67,7 +74,7 @@ function ActualNavbar() {
 
 
                                 <Menu
-                                sx={{mr:150}}
+                                    sx={{ mr: 150 }}
                                     id="simple-menu"
                                     anchorEl={anchorEl}
                                     keepMounted
