@@ -22,7 +22,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {CreateItemApi} from '../api/item/CreateItemApi';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { enqueueSnackbar } from "notistack";
-
+import { UploadImageApi } from '../api/item/UploadImageApi';
 
 function StaffAddItem() {
     const [loading, setLoading] = useState(false);
@@ -139,11 +139,25 @@ function StaffAddItem() {
             }
 
             let formData = new FormData();
-            formData.append('file', file);
-            console.log(`formData HERE`)
-            console.log(file.filename)
-
+            formData.append('file', file);            
+            let uploadImageParams = {
+                userId: "testUser1", // user.Username,
+                file: file
+            }
+            console.log(`uploadImageParams: ${JSON.stringify(uploadImageParams)}`)
+            UploadImageApi(uploadImageParams)
+                .then((res) => {
+                    console.log(`res.data: ${JSON.stringify(res.data)}`)
+                    // toast.success('Form submitted successfully');
+                    enqueueSnackbar("Image uploaded successfully", { variant: "success" });
+                })
+                .catch((error) => {
+                    console.error("Error uploading image:", error);
+                    enqueueSnackbar('Failed to upload image', { variant: "error" })
+                });
             // uplaod function to s3 with userId 
+            //userId + formData
+        
             
             
             // http.post('/file/upload', formData, {
