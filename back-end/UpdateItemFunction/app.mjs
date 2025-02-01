@@ -69,10 +69,10 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { itemId, userId, category, description, image_url, title, itemStatus } = requestBody;
+    const { itemId, userId, category, description, image_url, title, itemStatus,dateFound } = requestBody;
 
     // Validate input
-    if (!itemId || !userId || !category || !description || !image_url || !title || !itemStatus) {
+    if (!itemId || !userId || !category || !description || !image_url || !title || !itemStatus || !dateFound) {
       return {
         statusCode: 400,
         headers: {
@@ -85,6 +85,10 @@ export const lambdaHandler = async (event, context) => {
         }),
       };
     }
+    let dateClaimed = null
+    if ("dateClaimed" in requestBody) {
+      let dateClaimed = requestBody.dateClaimed;
+    }
 
     // Process budgets data
     const updatedData = {
@@ -94,7 +98,9 @@ export const lambdaHandler = async (event, context) => {
       "description": description,
       "image_url": image_url,
       "itemStatus": itemStatus,
-      "category": category
+      "category": category,
+      "dateFound": new Date(dateFound).toISOString(),
+      "dateClaimed": dateClaimed != null ? new Date(dateClaimed).toISOString() : null,
     };
 
     // Update DynamoDB
