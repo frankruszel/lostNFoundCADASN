@@ -5,9 +5,14 @@ import RegisterPage from './pages/RegisterPage'
 import PasswordResetPage from './pages/PasswordResetPage'
 import StaffDashboard from './pages/StaffDashboard'
 import StaffListItems from './pages/StaffListItems'
+import StaffAddItem from './pages/StaffAddItem'
 
 const PublicRoutes = [
-   
+    
+    {
+        path: "staff/list/add",
+        element: <StaffAddItem />,
+    },
     {
         path: "/staff/list",
         element: <StaffListItems />,
