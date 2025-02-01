@@ -111,6 +111,26 @@ Resources:
             Path: /Item/UpdateItem
             Method: Put
             RestApiId: !Ref ServerlessRestApi
+  # Delete
+  DeleteItemFunction:
+    DependsOn: ItemTable
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: DeleteItemFunction/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: ItemTable
+      Handler: app.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        DeletePreferenceApiResource:
+          Type: Api
+          Properties:
+            Path: /Item/DeleteItem
+            Method: delete
+            RestApiId: !Ref ServerlessRestApi
   # ------------------------------ START Fcuntion  creation------------------------------  #
   
   # ------------------------------ START Preference Table creation------------------------------  #
