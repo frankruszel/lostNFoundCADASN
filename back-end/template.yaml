@@ -8,7 +8,7 @@ Parameters:
     Type: String
   S3StoreItemImagesName:
     Type: String
-    Default: "lostNfound-store-item-images"
+    Default: "lostnfound-store-item-images"
 
 Globals:
   Function:
@@ -20,6 +20,8 @@ Globals:
       AllowOrigin: "'*'"
 
 Resources:
+  # ------------------------------ START S3  creation------------------------------  #
+
   S3StoreItemImages:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Delete
@@ -50,6 +52,8 @@ Resources:
   #             - s3:List*
   #           Resource:
   #             - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}
+  # ------------------------------ END S3  creation------------------------------  #
+
   # ------------------------------ START Function  creation------------------------------  #
   # Create
   CreateItemFunction:
