@@ -7,10 +7,11 @@ import { jwtDecode } from 'jwt-decode';
 
 
 function StaffDashboard() {
+    const squareMeasurement = 48
     return (
         <>
-            <Box>
-                <Breadcrumbs sx={{ mb: 1 }} >
+            <Box sx={{ mt: -5, ml: 1 }}>
+                <Breadcrumbs sx={{ mb: 1, px: 4 }} >
                     {/* <Link underline="hover" style={{ textDecoration: "none", color: "grey" }} href="/">
             Overview
           </Link> */}
@@ -28,92 +29,154 @@ function StaffDashboard() {
 
                 <Grid container direction="column" spacing={2} sx={{ height: "100%" }} px={4}>
                     <Grid lg={6} item container direction="row" spacing={2}>
-                        <Grid item lg={3}>
-                            <Card sx={{ width: "100%", height: 170 }}>
+                        <Grid item lg={3} sx={{ position: "relative" }}>
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 170, borderRadius: 5, px: 2 }}>
                                 <Grid container direction="column">
-                                    <Grid container direction="row" sx={{ marginTop: 2 }}>
+                                    <Grid container direction="row" sx={{ marginTop: 3 }}>
                                         <Grid item lg={2}>
-                                            <img style={{ width: 50, marginLeft: 16, }} src="https://cdn-icons-png.flaticon.com/128/1163/1163624.png" alt="" />
+                                            <img style={{ width: 45, marginLeft: 24, }} src="https://cdn-icons-png.flaticon.com/128/1565/1565813.png" alt="" />
                                         </Grid>
                                         <Grid item lg={9}>
-                                            <Typography fontSize={22} marginTop={1} marginLeft={2}> Items Lost </Typography>
+                                            <Typography fontSize={22} marginTop={1} marginLeft={3}> Lost Requests </Typography>
                                         </Grid>
 
                                     </Grid>
-                                    <Grid lg={6} container direction="row">
-
-                                        <Typography>
-
-                                        </Typography>
-                                    </Grid>
-
-
-                                </Grid>
-                            </Card>
-                        </Grid><Grid item lg={3}>
-                            <Card sx={{ width: "100%", height: 170 }}>
-                                <Grid container direction="column">
-                                    <Grid container direction="row" sx={{ marginTop: 2 }}>
-                                        <Grid item lg={2}>
-                                            <img style={{ width: 50, marginLeft: 16, }} src="https://cdn-icons-png.flaticon.com/128/1163/1163624.png" alt="" />
+                                    <Grid container sx={{
+                                        position: "absolute",
+                                        bottom: 10,
+                                        pb: 2.4,
+                                        pl: 4,
+                                        pr: 9
+                                    }} direction="row" display={'flex'} justifyContent={'space-between'} >
+                                        <Grid>
+                                            <Typography fontSize={36}>
+                                                12
+                                            </Typography>
                                         </Grid>
-                                        <Grid item lg={9}>
-                                            <Typography fontSize={22} marginTop={1} marginLeft={2}> Items Lost </Typography>
+                                        <Grid sx={{ pt: 1 }}>
+                                            <Link>
+                                            <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                            </Link>
                                         </Grid>
 
-                                    </Grid>
-                                    <Grid lg={6} container direction="row">
 
-                                        <Typography>
-
-                                        </Typography>
                                     </Grid>
+
 
 
                                 </Grid>
                             </Card>
                         </Grid>
-                        <Grid item lg={3}>
-                            <Card sx={{ width: "100%", height: 170 }}>
+                        <Grid item lg={3} sx={{ position: "relative" }}>
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 170, borderRadius: 5, px: 2 }}>
                                 <Grid container direction="column">
-                                    <Grid container direction="row" sx={{ marginTop: 2 }}>
+                                    <Grid container direction="row" sx={{ marginTop: 3 }}>
                                         <Grid item lg={2}>
-                                            <img style={{ width: 50, marginLeft: 15, }} src="https://cdn-icons-png.flaticon.com/128/13798/13798822.png" alt="" />
+                                            <img style={{ width: 45, marginLeft: 24, }} src="https://cdn-icons-png.flaticon.com/128/4426/4426201.png" alt="" />
                                         </Grid>
                                         <Grid item lg={9}>
-                                            <Typography fontSize={22} marginTop={1} marginLeft={2}> Items Found</Typography>
+                                            <Typography fontSize={22} marginTop={1} marginLeft={3}> Items Inventory </Typography>
                                         </Grid>
 
                                     </Grid>
-                                    <Grid lg={6} container direction="row">
+                                    <Grid container sx={{
+                                        position: "absolute",
+                                        bottom: 10,
+                                        pb: 2.4,
+                                        pl: 4,
+                                        pr: 9
+                                    }} direction="row" display={'flex'} justifyContent={'space-between'} >
+                                        <Grid>
+                                            <Typography fontSize={36}>
+                                                12
+                                            </Typography>
+                                        </Grid>
+                                        <Grid sx={{ pt: 1 }}>
+                                            <Link>
+                                            <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                            </Link>
+                                        </Grid>
 
-                                        <Typography>
 
-                                        </Typography>
                                     </Grid>
+
 
 
                                 </Grid>
                             </Card>
                         </Grid>
-                        <Grid item lg={3}>
-                            <Card sx={{ width: "100%", height: 170 }}>
+                        <Grid item lg={3} sx={{ position: "relative" }}>
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 170, borderRadius: 5, px: 2 }}>
                                 <Grid container direction="column">
-                                    <Grid container direction="row" sx={{ marginTop: 2 }}>
+                                    <Grid container direction="row" sx={{ marginTop: 3 }}>
                                         <Grid item lg={2}>
-                                            <img style={{ width: 50, marginLeft: 15, }} src="https://i.ibb.co/tYFNbxN/energy.png" alt="" />
+                                            <img style={{ width: 45, marginLeft: 24, }} src="https://cdn-icons-png.flaticon.com/128/18564/18564217.png" alt="" />
                                         </Grid>
                                         <Grid item lg={9}>
-                                            <Typography fontSize={22} marginTop={1} marginLeft={2}> Items returned </Typography>
+                                            <Typography fontSize={22} marginTop={1} marginLeft={3}> Claim Requests </Typography>
                                         </Grid>
 
                                     </Grid>
-                                    <Grid lg={6} container direction="row">
+                                    <Grid container sx={{
+                                        position: "absolute",
+                                        bottom: 10,
+                                        pb: 2.4,
+                                        pl: 4,
+                                        pr: 9
+                                    }} direction="row" display={'flex'} justifyContent={'space-between'} >
+                                        <Grid>
+                                            <Typography fontSize={36}>
+                                                12
+                                            </Typography>
+                                        </Grid>
+                                        <Grid sx={{ pt: 1 }}>
+                                            <Link>
+                                            <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                            </Link>
+                                        </Grid>
 
-                                        <Typography>
 
-                                        </Typography>
                                     </Grid>
+
+
+
+                                </Grid>
+                            </Card>
+                        </Grid>
+                        <Grid item lg={3} sx={{ position: "relative" }}>
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 170, borderRadius: 5, px: 2 }}>
+                                <Grid container direction="column">
+                                    <Grid container direction="row" sx={{ marginTop: 3 }}>
+                                        <Grid item lg={2}>
+                                            <img style={{ width: 45, marginLeft: 24, }} src="https://cdn-icons-png.flaticon.com/128/595/595018.png" alt="" />
+                                        </Grid>
+                                        <Grid item lg={9}>
+                                            <Typography fontSize={22} marginTop={1} marginLeft={3}> Items Returned </Typography>
+                                        </Grid>
+
+                                    </Grid>
+                                    <Grid container sx={{
+                                        position: "absolute",
+                                        bottom: 10,
+                                        pb: 2.4,
+                                        pl: 4,
+                                        pr: 9
+                                    }} direction="row" display={'flex'} justifyContent={'space-between'} >
+                                        <Grid>
+                                            <Typography fontSize={36}>
+                                                12
+                                            </Typography>
+                                        </Grid>
+                                        <Grid sx={{ pt: 1 }}>
+                                            
+                                            <Link>
+                                            <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                            </Link>
+                                        </Grid>
+
+
+                                    </Grid>
+
 
 
                                 </Grid>
@@ -122,12 +185,25 @@ function StaffDashboard() {
                     </Grid>
                     <Grid lg={6} item container direction="row" spacing={2}>
                         <Grid item lg={6}>
-                            <Card sx={{ width: "100%", height: 340 }}>
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 340 }}>
                                 Placeholder Graph
                             </Card>
                         </Grid><Grid item lg={6}>
-                            <Card sx={{ width: "100%", height: 340 }}>
-                                Returned Today
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 340 }}>
+                                <Grid container direction={"column"} >
+                                    <Grid>
+                                        {/* title */}
+                                        <Typography fontSize={24} sx={{ml:2,mt:2}}>
+                                            Returned Today
+                                        </Typography>
+
+                                    </Grid>
+                                    <Divider sx={{mx:2, mr:5, mt:1}}/>
+                                    <Grid>
+                                        test
+                                    </Grid>
+                                </Grid>
+
                             </Card>
                         </Grid>
 
