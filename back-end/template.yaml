@@ -186,7 +186,8 @@ Resources:
       DeletionProtectionEnabled: false
       TableClass: STANDARD
       Tags:
-        Stage: !Sub "${Environment}"
+        - Key: Stage
+          Value: !Ref Environment
 
       TimeToLiveSpecification:
         Enabled: false
