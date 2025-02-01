@@ -113,9 +113,24 @@ Resources:
         Location: !Ref PipelineArtifactsBucket
         Type: S3
       RoleArn: !GetAtt CodePipelineExecutionRole.Arn
-      RestartExecutionOnUpdate: false
+      RestartExecutionOnUpdate: true
+      PipelineType: "V2" 
+      Triggers:
+        - GitConfiguration: 
+            SourceActionName: "Source-Action"
+            Push:
+              - Branches:
+                  Includes: 
+                    - !Ref GithubBranch
+                FilePaths:
+                  Includes:
+                    - "back-end/**"
+                  Excludes:
+                    - "front-end/**"
+                
+          ProviderType: "CodeStarSourceConnection"
       Stages:
-        - Name: Source
+        - Name: Source-Action
           Actions:
             - ActionTypeId:
                 Category: Source
