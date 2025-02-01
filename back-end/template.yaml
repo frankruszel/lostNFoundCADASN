@@ -27,6 +27,11 @@ Resources:
     DeletionPolicy: Delete
     Properties:
       BucketName: !Sub "${Environment}-${S3StoreItemImagesName}"
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+        BlockPublicPolicy: false
+        IgnorePublicAcls: false
+        RestrictPublicBuckets: false
   S3StoreItemImagesPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
