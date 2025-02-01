@@ -6,7 +6,7 @@ const bucketName = 'prod-lostnfound-store-item-images';
 
 // Function to insert data into S3
 const uploadImageToS3 = async (file) => {
-  try {
+
     console.log({file})
     let params = {
       Bucket: bucketName,
@@ -16,11 +16,8 @@ const uploadImageToS3 = async (file) => {
     const savedFile = s3.putObject(params).promise();
     // await dynamoDB.put(params).promise();
     console.log(`Uploaded image to S3`);
-    return 
-  } catch (error) {
-    console.error('Error inserting item data into S3:', error);
-    throw new Error('Failed to insert item data into S3.');
-  }
+    return savedFile
+
 };
 
 export const lambdaHandler = async (event, context) => {
@@ -79,9 +76,7 @@ export const lambdaHandler = async (event, context) => {
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization", 
       },
-      body: JSON.stringify({
-        message: 'item data successfully created and stored in S3.',        
-      }),
+      body: results
     };
   } catch (error) {
     console.error('Error processing item data:', error);

@@ -45,12 +45,17 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { userId, item, file } = requestBody;
+    const { userId, item } = requestBody;
     // console.log(userId,budgets, typeof(budgets) === 'object')
     // Validate input
-    if ( !userId || typeof(item) !== 'object' || !file ) {
+    if ( !userId || typeof(item) !== 'object' ) {
       return {
         statusCode: 400,
+        headers: {
+          "Access-Control-Allow-Origin": "*", 
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization", 
+        },
         body: JSON.stringify({
           message: 'Missing or invalid userId, file, or item in request body.',
         }),
@@ -59,8 +64,6 @@ export const lambdaHandler = async (event, context) => {
 
     // Generate UUID for item and process rooms
     const itemId = uuidv4();
-
-    const s3ImageKey = `${userId}/${file.filename}`;
 
 
     const itemData = {

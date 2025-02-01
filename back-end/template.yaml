@@ -18,6 +18,8 @@ Globals:
       AllowMethods: "'GET,POST,DELETE,OPTIONS,PUT'"
       AllowHeaders: "'content-type'"
       AllowOrigin: "'*'"
+    BinaryMediaTypes:
+      - "*~1*"
 
 Resources:
   # ------------------------------ START S3  creation------------------------------  #
