@@ -113,11 +113,38 @@ Resources:
         Enabled: false
   # ------------------------------ END Preference Table creation------------------------------  #
   # ------------------------------  START Amplify Stack ------------------------------  #
+  AutomationServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: 
+            - amplify.amazonaws.com
+            - !Sub "amplify.${AWS::Region}.amazonaws.com"
+          Action: sts:AssumeRole
+      # ManagedPolicyArns:
+      # - arn:aws:iam::aws:policy/service-role/AmazonSSMAutomationRole
+      # RoleName: AutomationServiceRole
+      # Policies:
+      # - PolicyName: passrole
+      #   PolicyDocument:
+      #     Version: '2012-10-17'
+      #     Statement:
+      #     - Effect: Allow
+      #       Action:
+      #       - iam:PassRole
+      #       Resource:
+      #       - !GetAtt ManagedInstanceRole.Arn
   AmplifyApp:
     UpdateReplacePolicy: "Retain"
     Type: "AWS::Amplify::App"
     DeletionPolicy: "Delete"
+    DependsOn: AutomationServiceRole
     Properties:
+      IAMServiceRole: !GetAtt AutomationServiceRole.Arn
       Tags:
         - Key: Stage
           Value: !Ref Environment
