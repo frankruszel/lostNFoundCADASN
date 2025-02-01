@@ -15,4 +15,4 @@ applications:
       cache:
         paths:
           - .npm/**/*
-    appRoot: eco-wise/front-end
+    appRoot: front-end
