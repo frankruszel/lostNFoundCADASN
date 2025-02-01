@@ -2,11 +2,12 @@ import { ChangeEvent } from 'react'
 import {  Button, Typography, Box } from '@mui/material';
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { uploadPhoto } from '../api/item/photo';
+import { UploadImageApi } from '../api/item/UploadImageApi';
 
 export const Uploader = () => {
     const queryClient = useQueryClient();
     const mutation = useMutation({
-        mutationFn: uploadPhoto,
+        mutationFn: UploadImageApi,
         onSuccess: (response) => {
             // queryClient.invalidateQueries({queryKey:["photos"]})
             console.log(response)

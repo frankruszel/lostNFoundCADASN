@@ -3,6 +3,11 @@ const API_URL = `${process.env.REACT_APP_ECOWISE_API_URL}/Image`
 export const uploadPhoto = (body) => {
     fetch(API_URL, {
         method: 'POST',
-        body,
+        body,  
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            // Add any additional headers here (like Authorization token)
+        },
     })
 }

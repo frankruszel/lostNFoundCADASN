@@ -1,10 +1,10 @@
-import ClaimItApi from "../ClaimItAPIRequest";
+import ClaimItApiData from "../ClaimItAPIRequestData";
 
 export const UploadImageApi = async (requestBody) => {
     try {
   
       // Make the POST request using the APIRequest class
-      const response = await ClaimItApi.post('/Image', requestBody);
+      const response = await ClaimItApiData.post('/Image', requestBody);
    
       return response.data;
     } catch (error) {

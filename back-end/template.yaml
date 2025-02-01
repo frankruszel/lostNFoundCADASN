@@ -16,7 +16,7 @@ Globals:
   Api:
     Cors:
       AllowMethods: "'GET,POST,DELETE,OPTIONS,PUT'"
-      AllowHeaders: "'content-type'"
+      AllowHeaders: "'content-type,multipart/form-data'"
       AllowOrigin: "'*'"
     BinaryMediaTypes:
       - "*~1*"
