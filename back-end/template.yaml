@@ -18,6 +18,8 @@ Globals:
       AllowMethods: "'GET,POST,DELETE,OPTIONS,PUT'"
       AllowHeaders: "'content-type'"
       AllowOrigin: "'*'"
+    BinaryMediaTypes:
+      - "*~1*"
 
 Resources:
   # ------------------------------ START S3  creation------------------------------  #
@@ -68,6 +70,7 @@ Resources:
             Path: /Image
             Method: Post
             RestApiId: !Ref ServerlessRestApi
+            
   # ------------------------------ END S3  creation------------------------------  #
 
   # ------------------------------ START Function  creation------------------------------  #

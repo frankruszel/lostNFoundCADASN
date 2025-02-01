@@ -8,7 +8,7 @@ export const UploadImageApi = async (requestBody) => {
    
       return response.data;
     } catch (error) {
-      console.error('Error creating Item:', error);
+      console.error('Error uploading Image', error);
       // Re-throw the error for higher-level handling
       throw error;
     }
