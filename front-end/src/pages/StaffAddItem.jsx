@@ -41,6 +41,7 @@ function StaffAddItem() {
     const [currentTicket, setCurrentTicket] = useState()
     const [tabState, setTabState] = useState('All')
     const [imageFile, setImageFile] = useState(null);
+    const [filename, setFilename] = useState(null);
     const [imageError, setImageError] = useState(false);
     const [category, setCategory] = useState('');
 
@@ -69,6 +70,10 @@ function StaffAddItem() {
                 data.image_url = imageFile;
 
             }
+
+            let key = filename
+            console.log(`key: ${typeof(key)}`)
+            console.log(key)
             // create a new object for submission
 
             let dataToSubmit = {};
@@ -79,7 +84,7 @@ function StaffAddItem() {
             dataToSubmit["item"]["description"] = data.description.trim();
             dataToSubmit["item"]["category"] = category
             dataToSubmit["item"]["dateFound"] = new Date(data.date).toISOString();
-            dataToSubmit["item"]["image_url"] = imageFile;
+            dataToSubmit["item"]["image_url"] = key;
             dataToSubmit["item"]["itemStatus"] = "lost"
             console.log(`dataToSubmASDASDASDit:${JSON.stringify(dataToSubmit)}`)
             handleAddEvent(dataToSubmit)
@@ -90,7 +95,7 @@ function StaffAddItem() {
     const componentRef = useRef();
 
     const handleAddEvent = (data) => {
-        console.log(`handleAddEvent: ${data}`)
+        console.log(`handleAddEvent: ${JSON.stringify(data)}`)
         CreateItemApi(data)
             .then((res) => {
                 console.log(`res.data: ${JSON.stringify(res.data)}`)
@@ -128,6 +133,7 @@ function StaffAddItem() {
         // setCategoryError(false)
         setCategory(event.target.value);
     };
+    console.log()
     const onFileChange = (e) => {
         console.log("e")
         console.log(e)
@@ -208,33 +214,13 @@ function StaffAddItem() {
 
                                     <Grid>
                                         <Box sx={{ textAlign: 'center', mt: 2 }} >
-                                            {
-
-                                                imageFile && (
-                                                    <Button className="aspect-ratio-container" variant="outlined" component="label" sx={{ height: 250, width: "100%" }}>
-
-                                                        <img alt="tutorial"
-                                                            src={`${import.meta.env.VITE_FILE_BASE_URL}${imageFile}`}>
-                                                        </img>
-                                                        <input hidden accept="image/*" multiple type="file" onChange={onFileChange} />
-                                                    </Button>
-
-                                                )
-                                            }
-                                            {
-                                                (!imageFile && imageError) && (
-
-
-
-                                                   <Uploader />
-                                                )
-                                            }
-                                            {
-                                                (!imageFile && !imageError) && (
-
-                                                    <Uploader />
-                                                )
-                                            }
+                                            
+                                                    <Uploader
+                                                    image={imageFile}                                                    
+                                                    setImage={setImageFile}
+                                                    filename={filename}
+                                                    setFilename={setFilename}
+                                                    />
 
 
 
