@@ -75,10 +75,14 @@ export const lambdaHandler = async (event, context) => {
       statusCode: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
-      body: results
+      body: JSON.stringify(results)
+    //   "isBase64Encoded": true|false,
+    // "statusCode": httpStatusCode,
+    // "headers": { "headerName": "headerValue", ... },
+    // "body": "..."
     }
   } catch (error) {
     console.error('Error processing item data:', error);
@@ -86,12 +90,12 @@ export const lambdaHandler = async (event, context) => {
       statusCode: 500,
       headers: {
         "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
       body: JSON.stringify({
         message: 'An error occurred while processing the request.',
-        error: requestBody,
+        error: (requestBody),
       }),
     };
   }
