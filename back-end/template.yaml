@@ -133,6 +133,11 @@ Resources:
           DeveloperOnlyAttribute: false
           Mutable: true
           Required: false
+        - Name: is_staff
+          AttributeDataType: Boolean
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: true
       AutoVerifiedAttributes:
         - email
       UsernameAttributes:

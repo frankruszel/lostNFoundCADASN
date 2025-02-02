@@ -11,6 +11,11 @@ async function SignUpUserApi(email, password) {
         {
           Name: 'email',
           Value: email,
+          
+        },
+        {
+          Name: 'is_staff',
+          Value: false,
         },
       ],
     };
