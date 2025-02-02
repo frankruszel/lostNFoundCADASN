@@ -71,7 +71,7 @@ Resources:
       Policies:
         - S3CrudPolicy:
             BucketName: !Ref S3StoreItemImages
-        - RekognitionLabelsPolicy
+        - RekognitionLabelsPolicy: {}
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
       Architectures:

@@ -11,6 +11,7 @@ export const Uploader = () => {
         mutationFn: UploadImageApi,
         onSuccess: (response) => {
             // queryClient.invalidateQueries({queryKey:["photos"]})
+            console.log(`UPLOADER RESP::$$`)
             console.log(response)
             setImageError(false)
         },
