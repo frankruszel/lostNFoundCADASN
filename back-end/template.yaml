@@ -148,7 +148,7 @@ Resources:
       # SmsAuthenticationMessage: Your authentication code is {####}. Please enter it in the log in page.
       UserAttributeUpdateSettings:
         AttributesRequireVerificationBeforeUpdate: []
-      MfaConfiguration: OPTIONAL
+      # MfaConfiguration: OPTIONAL
       EmailConfiguration:
         EmailSendingAccount: COGNITO_DEFAULT
       # SmsConfiguration:
