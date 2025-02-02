@@ -11,14 +11,13 @@ import Select from '@mui/material/Select';
 import { useUserContext } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { useAlert } from "../../contexts/AlertContext";
-import UpdateUserApi from '../../api/auth/UpdateUserApi';
 import Divider from '@mui/material/Divider';
 import * as yup from 'yup';
+import { UserSubscriptionApi } from '../../api/item/UserSubscriptionApi';
 
 const schema = yup.object({
-  given_name: yup.string().required("Name is required"),
   email: yup.string().email("Invalid email address").required("Email is required"),
-}).required();
+});
 
 const notificationArray = [
   'Personal Items',
@@ -53,6 +52,7 @@ const ProfileInformationCard = () => {
     const {
       target: { value },
     } = event;
+    setIsModified(true);
     setNotifications(
       // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
@@ -100,22 +100,18 @@ const ProfileInformationCard = () => {
 
     const requestObj = {
       email: formData.email,
+      notificationSubList: notifications,
     };
-    UpdateUserApi({ accessToken, refreshToken, attributes: requestObj })
+    console.log(`requrestObjk: ${JSON.stringify(requestObj)}`)
+    UserSubscriptionApi(requestObj)
       .then((res) => {
-        RefreshUser();
-        showAlert('success', "Profile Updated Successfully.");
+        
+        showAlert('success', "Updated Successfully.");
         setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error updating user:", error);
-        if (error.name === 'NotAuthorizedException') {
-          if (error.message === 'Refresh Token has expired' || error.message.includes('Refresh')) {
-            SessionRefreshError();
-          }
-        } else {
-          showAlert('error', 'Unexpected error occurred. Please try again.');
-        }
+        
         setIsLoading(false);
       });
 

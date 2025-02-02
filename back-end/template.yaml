@@ -38,6 +38,12 @@ Resources:
       Policies:
         - SNSCrudPolicy:
             TopicName: !GetAtt ItemSnsTopic.TopicName
+        - Version: '2012-10-17' # Policy Document
+          Statement:
+            - Effect: Allow
+              Action:
+                - SNS:Unsubscribe
+              Resource: !GetAtt ItemSnsTopic.TopicArn
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
       Architectures:
