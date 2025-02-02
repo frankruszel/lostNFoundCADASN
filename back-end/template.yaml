@@ -191,8 +191,8 @@ Resources:
   
   CognitoUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
-    DependsOn:
-      - GoogleUserPoolIdentityProvider
+    # DependsOn:
+    #   - GoogleUserPoolIdentityProvider
     Properties:
       UserPoolId: !GetAtt CognitoUserPool.UserPoolId
       ClientName: EcoWiseWebApp
