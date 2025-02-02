@@ -38,7 +38,7 @@ export const Uploader = ({
             formData.append('file', file);
         });
         console.log("filename:")
-        console.log(file.name)
+        console.log(file)
         setFilename(file.name)
         mutation.mutate(formData)
     }

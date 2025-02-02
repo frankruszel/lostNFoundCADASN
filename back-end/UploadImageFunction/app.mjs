@@ -16,13 +16,13 @@ const uploadImageToS3 = async (file) => {
     Key: file.filename,// key
     Body: file.content
   }
-  const savedFile = s3.putObject(s3Params).promise();
+  const savedFile = await s3.putObject(s3Params).promise();
   console.log(`Uploaded image to S3`);
 
   let rekognitionParams = {
     Image: {
-      Bytes: file.content
-    }
+      Bytes: file.content,
+    },
   }
   const labels = await rekognition.detectLabels(rekognitionParams).promise();
   // await dynamoDB.put(params).promise();

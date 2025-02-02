@@ -2,7 +2,10 @@ import ClaimItApi from "../ClaimItAPIRequest";
 
 export const GetItemApi = async (userId, itemId) => {
     try {
-        let response = await ClaimItApi.get(`/Item/RetrieveItem/`);
+        let response 
+        if (!userId && !itemId) {
+            response = await ClaimItApi.get(`/Item/RetrieveItem/`);
+        }
         if (userId) {
             response = await ClaimItApi.get(`/Item/RetrieveItem/?userId=${userId}`);
         }
