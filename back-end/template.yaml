@@ -137,7 +137,7 @@ Resources:
           AttributeDataType: Boolean
           DeveloperOnlyAttribute: false
           Mutable: true
-          Required: true
+          Required: false
       AutoVerifiedAttributes:
         - email
       UsernameAttributes:
