@@ -1,7 +1,7 @@
 import { SignUpCommand } from "@aws-sdk/client-cognito-identity-provider"; // Import the required SDK v3 components
 import cognitoProviderClient from "./AwsCognitoInit";
 
-async function SignUpUserApi(email, fullName, password) {
+async function SignUpUserApi(email, password) {
   try {
     const params = {
       ClientId: process.env.REACT_APP_COGNITO_CLIENT_ID,

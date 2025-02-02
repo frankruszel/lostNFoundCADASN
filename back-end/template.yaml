@@ -193,7 +193,7 @@ Resources:
     #   - GoogleUserPoolIdentityProvider
     Properties:
       UserPoolId: !GetAtt CognitoUserPool.UserPoolId
-      ClientName: EcoWiseWebApp
+      ClientName: ClaimItWebApp
       RefreshTokenValidity: 5
       AccessTokenValidity: 60
       IdTokenValidity: 60

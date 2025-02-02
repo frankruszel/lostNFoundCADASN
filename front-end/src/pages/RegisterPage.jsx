@@ -15,7 +15,6 @@ import { enqueueSnackbar } from 'notistack';
 
 
 const schema = yup.object({
-    name: yup.string().required("Name is required"),
     email: yup.string().email("Invalid email address").required("Email is required"),
     password: yup.string()
         .required('Password is required')
@@ -31,7 +30,6 @@ const schema = yup.object({
 
 function RegisterPage() {
     const [formData, setFormData] = useState({
-        name: '',
         email: '',
         password: '',
         confirmPassword: ''
@@ -86,7 +84,7 @@ function RegisterPage() {
         schema.validate(formData, { abortEarly: false })
             .then(() => {
                 setErrors({});
-                SignUpUserApi(formData.email, formData.name, formData.password)
+                SignUpUserApi(formData.email, formData.password)
                     .then((res) => {
                         // Handle successful sign-up
                         console.log('Sign-up successful:', res);
