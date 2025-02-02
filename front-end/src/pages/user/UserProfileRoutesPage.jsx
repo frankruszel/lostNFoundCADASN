@@ -20,6 +20,7 @@ import PhoneLockedIcon from '@mui/icons-material/PhoneLocked';
 import UserPasswordLoginPage from './UserPasswordLoginPage';
 import NotFoundPage from '../NotFoundPage'
 
+
 export const ProfileContext = createContext(null)
 function UserProfileRoutesPage() {
     const { user } = useUserContext();
@@ -47,76 +48,8 @@ function UserProfileRoutesPage() {
     return (
         <>
             <Container maxWidth="xl" sx={{ marginTop: "2rem", marginBottom: "1rem" }}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={3}>
-                        <Card>
-                            <List>
-                                <ListItem key={"Account Overview"} disablePadding>
-                                    <ListItemButton component={Link} to="/profile" selected={(location.pathname == "/profile" || location.pathname.includes("/profile/edit"))}>
-                                        <ListItemIcon><PersonIcon /></ListItemIcon>
-                                        <ListItemText primary={"Account Overview"} />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem key={"Notification Settings"} disablePadding>
-                                    <ListItemButton component={Link} to="/profile/notification" selected={(location.pathname == "/profile/notification" )}>
-                                        <ListItemIcon><NotificationsIcon /></ListItemIcon>
-                                        <ListItemText primary={"Notification Settings"} />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem key={"Phone & 2FA"} disablePadding>
-                                    <ListItemButton component={Link} to="/profile/mfa" selected={(location.pathname == "/profile/mfa")}>
-                                        <ListItemIcon><PhoneLockedIcon /></ListItemIcon>
-                                        <ListItemText primary={"Phone & 2FA"} />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem key={"Password & login"} disablePadding>
-                                    <ListItemButton component={Link} to="/profile/passwordlogin" selected={(location.pathname == "/profile/passswordlogin")}>
-                                        <ListItemIcon><KeyIcon /></ListItemIcon>
-                                        <ListItemText primary={"Password & login"} />
-                                    </ListItemButton>
-                                </ListItem>
-                                {/* <ListItem key={"Driver Information"} disablePadding>
-                                    <ListItemButton component={Link} to="/profile/driverInformation" selected={(location.pathname == "/profile/driverInformation")}>
-                                        <ListItemIcon><DriveEtaIcon /></ListItemIcon>
-                                        <ListItemText primary={"Driver Information"} />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem key={"Wallet"} disablePadding>
-                                    <ListItemButton component={Link} to="/profile/wallet" selected={(location.pathname == "/profile/wallet")}>
-                                        <ListItemIcon><AccountBalanceWalletIcon /></ListItemIcon>
-                                        <ListItemText primary={"Wallet"} />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem key={"Transaction History"} disablePadding>
-                                    <ListItemButton component={Link} to="/profile/history" selected={(location.pathname.includes("/profile/history"))}>
-                                        <ListItemIcon><HistoryIcon /></ListItemIcon>
-                                        <ListItemText primary={"Transaction History"} />
-                                    </ListItemButton>
-                                </ListItem>
-                                <ListItem key={"Orders History"} disablePadding>
-                                    <ListItemButton component={Link} to="/profile/orders" selected={(location.pathname.includes("/profile/orders"))}>
-                                        <ListItemIcon><ReceiptLongIcon /></ListItemIcon>
-                                        <ListItemText primary={"Orders History"} />
-                                    </ListItemButton>
-                                </ListItem> */}
-                            </List>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={12} md={9}>
-                        <Routes>
-                            <Route path="/" element={<ViewProfilePage />} />
-                        </Routes>
-                        {/* <Routes>
-                            <Route path="/notification" element={<NotificationSettingsPage />} />
-                        </Routes> */}
-                        <Routes>
-                            <Route path="/mfa" element={<UserMFAPage />} />
-                        </Routes>
-                        <Routes>
-                            <Route path="/passwordlogin" element={<UserPasswordLoginPage />} />
-                        </Routes>
-                    </Grid>
-                </Grid>
+                
+                <ViewProfilePage/>
             </Container>
 
         </>

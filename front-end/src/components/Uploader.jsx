@@ -22,6 +22,7 @@ export const Uploader = ({
             let resultsArray = response.results
             let value = resultsArray[0].value
             let fileUrl = value.savedFile
+            console.log(fileUrl)
             setImage(fileUrl)
 
         },
@@ -76,7 +77,7 @@ export const Uploader = ({
 
                             <img alt="tutorial"
 
-                                src={image}>
+                                src={`${image}`}>
 
                             </img>
 

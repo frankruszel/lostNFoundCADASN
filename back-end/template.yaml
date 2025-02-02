@@ -22,6 +22,39 @@ Globals:
       - "multipart/form-data"
 
 Resources:
+  # ------------------------------  Start Notifi SNS & SQS Stack  ------------------------------  #
+  ItemSnsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: "ItemSnsTopic"
+  UserSubscriptionFunction:
+    DependsOn: 
+      - ItemSnsTopic
+    Type: AWS::Serverless::Function
+    Properties:
+      Tags:
+        Stage: !Sub "${Environment}"
+      CodeUri: UserSubscriptionFunction/
+      Policies:
+        - SNSCrudPolicy:
+            TopicName: !GetAtt ItemSnsTopic.TopicName
+      Handler: app.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        UserSubscriptionFunction:
+          Type: Api
+          Properties:
+            Path: /user/notification/
+            Method: POST
+            RestApiId: !Ref ServerlessRestApi
+      Environment:
+        Variables:
+          TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode it
+  
+  # ------------------------------  End Notifi SNS & SQS Stack  ------------------------------  #
+
   # ------------------------------  Start Cognito Stack  ------------------------------  #
   #cognito roles
   ClaimItCognitoSMSRole:

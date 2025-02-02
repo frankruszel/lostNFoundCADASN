@@ -37,9 +37,7 @@ const schema = yup.object({
 function ViewProfilePage() {
     const { user, accessToken, refreshToken, RefreshUser, SessionRefreshError, DeleteUser } = useUserContext();
     const [formData, setFormData] = useState({
-        given_name: '',
         email: '',
-        birthdate: '',
     });
     const [errors, setErrors] = useState({});
     const [selectedFile, setSelectedFile] = useState(null);
@@ -52,9 +50,7 @@ function ViewProfilePage() {
     useEffect(() => {
         if (user?.UserAttributes) {
             setFormData({
-                given_name: user.UserAttributes.given_name || '',
                 email: user.UserAttributes.email || '',
-                birthdate: user.UserAttributes.birthdate || '',
             });
         }
     }, [user]);
@@ -100,8 +96,6 @@ function ViewProfilePage() {
 
         const requestObj = {
             email: formData.email,
-            given_name: formData.given_name,
-            birthdate: formData.birthdate ? formData.birthdate : "",
         };
         UpdateUserApi({ accessToken, refreshToken, attributes: requestObj })
             .then((res) => {
@@ -142,17 +136,9 @@ function ViewProfilePage() {
     };
 
     return (
-        <Stack direction="column" spacing={2}>
+        <Stack direction="column" spacing={2} sx={{mx:30}}>
             <ProfileInformationCard
-                formData={formData}
-                handleInputChange={handleInputChange}
-                handleFileChange={handleFileChange}
-                handleEditProfile={handleEditProfile}
-                errors={errors}
-                isLoading={isLoading}
-                isModified={isModified}
-                selectedFile={selectedFile}
-                user={user}
+                
             />
             <DeleteUserCard
                 deleteUser={deleteUser}
