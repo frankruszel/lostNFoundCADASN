@@ -22,6 +22,232 @@ Globals:
       - "*~1*"
 
 Resources:
+  # ------------------------------  Start Cognito Stack  ------------------------------  #
+  #cognito roles
+  CognitoSMSRole:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::Role"
+    DeletionPolicy: "Delete"
+    Properties:
+      Path: "/service-role/"
+      ManagedPolicyArns:
+      - Ref: "policyserviceroleCognito"
+      MaxSessionDuration: 3600
+      RoleName: "CognitoSMSRole"
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Condition:
+            StringEquals:
+              sts:ExternalId: "3eec5d75-9954-4e6f-bc0d-354142c21099"
+          Action: "sts:AssumeRole"
+          Effect: "Allow"
+          Principal:
+            Service: "cognito-idp.amazonaws.com"
+          Sid: ""
+  policyserviceroleCognito:
+    UpdateReplacePolicy: "Retain"
+    Type: "AWS::IAM::ManagedPolicy"
+    DeletionPolicy: "Retain"
+    Properties:
+      ManagedPolicyName: "Cognito-1734066611089"
+      Path: "/service-role/"
+      Description: ""
+      Groups: []
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Resource:
+          - "*"
+          Action:
+          - "sns:publish"
+          Effect: "Allow"
+  #cognito user pool
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Properties:
+      UserPoolName: ClaimItWebAppUserPool
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireUppercase: true
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+          TemporaryPasswordValidityDays: 7
+        SignInPolicy:
+          AllowedFirstAuthFactors:
+            - PASSWORD
+      DeletionProtection: ACTIVE
+      Schema:
+        - Name: profile
+          AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: '0'
+            MaxLength: '2048'
+        - Name: updated_at
+          AttributeDataType: Number
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          NumberAttributeConstraints:
+            MinValue: '0'
+        - Name: identities
+          AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints: {}
+        - Name: sub
+          AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: false
+          Required: true
+          StringAttributeConstraints:
+            MinLength: '1'
+            MaxLength: '2048'
+        - Name: phone_number
+          AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: '0'
+            MaxLength: '2048'
+        - Name: phone_no_verified
+          AttributeDataType: Boolean
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+        - Name: email
+          AttributeDataType: String
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+          StringAttributeConstraints:
+            MinLength: '0'
+            MaxLength: '2048'
+        - Name: email_verified
+          AttributeDataType: Boolean
+          DeveloperOnlyAttribute: false
+          Mutable: true
+          Required: false
+      AutoVerifiedAttributes:
+        - email
+      UsernameAttributes:
+        - email
+      # VerificationMessageTemplate:
+      #   EmailMessageByLink: >-
+      #     Please click the link below to verify your email address. {##Verify
+      #     Email##}
+      #   EmailSubjectByLink: EcoWise verification link
+      #   DefaultEmailOption: CONFIRM_WITH_LINK
+      # SmsAuthenticationMessage: Your authentication code is {####}. Please enter it in the log in page.
+      UserAttributeUpdateSettings:
+        AttributesRequireVerificationBeforeUpdate: []
+      MfaConfiguration: OPTIONAL
+      EmailConfiguration:
+        EmailSendingAccount: COGNITO_DEFAULT
+      # SmsConfiguration:
+      #   SnsCallerArn: !Sub arn:aws:iam::${AWS::AccountId}:role/service-role/CognitoSMSRole
+      #   ExternalId: 3eec5d75-9954-4e6f-bc0d-354142c21099
+      #   SnsRegion: us-east-1
+      UserPoolTags: {}
+      AdminCreateUserConfig:
+        AllowAdminCreateUserOnly: false
+      UsernameConfiguration:
+        CaseSensitive: false
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Priority: 1
+            Name: verified_email
+          - Priority: 2
+            Name: verified_phone_number
+      UserPoolTier: ESSENTIALS
+  
+  # GoogleUserPoolIdentityProvider:
+  #   Type: AWS::Cognito::UserPoolIdentityProvider
+  #   Properties:
+  #     UserPoolId: !GetAtt CognitoUserPool.UserPoolId
+  #     ProviderName: Google
+  #     ProviderType: Google
+  #     ProviderDetails:
+  #       attributes_url: https://people.googleapis.com/v1/people/me?personFields=
+  #       attributes_url_add_attributes: 'true'
+  #       authorize_scopes: email profile openid
+  #       authorize_url: https://accounts.google.com/o/oauth2/v2/auth
+  #       client_id: "{{resolve:secretsmanager:UserPoolIdentityProvider:SecretString:google_client_id}}"
+  #       client_secret: "{{resolve:secretsmanager:UserPoolIdentityProvider:SecretString:google_client_secret}}"
+  #       oidc_issuer: https://accounts.google.com
+  #       token_request_method: POST
+  #       token_url: https://www.googleapis.com/oauth2/v4/token
+  #     AttributeMapping:
+  #       email: email
+  #       email_verified: email_verified
+  #       username: sub
+  
+  CognitoUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    DependsOn:
+      - GoogleUserPoolIdentityProvider
+    Properties:
+      UserPoolId: !GetAtt CognitoUserPool.UserPoolId
+      ClientName: EcoWiseWebApp
+      RefreshTokenValidity: 5
+      AccessTokenValidity: 60
+      IdTokenValidity: 60
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+        RefreshToken: days
+      ExplicitAuthFlows:
+        - ALLOW_ADMIN_USER_PASSWORD_AUTH
+        - ALLOW_CUSTOM_AUTH
+        - ALLOW_REFRESH_TOKEN_AUTH
+        - ALLOW_USER_AUTH
+        - ALLOW_USER_PASSWORD_AUTH
+        - ALLOW_USER_SRP_AUTH
+      SupportedIdentityProviders:
+        - COGNITO
+        # - Google
+      CallbackURLs:
+        - http://localhost:3000/login 
+        - !Sub >-
+          https://main.${AmplifyApp.DefaultDomain}/login
+      AllowedOAuthFlows:
+        - implicit
+      AllowedOAuthScopes:
+        - aws.cognito.signin.user.admin
+        - email
+        - openid
+        - phone
+        - profile
+      AllowedOAuthFlowsUserPoolClient: true
+      PreventUserExistenceErrors: ENABLED
+      EnableTokenRevocation: true
+      EnablePropagateAdditionalUserContextData: false
+      AuthSessionValidity: 3
+  CognitoUserPoolDomain:
+    Type: AWS::Cognito::UserPoolDomain
+    Properties:
+      UserPoolId: !GetAtt CognitoUserPool.UserPoolId
+      Domain: claimit
+      ManagedLoginVersion: 2
+
+  CognitoManagedLoginBranding:
+    Type: AWS::Cognito::ManagedLoginBranding
+    DependsOn:
+      - CognitoUserPool
+      - CognitoUserPoolClient
+    Properties:
+      ClientId: !GetAtt CognitoUserPoolClient.ClientId
+      UserPoolId: !GetAtt CognitoUserPool.UserPoolId
+      UseCognitoProvidedValues: true  
+
+  # ------------------------------  END Cognito Stack  ------------------------------  #
   # ------------------------------ START S3  creation------------------------------  #
  
 

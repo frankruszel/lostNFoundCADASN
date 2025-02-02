@@ -26,7 +26,7 @@ const uploadImageToS3 = async (file) => {
   }
   const labels = await rekognition.detectLabels(rekognitionParams).promise();
   // await dynamoDB.put(params).promise();
-  return { savedFile, labels }
+  return { savedFile: `https://${bucketName}.s3.amazonaws.com/${file.filename}`, labels }
 
 };
 
