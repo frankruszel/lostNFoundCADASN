@@ -300,7 +300,6 @@ Resources:
                 Version: "1"
               RunOrder: 2 # keeping run order as 2 in case manual approval is enabled
               Configuration:
-                Capabilities: CAPABILITY_NAMED_IAM
                 ProjectName: !Ref CodeBuildProjectDeploy
                 EnvironmentVariables: !Sub |
                   [
