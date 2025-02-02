@@ -142,12 +142,12 @@ Resources:
         - email
       UsernameAttributes:
         - email
-      # VerificationMessageTemplate:
-      #   EmailMessageByLink: >-
-      #     Please click the link below to verify your email address. {##Verify
-      #     Email##}
-      #   EmailSubjectByLink: EcoWise verification link
-      #   DefaultEmailOption: CONFIRM_WITH_LINK
+      VerificationMessageTemplate:
+        EmailMessageByLink: >-
+          Verify your email by clicking below. {##Verify
+          Email##}
+        EmailSubjectByLink: NYP verification link
+        DefaultEmailOption: CONFIRM_WITH_LINK
       # SmsAuthenticationMessage: Your authentication code is {####}. Please enter it in the log in page.
       UserAttributeUpdateSettings:
         AttributesRequireVerificationBeforeUpdate: []

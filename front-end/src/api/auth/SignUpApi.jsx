@@ -3,6 +3,7 @@ import cognitoProviderClient from "./AwsCognitoInit";
 
 async function SignUpUserApi(email, password) {
   try {
+    console.log(email)
     const params = {
       ClientId: process.env.REACT_APP_COGNITO_CLIENT_ID,
       Username: email,
@@ -12,11 +13,7 @@ async function SignUpUserApi(email, password) {
           Name: 'email',
           Value: email,
           
-        },
-        {
-          Name: 'is_staff',
-          Value: false,
-        },
+        }
       ],
     };
 
