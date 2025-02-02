@@ -2,21 +2,31 @@ import AWS from 'aws-sdk';
 import { v4 as uuidv4 } from 'uuid'; // UUID library for generating unique IDs
 import parser from 'lambda-multipart-parser';
 const s3 = new AWS.S3();
+
 const bucketName = 'prod-lostnfound-store-item-images';
+const rekognition = new AWS.Rekognition();
+
 
 // Function to insert data into S3
 const uploadImageToS3 = async (file) => {
 
   console.log({ file })
-  let params = {
+  let s3Params = {
     Bucket: bucketName,
     Key: file.filename,// key
     Body: file.content
   }
-  const savedFile = s3.putObject(params).promise();
-  // await dynamoDB.put(params).promise();
+  const savedFile = s3.putObject(s3Params).promise();
   console.log(`Uploaded image to S3`);
-  return savedFile
+
+  let rekognitionParams = {
+    Image: {
+      Bytes: file.content
+    }
+  }
+  const labels = await rekognition.detectLabels(rekognitionParams).promise();
+  // await dynamoDB.put(params).promise();
+  return { savedFile, labels }
 
 };
 
@@ -49,28 +59,7 @@ export const lambdaHandler = async (event, context) => {
     const results = await Promise.allSettled(filesData);
 
     console.log(results)
-    // let userId = null
-    // if ("userId" in requestBody){
-    //   userId = requestBody.userId
-    // }
-    // // console.log(userId,budgets, typeof(budgets) === 'object')
-    // // Validate input
-    // if ( !userId || !file ) {
-    //   return {
-    //     statusCode: 400,
-    //     body: JSON.stringify({
-    //       message: 'Missing or invalid userId, file, or item in request body.',
-    //     }),
-    //   };
-    // }
-
-
-    // Upload into S3
-    // let file = requestBody.body
-    // let fileName = file.filename;
-    // let fileContent = file.content;
-    // await uploadImageToS3(userId,fileName,fileContent);
-
+    
     return {
       statusCode: 200,
       headers: {
@@ -78,7 +67,9 @@ export const lambdaHandler = async (event, context) => {
         "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
         "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
-      body: JSON.stringify(results)
+      body: JSON.stringify({
+        message: "Succeessfully uploaded images",
+        results})
     //   "isBase64Encoded": true|false,
     // "statusCode": httpStatusCode,
     // "headers": { "headerName": "headerValue", ... },
