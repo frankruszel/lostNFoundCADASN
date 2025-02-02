@@ -23,6 +23,7 @@ Globals:
 
 Resources:
   # ------------------------------ START S3  creation------------------------------  #
+ 
 
   S3StoreItemImages:
     Type: 'AWS::S3::Bucket'
@@ -47,6 +48,17 @@ Resources:
               - s3:GetObject
             Resource:
               - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}/*
+#  RoleForS3:
+#     Type: AWS::IAM::Role
+#     Properties:
+#       AssumeRolePolicyDocument:
+#         Version: '2012-10-17'
+#         Statement:
+#         - Effect: Allow
+#           Action: sts:AssumeRole
+#           Resource: 
+#             - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}/*
+#         - Effect: Allow
   # Upload Image Function
   UploadImageFunction:
     DependsOn: 
@@ -59,6 +71,7 @@ Resources:
       Policies:
         - S3CrudPolicy:
             BucketName: !Ref S3StoreItemImages
+        - RekognitionLabelsPolicy
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
       Architectures:
