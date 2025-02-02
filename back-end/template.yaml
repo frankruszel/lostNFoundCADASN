@@ -24,7 +24,7 @@ Globals:
 Resources:
   # ------------------------------  Start Cognito Stack  ------------------------------  #
   #cognito roles
-  CognitoSMSRole:
+  ClaimItCognitoSMSRole:
     UpdateReplacePolicy: "Retain"
     Type: "AWS::IAM::Role"
     DeletionPolicy: "Delete"
@@ -33,7 +33,7 @@ Resources:
       ManagedPolicyArns:
       - Ref: "policyserviceroleCognito"
       MaxSessionDuration: 3600
-      RoleName: "CognitoSMSRole"
+      RoleName: "ClaimItCognitoSMSRole"
       AssumeRolePolicyDocument:
         Version: "2012-10-17"
         Statement:
