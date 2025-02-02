@@ -14,6 +14,6 @@ phases:
       - cat parameters/${ENV_NAME}-parameters.json
       - SAM_PARAMETERS=$( cat parameters/${ENV_NAME}-parameters.json | jq -r '[ .[] | "\(.ParameterKey)=\(.ParameterValue)" ] | join(" ")' )
       - echo $SAM_PARAMETERS
-      - sam deploy --debug --config-file pipeline/samconfig-pipeline.toml --parameter-overrides $SAM_PARAMETERS
+      - sam deploy --debug --config-file pipeline/samconfig-pipeline.toml --parameter-overrides $SAM_PARAMETERS --capabilities CAPABILITY_NAMED_IAM
                     --config-env "${ENV_CONFIG_NAME}"
                     --role-arn "${ENV_CLOUDFORMATION_EXECUTION_ROLE}"
