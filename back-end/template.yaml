@@ -54,8 +54,6 @@ Resources:
       KeySchema:
         - KeyType: HASH
           AttributeName: userId
-        - KeyType: RANGE
-          AttributeName: uuid
       DeletionProtectionEnabled: false
       TableClass: STANDARD
       Tags:
