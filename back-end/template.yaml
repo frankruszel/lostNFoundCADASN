@@ -17,7 +17,7 @@ Parameters:
     Default: "ItemTableCategoryChangeStream"
   NotificationPreferenceTableName:
     Type: String
-    Default: "NotifyPreferenceTable"
+    Default: "NotificationPreferenceTable"
 
 Globals:
   Function:
@@ -32,7 +32,7 @@ Globals:
 
 Resources:
 # ------------------------------ START NotiificationPreference Table creation------------------------------  # 
-  NotificationPreferenceTable:
+  NotificationPreferenceTable2:
     UpdateReplacePolicy: Retain
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
@@ -72,7 +72,7 @@ Resources:
   UserSubscriptionFunction:
     DependsOn: 
       - ItemSnsTopic
-      - NotificationPreferenceTable
+      - NotificationPreferenceTable2
     Type: AWS::Serverless::Function
     Properties:
       Tags:
