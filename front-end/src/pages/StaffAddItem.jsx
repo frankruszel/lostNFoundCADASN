@@ -77,6 +77,7 @@ function StaffAddItem() {
                 let objParentsLength = obj.Parents.length
                 if (objParentsLength > specificNo) {
                     specificObj = obj
+                    specificNo=objParentsLength
                 }
             }
             let title = specificObj.Name

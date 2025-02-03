@@ -631,33 +631,39 @@ Resources:
         # - Name: REACT_APP_GOOGLE_AUTH_PROVIDER_CLIENT_ID
         #   Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_GOOGLE_AUTH_PROVIDER_CLIENT_ID}}'
         - Name: REACT_APP_COGNITO_CLIENT_ID
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_COGNITO_CLIENT_ID}}'
+          Value: !GetAtt CognitoUserPoolClient.ClientId
         - Name: AMPLIFY_MONOREPO_APP_ROOT
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:AMPLIFY_MONOREPO_APP_ROOT}}'
+          Value: front-end
         - Name: REACT_APP_COGNITO_AUTH_FLOW
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_COGNITO_AUTH_FLOW}}'
+          Value: "USER_PASSWORD_AUTH"
         - Name: REACT_APP_REDIRECT_URI
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_REDIRECT_URI}}'
+          Value: !Sub #https://main.d3n6kwiat2qkiw.amplifyapp.com/login
+            - "https://main.${AmplifyApp.DefaultDomain}/login"
+          
         - Name: AMPLIFY_DIFF_DEPLOY
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:AMPLIFY_DIFF_DEPLOY}}'
+          Value: false
         - Name: REACT_APP_ADMIN_ACCESS_KEY_ID
           Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_ADMIN_ACCESS_KEY_ID}}'
         - Name: REACT_APP_COGNITO_REFRESH_TOKEN_FLOW
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_COGNITO_REFRESH_TOKEN_FLOW}}'
+          Value: "REFRESH_TOKEN_AUTH"
         - Name: REACT_APP_AWS_REGION
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_AWS_REGION}}'
+          Value: !Sub "${AWS::Region}"
         # - Name: REACT_APP_FACEBOOK_SSO_APP_ID
         #   Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_FACEBOOK_SSO_APP_ID}}'
         - Name: REACT_APP_CLAIMIT_API_URL
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_CLAIMIT_API_URL}}'
+          Value: !Sub
+            - 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'  
+            - ServerlessRestApi: !Ref ServerlessRestApi            
         - Name: REACT_APP_COGNITO_OAUTH_DOMAIN
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_COGNITO_OAUTH_DOMAIN}}'
+          Value: !Sub
+            - "https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com"
+            - CognitoUserPoolDomain: !Ref CognitoUserPoolDomain
         - Name: REACT_APP_COGNITO_SMS_MFA_CHALLENGE
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_COGNITO_SMS_MFA_CHALLENGE}}'
+          Value: SMS_MFA
         - Name: REACT_APP_USER_POOL_ID
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_USER_POOL_ID}}'
+          Value: !GetAtt CognitoUserPool.UserPoolId
         - Name: IMAGE_BUCKET_NAME
-          Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:IMAGE_BUCKET_NAME}}'
+          Value: !Ref S3StoreItemImagesName
       Platform: "WEB"
       EnableBranchAutoDeletion: false
       BuildSpec: |
