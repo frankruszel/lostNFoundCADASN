@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -16,11 +16,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import { Button } from '@mui/material';
-import { BrowserRouter as Link, useNavigate } from 'react-router-dom';
+import { Menu,MenuItem,Avatar } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
-
+import { useUserContext } from '../../contexts/UserContext';
+import SignOutApi from "../../api/auth/SignOutApi";
 
 const drawerWidth = 240;
 
@@ -93,21 +93,44 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function SideNav() {
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-    const [user, setUser] = React.useState(null);
+    const [open, setOpen] = useState(false);    
+    const { user, RefreshUser, accessToken, refreshToken,UserLogOut } = useUserContext()
+    const [anchorEl, setAnchorEl] = useState(null);
 
-
-    const logout = () => {
-        localStorage.clear();
-        window.location = "/";
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
     };
-    const navigate = useNavigate();
-    const handleClickHome = () => {
-        navigate("/")
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    
+    function handleLogout() {
+        window.location.href = '/'
+        SignOutApi(accessToken, refreshToken)
+            .then((res) => {
+                UserLogOut();
+            })
+            .catch((error) => {
+                console.error('Error when signing out:', error);
+                if (error.name === 'NotAuthorizedException') {
+                    if (error.message == "Refresh Token has expired" || error.message.includes('Refresh')) {
+                        UserLogOut();
+                    }
+                } else {
+                    console.error('Error fetching user data:', error.message);
+                    UserLogOut();
+                }
+            })
+
     }
     const handleManageEvents = () => {
-        navigate("/staff/list")
+        window.location.href = "/staff/list"
     }
+    const handleClickHome = () => {
+        window.location.href = "/staff/dashboard"
+    }
+    
 
 
     return (
@@ -135,21 +158,46 @@ export default function SideNav() {
             </Typography>*/}
                         <Box sx={{ flexGrow: 1 }}></Box>
                         {user && (
-                            <>
-                                <Typography sx={{ color: '#dddddd' }} >{user.name}</Typography>
-                                &nbsp;&nbsp;
-                                <Button onClick={logout}>Logout</Button>
-                            </>
-                        )
-                        }
-                        {!user && (
-                            <>
-                                <a href="/register" ><Typography sx={{ color: '#dddddd' }} >Register</Typography></a>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                <a href="/login" ><Typography sx={{ color: '#dddddd' }} >Login</Typography></a>
+                                <>                            
+                                    <Menu
+                                        sx={{ mr: 150 }}
+                                        id="simple-menu"
+                                        anchorEl={anchorEl}
+                                        keepMounted
+                                        open={Boolean(anchorEl)}
+                                        onClose={handleClose}
+                                    >
+                                        <MenuItem><a href={`/profile`} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Profile</Typography></a></MenuItem>
+                                        <MenuItem ><a onClick={handleLogout} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Logout</Typography></a></MenuItem>
+                                    </Menu>
+                                    <IconButton aria-label="menu" onClick={handleClick} sx={{ mr: 2 }}>
+                                      
+                                        {
+                                            user.profilePicture && user.profilePicture != "null" && (
+                                                <img alt="Profile Picture"
+                                                    // src={`${import.meta.env.VITE_FILE_BASE_URL}${profilePicture}`} 
+                                                    style={{ height: '40px', width: '40px', borderRadius: '50%' }}
+                                                    onClick={handleClose}>
+                                                </img>
+                                            )
+                                        }
+                                        {
+                                            (!user.profilePicture || user.profilePicture == "null") && (
+                                                <Avatar alt="" />
+                                            )
+                                        }
+                                    </IconButton>
+                                 
 
-                            </>
-                        )}
+                                </>
+                            )
+                            }
+                            {!user && (
+                                <>
+                                    <a href="/register" ><Typography>Register</Typography></a>
+                                    <a href="/login" ><Typography>Login</Typography></a>
+                                </>
+                            )}
                     </Toolbar>
                 </AppBar>
                 <Drawer variant="permanent" open={open} sx={{ backgroundColor: 'secondaryColor' }} >

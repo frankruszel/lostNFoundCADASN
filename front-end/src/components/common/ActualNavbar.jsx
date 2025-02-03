@@ -20,6 +20,7 @@ function ActualNavbar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    
     function handleLogout() {
         navigate('/')
         SignOutApi(accessToken, refreshToken)
@@ -77,25 +78,7 @@ function ActualNavbar() {
 
 
                             {user && (
-                                <>
-
-
-                                    {/* <IconButton sx={{ mx: 0, px: 0 }}>
-                                    <img height="25px" src="https://cdn-icons-png.flaticon.com/128/1170/1170678.png" alt="" />
-
-                                </IconButton>
-                                <IconButton sx={{ mx: 0, px: 0 }}>
-                                    <img height="24px" src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png" alt="" />
-                                </IconButton>
-                                <IconButton sx={{ mx: 0, px: 0 }}>
-                                    <img height="24px" src="https://cdn-icons-png.flaticon.com/512/2529/2529521.png" alt="" />
-                                </IconButton>
-                                <IconButton sx={{ mx: 0, px: 0 }}>
-                                    <img height="25px" src="https://cdn-icons-png.flaticon.com/128/685/685655.png" alt="" />
-
-                                </IconButton> */}
-
-
+                                <>                            
                                     <Menu
                                         sx={{ mr: 150 }}
                                         id="simple-menu"
@@ -108,8 +91,7 @@ function ActualNavbar() {
                                         <MenuItem ><Link onClick={handleLogout} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Logout</Typography></Link></MenuItem>
                                     </Menu>
                                     <IconButton aria-label="menu" onClick={handleClick} sx={{ mr: 2 }}>
-                                        {/* <MenuIcon /> */}
-                                        {/* <Avatar alt="" /> */}
+                                      
                                         {
                                             user.profilePicture && user.profilePicture != "null" && (
                                                 <img alt="Profile Picture"

@@ -90,7 +90,7 @@ function UserPasswordLoginPage() {
                 }));
             })
             .catch((error) => {
-                if (error.name == "InvalidParameterException" && error.message.includes('SourceUser is already linked to DestinationUser')) {
+                if (error.name == "InvalidParametRerException" && error.message.includes('SourceUser is already linked to DestinationUser')) {
                     return showAlert('warning', 'Facebook Account has already been linked to another account.')
                 }
                 if (error.name == "InvalidParameterException" && error.message.includes('Merging is not currently supported')) {
