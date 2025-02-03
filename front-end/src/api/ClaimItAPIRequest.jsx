@@ -54,6 +54,6 @@ export class APIRequest {
 
 }
 
-const ClaimItApi = new APIRequest(process.env.REACT_APP_ECOWISE_API_URL)
+const ClaimItApi = new APIRequest(process.env.REACT_APP_CLAIMIT_API_URL)
 
 export default ClaimItApi;
