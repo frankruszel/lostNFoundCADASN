@@ -30,11 +30,11 @@ import * as tf from '@tensorflow/tfjs';
 import * as sentenceEncoder from "@tensorflow-models/universal-sentence-encoder";
 
 
-
+const model = sentenceEncoder.load()
 
 
 const getSimilarity = async (mainString, stringListToCompare) => {
-    const model = await sentenceEncoder.load().then((model) => model.embed([mainString, ...stringListToCompare])).then((res) => {
+    return model.then((model) => model.embed([mainString, ...stringListToCompare])).then((res) => {
         // console.log(res.unstack())
 
         let embeddings = res.unstack()
@@ -62,8 +62,9 @@ const getSimilarity = async (mainString, stringListToCompare) => {
 
     );
 
-    return model
 }
+const categoryList = ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
+
 function StaffAddItem() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -123,13 +124,23 @@ function StaffAddItem() {
             let title = specificObj.Name
             // let categoryListFromObj = specificObj.Categories.map(item => item.Name)
             // let categoryFromObj = categoryListFromObj[0]
-            formik.values.title = title
-            const categoryList = ["Personal Items", "Electronics", "Bags & Luggage", "Miscellaneous"]
+            formik.values.title = title            
             console.log("getSimilarity below")
             getSimilarity(title, categoryList).then((res) => {
                 console.log(`similarity:`)
                 console.log(res)
+                setCategory(res.bestMatch.Name)
+                setLoading(false)
+                // Clothing
+                // Electronics
+                // Stationery
+                // Jewelry
+                // Wallet or ID
 
+            }).catch((error) => {
+                console.error("Error auto suggesting item:", error);
+                enqueueSnackbar('Failed to auto suggesting item', { variant: "error" })                
+                setLoading(false)
             })
 
             // let titleCategoriesRankingOwn = findBestMatch(title, categoryListFromObj)
@@ -195,6 +206,7 @@ function StaffAddItem() {
         console.log("filename:")
         console.log(file)
         setFilename(file.name)
+        setLoading(true)
         mutation.mutate(formData)
     }
 
@@ -343,7 +355,7 @@ function StaffAddItem() {
         }
     };
 
-
+    
 
     return (
 
@@ -480,10 +492,12 @@ function StaffAddItem() {
                                                             label="category"
                                                             onChange={handleCategoryChange}
                                                         >
-                                                            <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
-                                                            <MenuItem value={'Electronics'}>Electronics</MenuItem>
-                                                            <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
-                                                            <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem>
+                                                            {
+                                                            categoryList.map((category, i) => {
+                                                                return <MenuItem value={category}>{category}</MenuItem>
+                                                            })
+                                                            }
+                                                            
                                                         </Select>
                                                     </FormControl>
                                                 </Grid>
@@ -510,7 +524,9 @@ function StaffAddItem() {
 
                                                     <Grid container direction={'column'} mt={2}  >
                                                         <Grid item display={'flex'} >
-                                                            <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
+                                                            <LoadingButton 
+                                                            loading={loading}
+                                                            type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
                                                                 Add Item
                                                             </LoadingButton>
                                                         </Grid>
