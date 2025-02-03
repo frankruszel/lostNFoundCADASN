@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { Paper, Select, MenuItem, InputLabel, FormControl, TextField, Tabs, Stack, Tab, Dialog, Input, DialogTitle, Card, DialogContent, Avatar, CardContent, Divider, DialogContentText, DialogActions, Button, Typography, Box, IconButton, Chip, Grid } from '@mui/material';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { AccessTime, Search, Clear, ErrorRounded } from '@mui/icons-material';
+import { AccessTime, Search, Clear, ErrorRounded, CollectionsBookmarkRounded } from '@mui/icons-material';
 import UserContext from '../contexts/UserContext';
 import CircularProgress from '@mui/material/CircularProgress';
 import { toast } from 'react-toastify';
@@ -26,7 +26,39 @@ import { UploadImageApi } from '../api/item/UploadImageApi';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Uploader } from '../components/Uploader';
 import { findBestMatch } from 'string-similarity'
+import * as tf from '@tensorflow/tfjs';
+import * as sentenceEncoder from "@tensorflow-models/universal-sentence-encoder";
 
+
+
+
+
+const getSimilarity = (stringList) => {
+    const model = sentenceEncoder.load().then((model) => model.embed(stringList)).then((res) => {
+        // console.log(res.unstack())
+
+        let embeddings = res.unstack()
+        let semanticDict = {}
+        let closestMatch = null
+        let smallestSemanticCloseness = 100
+        for (let i = 1; i < embeddings.length; i++) {
+            let semanticCloseness = tf.losses.cosineDistance(embeddings[0], embeddings[i], 0).print()
+            semanticDict[stringList[i]] = { "Name": stringList[i], "ClosenessDistance": semanticCloseness }
+            if (semanticCloseness < smallestSemanticCloseness) {
+                closestMatch = semanticDict[stringList[i]]
+            }
+        }
+        // closer distance for cosine MEANNS ===== more similar (close to the meaning)
+        let returnItem = {
+            bestMatch: closestMatch,
+            rankings: semanticDict
+        }
+        return returnItem
+    }
+
+
+    );
+}
 function StaffAddItem() {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
@@ -84,13 +116,54 @@ function StaffAddItem() {
                 }
             }
             let title = specificObj.Name
+            let categoryListFromObj = specificObj.Categories.map(item => item.Name)
+            let categoryFromObj = categoryListFromObj[0]
             formik.values.title = title
-            const categoryList = ["Personal Items", "Electronics", "Bags & Luggage", "Miscellaneous"]
-
+            const categoryList = ["Personal Items", "Electronics", "Bags & Luggage"]
+            let titleCategoriesRankingOwn = findBestMatch(title, categoryListFromObj)
+            console.log(`titleCategoriesRankingOwn`)
+            console.log(titleCategoriesRankingOwn)
+            console.log(`categoryListFromObj`)
+            console.log(categoryListFromObj)
+            let categoryFromRekogRanking = findBestMatch(titleCategoriesRankingOwn.bestMatch.target, categoryList)
             let matchRanking = findBestMatch(title, categoryList)
+            console.log(`categoryFromObj`)
+            console.log(categoryFromObj)
+            console.log(`matchRanking`)
+            console.log(matchRanking)
             setCategory(matchRanking.bestMatch.target)
             console.log(`specificObj`)
             console.log(specificObj)
+
+            if (titleCategoriesRankingOwn.bestMatch.rating > matchRanking.bestMatch.rating) {
+                if (categoryFromRekogRanking.bestMatch.rating > matchRanking.bestMatch.rating) {
+                    console.log(`categoryFromRekogRanking > matchRanking`)
+                    console.log(`categoryFromRekogRanking`)
+                    console.log(categoryFromRekogRanking)
+                    console.log(`matchRanking`)
+                    console.log(matchRanking)
+                    console.log(`titleCategoriesRankingOwn`)
+                    console.log(titleCategoriesRankingOwn)
+                } else {
+                    console.log(`categoryFromRekogRanking < matchRanking`)
+                    console.log(`categoryFromRekogRanking`)
+                    console.log(categoryFromRekogRanking)
+                    console.log(`matchRanking`)
+                    console.log(matchRanking)
+                    console.log(`titleCategoriesRankingOwn`)
+                    console.log(titleCategoriesRankingOwn)
+                }
+            } else {
+                console.log(`titleCategoriesRankingOwn > matchRanking`)
+                console.log(`categoryFromRekogRanking`)
+                console.log(categoryFromRekogRanking)
+                console.log(`matchRanking`)
+                console.log(matchRanking)
+                console.log(`titleCategoriesRankingOwn`)
+                console.log(titleCategoriesRankingOwn)
+            }
+            //if titleOwnCategoriesRanking with categgoryList > title with categoryList
+
 
 
 
