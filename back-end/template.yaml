@@ -77,7 +77,7 @@ Resources:
         - SNSPublishMessagePolicy:
             TopicName: !GetAtt ItemSnsTopic.TopicName
         - DynamoDBStreamReadPolicy:
-            TableName: !Ref ItemTableName
+            TableName: !Ref ItemTableName 
             StreamName: !Ref ItemTableStreamName
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
