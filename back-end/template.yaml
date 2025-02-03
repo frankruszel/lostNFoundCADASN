@@ -17,7 +17,7 @@ Parameters:
     Default: "ItemTableCategoryChangeStream"
   NotificationPreferenceTableName:
     Type: String
-    Default: "NotificationPreferenceTable"
+    Default: "NotifyPreferenceTable"
 
 Globals:
   Function:
