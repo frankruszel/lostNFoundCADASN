@@ -15,6 +15,7 @@ import Divider from '@mui/material/Divider';
 import * as yup from 'yup';
 import { UserSubscriptionApi } from '../../api/item/UserSubscriptionApi';
 import DeleteUserModal from './DeleteUserModal';
+import { GetUserNotificationApi } from '../../api/item/GetUserNotificationApi';
 
 const schema = yup.object({
   email: yup.string().email("Invalid email address").required("Email is required"),
@@ -47,6 +48,13 @@ const ProfileInformationCard = () => {
     if (user?.UserAttributes) {
       setFormData({
         email: user.UserAttributes.email || '',
+      });
+      GetUserNotificationApi(user.Username).then((res) => {
+        console.log(`res.data: FOR GETUSER NOTIFIACTION ${JSON.stringify(res.data)}`)
+        let notifications = res.data[0].notificationSubList
+        setNotifications(notifications)
+      }).catch((error) => {
+        console.error("Error getting user notification:", error);
       });
     }
   }, [user]);

@@ -19,12 +19,13 @@ import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import {CreateItemApi} from '../api/item/CreateItemApi';
+import { CreateItemApi } from '../api/item/CreateItemApi';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { enqueueSnackbar } from "notistack";
 import { UploadImageApi } from '../api/item/UploadImageApi';
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Uploader } from '../components/Uploader';
+import { findBestMatch } from 'string-similarity'
 
 function StaffAddItem() {
     const [loading, setLoading] = useState(false);
@@ -41,10 +42,77 @@ function StaffAddItem() {
     const [currentTicket, setCurrentTicket] = useState()
     const [tabState, setTabState] = useState('All')
     const [imageFile, setImageFile] = useState(null);
+    const [imageLabels, setImageLabels] = useState(null);
     const [filename, setFilename] = useState(null);
     const [imageError, setImageError] = useState(false);
     const [category, setCategory] = useState('');
+    const [title, setTitle] = useState('');
+    
 
+
+    // START
+    const queryClient = useQueryClient();
+    const mutation = useMutation({
+        mutationFn: UploadImageApi,
+        onSuccess: (response) => {
+            // queryClient.invalidateQueries({queryKey:["photos"]})
+            console.log(`UPLOADER RESP::$$`)
+            console.log(response)
+            setImageError(false)
+            let resultsArray = response.results
+            let value = resultsArray[0].value
+            let fileUrl = value.savedFile
+            let labels = value.labels.Labels
+            console.log(`lables:`)
+            console.log(labels)
+            setImageLabels(labels)
+            console.log(`fileUrl:${fileUrl}`)
+            setImageFile(fileUrl)
+
+            let specificNo = 0
+            let specificObj
+            for (let i = 0; i < labels.length; i++) {
+                // console.log(labels[i])
+                let obj = labels[i]
+                let objParentsLength = obj.Parents.length
+                if (objParentsLength > specificNo) {
+                    specificObj = obj
+                }
+            }
+            let title = specificObj.Name
+            formik.values.title = title
+            const categoryList = ["Personal Items","Electronics","Bags & Luggage","Miscellaneous"]
+
+            let matchRanking = findBestMatch(title,categoryList)
+            setCategory(matchRanking.bestMatch.target)
+            console.log(`specificObj`)
+            console.log(specificObj)
+
+
+
+        },
+        onError: (error) => {
+            console.log(error)
+            setImageError(true)
+        }
+    })
+    const uploadFile = (e) => {
+        const files = e.target.files
+        const file = e.target.files[0]
+        const formData = new FormData();
+        Object.values(files).forEach(file => {
+            formData.append('file', file);
+        });
+        console.log("filename:")
+        console.log(file)
+        setFilename(file.name)
+        mutation.mutate(formData)
+    }
+
+    useEffect(() => {
+        console.log("useEffect triggered")
+    }, [imageFile])
+    //END
     // bookingId
     const formik = useFormik({
         initialValues: {
@@ -71,9 +139,9 @@ function StaffAddItem() {
 
             }
 
-            let key = filename
-            console.log(`key: ${typeof(key)}`)
-            console.log(key)
+
+            console.log(`key: ${typeof (filename)}`)
+            console.log(filename)
             // create a new object for submission
 
             let dataToSubmit = {};
@@ -84,7 +152,8 @@ function StaffAddItem() {
             dataToSubmit["item"]["description"] = data.description.trim();
             dataToSubmit["item"]["category"] = category
             dataToSubmit["item"]["dateFound"] = new Date(data.date).toISOString();
-            dataToSubmit["item"]["image_url"] = key;
+            dataToSubmit["item"]["image_url"] = filename;
+            dataToSubmit["item"]["image_labels"] = imageLabels;
             dataToSubmit["item"]["itemStatus"] = "lost"
             console.log(`dataToSubmASDASDASDit:${JSON.stringify(dataToSubmit)}`)
             handleAddEvent(dataToSubmit)
@@ -132,6 +201,7 @@ function StaffAddItem() {
     const handleCategoryChange = (event) => {
         // setCategoryError(false)
         setCategory(event.target.value);
+
     };
     console.log()
     const onFileChange = (e) => {
@@ -147,11 +217,11 @@ function StaffAddItem() {
             }
 
             let formData = new FormData();
-            formData.append('file', file);            
-            formData.append('userId',  "testUser1");
+            formData.append('file', file);
+            formData.append('userId', "testUser1");
             console.log("OUTOUTE HERE")
             console.log(formData.get('userId'))
-            
+
             // UploadImageApi(formData)
             //     .then((res) => {
             //         console.log(`res.data: ${JSON.stringify(res.data)}`)
@@ -162,14 +232,14 @@ function StaffAddItem() {
             //         console.error("Error uploading HERE:", error);
             //         let reqBody = error.response.data.error
             //         console.log(reqBody.file.)
-                    
+
             //         enqueueSnackbar('Failed to upload image', { variant: "error" })
             //     });
             // uplaod function to s3 with userId 
             //userId + formData
-        
-            
-            
+
+
+
             // http.post('/file/upload', formData, {
             //     headers: {
             //         'Content-Type': 'multipart/form-data'
@@ -214,13 +284,61 @@ function StaffAddItem() {
 
                                     <Grid>
                                         <Box sx={{ textAlign: 'center', mt: 2 }} >
-                                            
-                                                    <Uploader
-                                                    image={imageFile}                                                    
-                                                    setImage={setImageFile}
-                                                    filename={filename}
-                                                    setFilename={setFilename}
-                                                    />
+
+                                            {imageError && (
+                                                <>
+                                                    <Box>
+                                                        <Button className="aspect-ratio-container" variant="outlined-error" component="label" sx={{ height: 250, width: "100%" }}>
+
+                                                            <img alt="tutorial"
+
+                                                                src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png">
+
+                                                            </img>
+
+
+                                                            <input hidden accept="image/*" multiple type="file" onChange={uploadFile} />
+                                                        </Button>
+                                                        <Typography textAlign={"start"} fontSize={16} sx={{ color: "#d9534f", pl: 1 }}>Image is required</Typography>
+                                                    </Box>
+                                                </>
+
+                                            )
+                                            }
+                                            {
+                                                !imageError && imageFile && (
+                                                    <>
+                                                        <Button className="aspect-ratio-container" variant="outlined-striped" component="label" sx={{ height: 250, width: "100%" }}>
+
+                                                            <img alt="tutorial"
+
+                                                                src={`${imageFile}`}>
+
+                                                            </img>
+
+
+                                                            <input hidden accept="image/*" multiple type="file" onChange={uploadFile} />
+                                                        </Button>
+                                                    </>
+                                                )
+                                            }
+                                            {
+                                                !imageError && !imageFile && (
+                                                    <>
+                                                        <Button className="aspect-ratio-container" variant="outlined-striped" component="label" sx={{ height: 250, width: "100%" }}>
+
+                                                            <img alt="tutorial"
+
+                                                                src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png">
+
+                                                            </img>
+
+
+                                                            <input hidden accept="image/*" multiple type="file" onChange={uploadFile} />
+                                                        </Button>
+                                                    </>
+                                                )
+                                            }
 
 
 

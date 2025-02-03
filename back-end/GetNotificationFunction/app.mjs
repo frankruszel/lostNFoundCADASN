@@ -3,7 +3,7 @@ import AWS from 'aws-sdk';
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const tableName = 'NotificationTable';
 
-// Function to query data from DynamoDB, now with conditional query based on uuid
+// Function to query data from DynamoDB, now with conditional query based on 
 const queryNotificationDataFromDynamoDB = async (userId) => {
   try {
     let params = {
@@ -15,7 +15,7 @@ const queryNotificationDataFromDynamoDB = async (userId) => {
     };
 
     const result = await dynamoDB.query(params).promise();
-    console.log(`Queried Notification data for userId: ${userId} with uuid: ${uuid}`);
+    console.log(`Queried Notification data for userId: ${userId} w`);
     return result.Items || [];
   } catch (error) {
     console.error('Error querying Notification data from DynamoDB:', error);
@@ -28,7 +28,7 @@ export const lambdaHandler = async (event, context) => {
   console.log('Lambda context:', JSON.stringify(context));
 
   try {
-    // Extract userId and uuid from query parameters
+    // Extract userId and  from query parameters
     const userId = event.queryStringParameters && event.queryStringParameters.userId;
 
     if (!userId) {
@@ -45,7 +45,7 @@ export const lambdaHandler = async (event, context) => {
       };
     }
 
-    // Query DynamoDB for Notification data with or without uuid based on its presence
+    // Query DynamoDB for Notification data with or without uid based on its presence
     const notificationData = await queryNotificationDataFromDynamoDB(userId);
 
     // Ensure that at least one item is returned
@@ -79,6 +79,11 @@ export const lambdaHandler = async (event, context) => {
     console.error('Error processing request:', error);
     return {
       statusCode: 500,
+      headers: {
+        "Access-Control-Allow-Origin": "*", 
+        "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization", 
+      },
       body: JSON.stringify({
         message: 'An error occurred while processing the request.',
         error: error.message,

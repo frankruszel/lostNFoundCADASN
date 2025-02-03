@@ -13,7 +13,7 @@ function Footer() {
         <Grid container spacing={2} sx={{ justifyContent: 'space-between', width: '100%' }}>
           <Grid item xs={12} sm={4}>
             <Typography variant="body1" align="center" fontFamily="Poppins" sx={{ mt: 1 }}>
-              © {new Date().getFullYear()} EcoWise
+              © {new Date().getFullYear()} NYP
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4} sx={{ display: 'flex', justifyContent: 'center' }}>

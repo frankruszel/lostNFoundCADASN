@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { Box, TextField, Button, Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
+import { Box, TextField, InputLabel, FormControl, MenuItem, Select, Button, Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
 import { AccessTime, CalendarTodayRounded, Favorite, FavoriteBorder, LocationOn, Clear, Room, KeyboardArrowDown } from '@mui/icons-material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { jwtDecode } from 'jwt-decode';
@@ -86,7 +86,7 @@ function Homepage() {
 
         <Paper
 
-          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '52.5%', height: "65px", position: "absolute", borderRadius: 3, mx: 'auto', left: 0, right: 0, top: 102 }}
+          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '52.5%', height: "65px", position: "absolute", borderRadius: 3, mx: 'auto',left: 0, right: 0, top: 102 }}
         >
           <IconButton type="button" sx={{ pl: '20px', pt: "10px" }} aria-label="search"
           // onClick={onClickSearch}
@@ -154,7 +154,7 @@ function Homepage() {
 
 
             render={<IconButton >
-              <CalendarTodayRounded color="primary" sx={{ pt: '10px', pb: '10px', pl: 1, fontSize:42 }} /><Typography color={'black'} sx={{ pl:0.3, pr: 1 }}>When</Typography> <KeyboardArrowDown />
+              <CalendarTodayRounded color="primary" sx={{ pt: '10px', pb: '10px', pl: 1, fontSize: 42 }} /><Typography color={'black'} sx={{ pl: 0.3, pr: 1 }}>When</Typography> <KeyboardArrowDown />
             </IconButton>}
           />
 
@@ -169,24 +169,70 @@ function Homepage() {
 
         </Paper>
 
+        <Typography sx={{ textAlign: 'center', fontSize: '42px', pb: 1.5, mt: -0.5 }} color="black">Category Selcted</Typography>
 
-        <Typography sx={{ textAlign: 'center', fontSize: '42px', pb: 3, ml: 5, mt: -0.5 }} color="black">Category Selcted</Typography>
-        <Grid container direction="column" alignItems={"center"} justifyContent={"center"} >
-          <Stack direction="row" spacing={2}>
-            {/* <Chip label="All Activities" onClick variant="uplay_primary" sx={{}} /> */}
-            {/* <Chip label="Dine & Wine" onClick variant="uplay_secondary" sx={{}} /> */}
-            { }
-            {/* if a true then 'a' else 'd' */}
-            {/* a === true ? 'a' : 'd' */}
-            <Chip label="Dine & Wine" onClick={() => handleCategoryChange("Dine & Wine")} variant={categorySelected === 'Dine & Wine' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-            <Chip label="Family Bonding" onClick={() => handleCategoryChange("Family Bonding")} variant={categorySelected === 'Family Bonding' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-            <Chip label="Hobbies & Wellness" onClick={() => handleCategoryChange("Hobbies & Wellness")} variant={categorySelected === 'Hobbies & Wellness' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-            <Chip label="Sports & Adventure" onClick={() => handleCategoryChange("Sports & Adventure")} variant={categorySelected === 'Sports & Adventure' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-            <Chip label="Travel" onClick={() => handleCategoryChange("Travel")} variant={categorySelected === 'Travel' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-          </Stack>
+        <Grid container direction="row" alignItems={"center"} justifyContent={"space-between"}
+          px={23} pr={16}
+        >
+          <Grid sx={{ pb: 2 }}>
+            <FormControl fullWidth>
+              <InputLabel id="eventType" sx={{ fontSize: 12, position: 'relative', top: 12 }}>Category</InputLabel>
+              <Select
+                labelId="category"
+                id="category-select"
+                // value={category}
+                label="category"
+                // onChange={handleCategoryChange}
+                sx={{ height: 38, borderRadius: 3, minWidth: 100 }}
+
+              >
+                <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
+                <MenuItem value={'Electronics'}>Electronics</MenuItem>
+                <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
+                <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid>
+            <Stack direction="row" spacing={2}>
+              {/* <Chip label="All Activities" onClick variant="uplay_primary" sx={{}} /> */}
+              {/* <Chip label="Dine & Wine" onClick variant="uplay_secondary" sx={{}} /> */}
+              { }
+              {/* if a true then 'a' else 'd' */}
+              {/* a === true ? 'a' : 'd' */}
+              {/* <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
+              <MenuItem value={'Electronics'}>Electronics</MenuItem>
+              <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
+              <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem> */}
+              <Chip label="Personal Items" onClick={() => handleCategoryChange("Dine & Wine")} variant={categorySelected === 'Dine & Wine' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
+              <Chip label="Electronics" onClick={() => handleCategoryChange("Family Bonding")} variant={categorySelected === 'Family Bonding' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
+              <Chip label="Bags & Luggage" onClick={() => handleCategoryChange("Hobbies & Wellness")} variant={categorySelected === 'Hobbies & Wellness' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
+              <Chip label="Miscellaneous" onClick={() => handleCategoryChange("Sports & Adventure")} variant={categorySelected === 'Sports & Adventure' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
+``            </Stack>
+          </Grid>
+
+          <Grid sx={{ pb: 2 }} >
+            <FormControl fullWidth>
+              <InputLabel id="eventType" sx={{ fontSize: 12, position: 'relative', top: 12 }}>Category</InputLabel>
+              <Select
+                labelId="category"
+                id="category-select"
+                // value={category}
+                label="category"
+                // onChange={handleCategoryChange}
+                sx={{ height: 38, borderRadius: 3, minWidth: 100 }}
+
+              >
+                <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
+                <MenuItem value={'Electronics'}>Electronics</MenuItem>
+                <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
+                <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
         </Grid>
 
-     
+
         <Grid container spacing={4} px={10} mb={10} ml={8.5} >
           {/* start grid  */}
 
@@ -247,7 +293,7 @@ function Homepage() {
                             {
                               item.image_url && (
                                 <>
-                                  <img alt="test" src={`https://${IMAGE_BUCKET_NAME}.s3.amazonaws.com/${item.image_url}`} 
+                                  <img alt="test" src={`https://${IMAGE_BUCKET_NAME}.s3.amazonaws.com/${item.image_url}`}
                                     style={{ display: 'flex', minHeight: 185, maxHeight: 185 }}
                                   />
                                 </>
@@ -358,7 +404,7 @@ function Homepage() {
                   </>
                 )
               })
-              : <><Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%",ml:-8.5 }}>
+              : <><Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%", ml: -8.5 }}>
                 <Box>
                   <Grid>
                     <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />

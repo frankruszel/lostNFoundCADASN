@@ -8,7 +8,12 @@ export const Uploader = ({
     filename,
     setFilename,
     image,
-    setImage
+    setImage,
+    imageLabels,
+    setImageLabels,
+    title,
+    setTitle,
+    titleFormik
 }) => {
     const [imageError, setImageError] = useState(false);
     const queryClient = useQueryClient();
@@ -22,8 +27,29 @@ export const Uploader = ({
             let resultsArray = response.results
             let value = resultsArray[0].value
             let fileUrl = value.savedFile
-            console.log(fileUrl)
+            let labels = value.labels.Labels
+            console.log(`lables:`)
+            console.log(labels)
+            setImageLabels(labels)
+            console.log(`fileUrl:${fileUrl}`)
             setImage(fileUrl)
+
+            let specificNo = 0
+            let specificObj
+            for (let i = 0; i < labels.length; i++) {
+                // console.log(labels[i])
+                let obj = labels[i]
+                let objParentsLength = obj.Parents.length
+                if (objParentsLength > specificNo) {
+                    specificObj = obj
+                }
+            }
+            let title = specificObj.Name
+            titleFormik = title
+            console.log(`specificObj`)
+            console.log(specificObj)
+            
+
 
         },
         onError: (error) => {
@@ -44,7 +70,7 @@ export const Uploader = ({
         mutation.mutate(formData)
     }
 
-    useEffect(() => {    
+    useEffect(() => {
         console.log("useEffect triggered")
     }, [image])
 
