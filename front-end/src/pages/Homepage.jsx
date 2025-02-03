@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { Box, TextField, InputLabel, FormControl, MenuItem, Select, Button, Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
+import { Box, TextField, Dialog, DialogTitle, DialogActions, DialogContentText, DialogContent, InputLabel, FormControl, MenuItem, Select, Button, Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
 import { AccessTime, CalendarTodayRounded, Favorite, FavoriteBorder, LocationOn, Clear, Room, KeyboardArrowDown } from '@mui/icons-material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { jwtDecode } from 'jwt-decode';
@@ -14,6 +14,7 @@ import CategoryIcon from '@mui/icons-material/Category';
 import { GetItemApi } from '../api/item/GetItemApi';
 import dayjs from 'dayjs';
 import { enqueueSnackbar } from "notistack";
+import qrcode from "qrcode";
 
 const IMAGE_BUCKET_NAME = process.env.IMAGE_BUCKET_NAME ? process.env.IMAGE_BUCKET_NAME : "prod-lostnfound-store-item-images"
 console.log(`IMAGE_BUCKET_NAME:${IMAGE_BUCKET_NAME}`)
@@ -25,7 +26,30 @@ function Homepage() {
   const [itemList, setitemList] = useState([])
   const [search, setSearch] = useState('');
   const [itemListForAutoComplete, setItemListForAutoComplete] = useState([])
+  const [currentItem, setCurrentItem] = useState()
+  const [imageQR, setImageQR] = useState();
+  const [qrOpen, setQrOpen] = useState(false)
 
+  const generateQRCode = async (itemInfo) => {
+    // console.log(JSON.parse(JSON.stringify(myNewInfo)))
+    // console.log("test")
+    // console.log(ticketInfo)
+    console.log(itemInfo)
+    var myNewInfo = {
+      itemId: itemInfo.itemId,
+      title: itemInfo.title,
+      category: itemInfo.category,
+      description: itemInfo.description
+    }
+    console.log(myNewInfo)
+    const image = await qrcode.toDataURL(JSON.stringify(itemInfo))
+    setImageQR(image);
+    setCurrentItem(myNewInfo);
+    setQrOpen(true)
+  }
+  function handleCloseQR() {
+    setQrOpen(false)
+  }
   const handleCategoryChange = (e) => {
     if (e != categorySelected) {
       setCategorySelected(e)
@@ -78,15 +102,64 @@ function Homepage() {
     searchEvents()
   }, [search])
 
+  function handleSendEmailQR(imageQR) {
+    console.log('sending email')
+    // EmailService/TicketQR/{user.email}
+    var data = {}
+    data.imageQR = imageQR
+    
+
+}
+
   return (
     <>
+      <Dialog open={qrOpen} onClose={handleCloseQR} PaperProps={{
+        style: {
 
+          maxWidth: 350, maxHeight: 700
+        },
+      }}>
+        <DialogTitle sx={{ textAlign: 'center', fontWeight: 'none', letterSpacing: 1 }}>
+          <Typography sx={{ fontWeight: 'none', letterSpacing: 1, fontSize: 20 }}>
+            {currentItem?.title}
+          </Typography>
+
+        </DialogTitle>
+        <Box >
+          {currentItem?.image_url && (
+            <img style={{ maxWidth: "100%", height: 170 }} height="100%" width="100%" alt="test" src={`https://${IMAGE_BUCKET_NAME}.s3.amazonaws.com/${currentItem.image_url}`} sx={{ display: 'flex' }} />
+
+          )}
+        </Box>
+        <DialogContent sx={{ pt: 0, mt: 0 }}>
+
+          <DialogContentText>
+            {imageQR
+              ?
+              <>
+                <a href={imageQR} download style={{ justifyContent: 'center', display: 'flex', flexGrow: 1 }}><img src={imageQR} alt="" style={{ width: "60%" }} /></a>
+                { user && user.email
+                  ? <Button sx={{ mt: 3 }} fullWidth variant='claimit_primary' onClick={() => handleSendEmailQR(imageQR)}>Send</Button>
+                  : <Button sx={{ mt: 3 }} fullWidth variant='claimit_primary'  disable>Send</Button>
+                }
+
+              </>
+              : <Typography>Something went wrong with the Ticket</Typography>
+            }
+
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+
+
+        </DialogActions>
+      </Dialog>
       <Box ml={-8.5}>
 
 
         <Paper
 
-          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '52.5%', height: "65px", position: "absolute", borderRadius: 3, mx: 'auto',left: 0, right: 0, top: 102 }}
+          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: '52.5%', height: "65px", position: "absolute", borderRadius: 3, mx: 'auto', left: 0, right: 0, top: 102 }}
         >
           <IconButton type="button" sx={{ pl: '20px', pt: "10px" }} aria-label="search"
           // onClick={onClickSearch}
@@ -208,7 +281,7 @@ function Homepage() {
               <Chip label="Electronics" onClick={() => handleCategoryChange("Family Bonding")} variant={categorySelected === 'Family Bonding' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
               <Chip label="Bags & Luggage" onClick={() => handleCategoryChange("Hobbies & Wellness")} variant={categorySelected === 'Hobbies & Wellness' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
               <Chip label="Miscellaneous" onClick={() => handleCategoryChange("Sports & Adventure")} variant={categorySelected === 'Sports & Adventure' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-``            </Stack>
+              ``            </Stack>
           </Grid>
 
           <Grid sx={{ pb: 2 }} >
@@ -279,7 +352,7 @@ function Homepage() {
 </Box> */}
 
 
-                      <Link to={`/event/`} style={{ textDecoration: 'none' }}>
+                      <Link style={{ textDecoration: 'none' }}>
 
 
 
@@ -368,7 +441,7 @@ function Homepage() {
                           }} justifySelf={'end'} container direction={'row'} display={'flex'} justifyContent={'space-between'} px={3}  >
                             <Grid item lg={12}>
                               <Button sx={{ wdith: "100%", height: 50, borderRadius: 4, }} variant='claimit_primary' fullWidth
-
+                                onClick={() => generateQRCode(item)}
                               >
                                 Claim
                               </Button>
