@@ -47,7 +47,7 @@ function StaffAddItem() {
     const [imageError, setImageError] = useState(false);
     const [category, setCategory] = useState('');
     const [title, setTitle] = useState('');
-    
+
 
 
     // START
@@ -75,16 +75,19 @@ function StaffAddItem() {
                 // console.log(labels[i])
                 let obj = labels[i]
                 let objParentsLength = obj.Parents.length
-                if (objParentsLength > specificNo) {
+                if (obj.Confidence == 100) {
                     specificObj = obj
-                    specificNo=objParentsLength
+                    break;
+                } else if (objParentsLength > specificNo) {
+                    specificObj = obj
+                    specificNo = objParentsLength
                 }
             }
             let title = specificObj.Name
             formik.values.title = title
-            const categoryList = ["Personal Items","Electronics","Bags & Luggage","Miscellaneous"]
+            const categoryList = ["Personal Items", "Electronics", "Bags & Luggage", "Miscellaneous"]
 
-            let matchRanking = findBestMatch(title,categoryList)
+            let matchRanking = findBestMatch(title, categoryList)
             setCategory(matchRanking.bestMatch.target)
             console.log(`specificObj`)
             console.log(specificObj)
