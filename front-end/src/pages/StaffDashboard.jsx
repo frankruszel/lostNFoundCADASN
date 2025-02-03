@@ -55,7 +55,7 @@ function StaffDashboard() {
                                         </Grid>
                                         <Grid sx={{ pt: 1 }}>
                                             <Link>
-                                            <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                                <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
                                             </Link>
                                         </Grid>
 
@@ -93,7 +93,7 @@ function StaffDashboard() {
                                         </Grid>
                                         <Grid sx={{ pt: 1 }}>
                                             <Link>
-                                            <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                                <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
                                             </Link>
                                         </Grid>
 
@@ -131,7 +131,7 @@ function StaffDashboard() {
                                         </Grid>
                                         <Grid sx={{ pt: 1 }}>
                                             <Link>
-                                            <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                                <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
                                             </Link>
                                         </Grid>
 
@@ -168,9 +168,9 @@ function StaffDashboard() {
                                             </Typography>
                                         </Grid>
                                         <Grid sx={{ pt: 1 }}>
-                                            
+
                                             <Link>
-                                            <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                                <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
                                             </Link>
                                         </Grid>
 
@@ -184,21 +184,46 @@ function StaffDashboard() {
                         </Grid>
                     </Grid>
                     <Grid lg={6} item container direction="row" spacing={2}>
+                        <Grid lg={6} item>
+                            <Link style={{ textDecoration: "none" }} to="/staff/list/scan">
+                                <Card sx={{ borderRadius: 5, width: "100%", height: 340}}>
+                                    <Grid container direction={"row"}>
+                                        <Grid lg={4} md={3} sm={5} sx={{ display: "flex", pt: "11%", ml: "14%" }} item>
+                                            <img style={{ width: 100, height:100,marginRight: 11 }} src="https://cdn-icons-png.flaticon.com/128/6521/6521815.png" alt="" />
+                                            <Divider orientation="vertical" flexItem />
+                                        </Grid>
+
+                                        <Grid lg={6} md={3} sm={5} sx={{ display: "flex", pt: "11%" }} item>
+                                            <Box >
+
+                                                <Typography sx={{ fontSize: 40, fontWeight: 'bold' }}>
+                                                    Scan Attendance
+                                                </Typography>
+
+                                                <Typography >
+
+                                                </Typography>
+
+                                            </Box>
+
+
+
+                                        </Grid>
+                                    </Grid>
+                                </Card>
+                            </Link>
+                        </Grid>
                         <Grid item lg={6}>
-                            <Card sx={{ borderRadius: 5, width: "100%", height: 340 }}>
-                                Placeholder Graph
-                            </Card>
-                        </Grid><Grid item lg={6}>
                             <Card sx={{ borderRadius: 5, width: "100%", height: 340 }}>
                                 <Grid container direction={"column"} >
                                     <Grid>
                                         {/* title */}
-                                        <Typography fontSize={24} sx={{ml:2,mt:2}}>
+                                        <Typography fontSize={24} sx={{ ml: 2, mt: 2 }}>
                                             Returned Today
                                         </Typography>
 
                                     </Grid>
-                                    <Divider sx={{mx:2, mr:5, mt:1}}/>
+                                    <Divider sx={{ mx: 2, mr: 5, mt: 1 }} />
                                     <Grid>
                                         test
                                     </Grid>

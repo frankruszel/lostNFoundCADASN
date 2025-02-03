@@ -13,6 +13,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import dayjs from 'dayjs';
 import { enqueueSnackbar } from "notistack";
 import { GetItemApi } from '../api/item/GetItemApi';
+import QrReader from "react-qr-reader";
 
 function StaffListItems() {
     // bookingId
@@ -289,13 +290,11 @@ function StaffListItems() {
 
                                         >
                                             <Tab value="All" label="All" />
-                                            <Tab value="Today" label="Today" />
-                                            <Tab value="Upcoming" label="Upcoming" />
                                             <Tab value="Completed" label="Completed" />
                                         </Tabs>
                                     </Grid>
-                                    <Grid>
-                                        <Button alignSelf="flex-end" variant="claimit_primary" onClick={handleAddItem}  >Add Item</Button>
+                                    <Grid >
+                                    <Button alignSelf="flex-end" variant="claimit_primary" onClick={handleAddItem}  >Add Item</Button>
                                     </Grid>
 
                                 </Grid>

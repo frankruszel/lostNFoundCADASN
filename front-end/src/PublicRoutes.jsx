@@ -7,9 +7,14 @@ import StaffDashboard from './pages/StaffDashboard'
 import StaffListItems from './pages/StaffListItems'
 import StaffAddItem from './pages/StaffAddItem'
 import FindItem from './pages/FindItem'
+import ClaimScanner from './pages/ClaimScanner'
 
 const PublicRoutes = [
     
+    {
+        path: "staff/list/scan",
+        element: <ClaimScanner />,
+    }, 
     {
         path: "staff/list/add",
         element: <StaffAddItem />,
