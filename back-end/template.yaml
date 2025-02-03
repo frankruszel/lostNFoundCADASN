@@ -154,7 +154,7 @@ Resources:
         GetNotificationFunctionApiResource:
           Type: Api
           Properties:
-            Path: /Item/RetrieveItem
+            Path: /user/getNotification
             Method: Get
             RestApiId: !Ref ServerlessRestApi
 
