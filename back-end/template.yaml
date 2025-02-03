@@ -638,8 +638,8 @@ Resources:
           Value: "USER_PASSWORD_AUTH"
         - Name: REACT_APP_REDIRECT_URI
           Value: !Sub #https://main.d3n6kwiat2qkiw.amplifyapp.com/login
-            - "https://main.${AmplifyApp.DefaultDomain}/login"
-          
+            - "https://main.${DomainName}/login"
+            - DomainName: !GetAtt AmplifyApp.DefaultDomain          
         - Name: AMPLIFY_DIFF_DEPLOY
           Value: false
         - Name: REACT_APP_ADMIN_ACCESS_KEY_ID
@@ -647,7 +647,7 @@ Resources:
         - Name: REACT_APP_COGNITO_REFRESH_TOKEN_FLOW
           Value: "REFRESH_TOKEN_AUTH"
         - Name: REACT_APP_AWS_REGION
-          Value: !Sub "${AWS::Region}"
+          Value: !Ref AWS::Region
         # - Name: REACT_APP_FACEBOOK_SSO_APP_ID
         #   Value: '{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:REACT_APP_FACEBOOK_SSO_APP_ID}}'
         - Name: REACT_APP_CLAIMIT_API_URL
