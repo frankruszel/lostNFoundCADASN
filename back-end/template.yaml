@@ -15,9 +15,9 @@ Parameters:
   ItemTableStreamName:
     Type: String
     Default: "ItemTableCategoryChangeStream"
-  NotificationPreferenceTableName:
+  NotifyPreferenceTableName:
     Type: String
-    Default: "NotificationPreferenceTable2"
+    Default: "NotificationTable"
 
 Globals:
   Function:
@@ -32,14 +32,14 @@ Globals:
 
 Resources:
 # ------------------------------ START NotiificationPreference Table creation------------------------------  # 
-  NotificationPreferenceTable2:
+  NotifyPreferenceTable:
     UpdateReplacePolicy: Retain
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
     Properties:
       SSESpecification:
         SSEEnabled: false
-      TableName: !Ref NotificationPreferenceTableName
+      TableName: !Ref NotifyPreferenceTableName
       AttributeDefinitions:
         - AttributeType: S
           AttributeName: userId
@@ -72,7 +72,7 @@ Resources:
   UserSubscriptionFunction:
     DependsOn: 
       - ItemSnsTopic
-      - NotificationPreferenceTable2
+      - NotifyPreferenceTable
     Type: AWS::Serverless::Function
     Properties:
       Tags:
@@ -80,7 +80,7 @@ Resources:
       CodeUri: UserSubscriptionFunction/
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: !Ref NotificationPreferenceTableName
+            TableName: !Ref NotifyPreferenceTableName
         - SNSCrudPolicy:
             TopicName: !GetAtt ItemSnsTopic.TopicName
         - Version: '2012-10-17' # Policy Document
