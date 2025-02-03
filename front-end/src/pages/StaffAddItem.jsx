@@ -33,8 +33,8 @@ import * as sentenceEncoder from "@tensorflow-models/universal-sentence-encoder"
 
 
 
-const getSimilarity = (stringList) => {
-    const model = sentenceEncoder.load().then((model) => model.embed(stringList)).then((res) => {
+const getSimilarity = async (mainString, stringListToCompare) => {
+    const model = await sentenceEncoder.load().then((model) => model.embed([mainString, ...stringListToCompare])).then((res) => {
         // console.log(res.unstack())
 
         let embeddings = res.unstack()
@@ -42,22 +42,27 @@ const getSimilarity = (stringList) => {
         let closestMatch = null
         let smallestSemanticCloseness = 100
         for (let i = 1; i < embeddings.length; i++) {
-            let semanticCloseness = tf.losses.cosineDistance(embeddings[0], embeddings[i], 0).print()
-            semanticDict[stringList[i]] = { "Name": stringList[i], "ClosenessDistance": semanticCloseness }
+            let semanticCloseness = tf.losses.cosineDistance(embeddings[0], embeddings[i], 0).dataSync()[0]
+            semanticDict[stringListToCompare[i - 1]] = { "Name": stringListToCompare[i - 1], "ClosenessDistance": semanticCloseness }
             if (semanticCloseness < smallestSemanticCloseness) {
-                closestMatch = semanticDict[stringList[i]]
+                smallestSemanticCloseness = semanticCloseness
+                closestMatch = semanticDict[stringListToCompare[i - 1]]
             }
         }
         // closer distance for cosine MEANNS ===== more similar (close to the meaning)
         let returnItem = {
-            bestMatch: closestMatch,
-            rankings: semanticDict
+            "bestMatch": closestMatch,
+            "rankings": semanticDict
         }
+        console.log(`returnItem:`)
+        console.log(returnItem)
         return returnItem
     }
 
 
     );
+
+    return model
 }
 function StaffAddItem() {
     const [loading, setLoading] = useState(false);
@@ -116,52 +121,59 @@ function StaffAddItem() {
                 }
             }
             let title = specificObj.Name
-            let categoryListFromObj = specificObj.Categories.map(item => item.Name)
-            let categoryFromObj = categoryListFromObj[0]
+            // let categoryListFromObj = specificObj.Categories.map(item => item.Name)
+            // let categoryFromObj = categoryListFromObj[0]
             formik.values.title = title
-            const categoryList = ["Personal Items", "Electronics", "Bags & Luggage"]
-            let titleCategoriesRankingOwn = findBestMatch(title, categoryListFromObj)
-            console.log(`titleCategoriesRankingOwn`)
-            console.log(titleCategoriesRankingOwn)
-            console.log(`categoryListFromObj`)
-            console.log(categoryListFromObj)
-            let categoryFromRekogRanking = findBestMatch(titleCategoriesRankingOwn.bestMatch.target, categoryList)
-            let matchRanking = findBestMatch(title, categoryList)
-            console.log(`categoryFromObj`)
-            console.log(categoryFromObj)
-            console.log(`matchRanking`)
-            console.log(matchRanking)
-            setCategory(matchRanking.bestMatch.target)
-            console.log(`specificObj`)
-            console.log(specificObj)
+            const categoryList = ["Personal Items", "Electronics", "Bags & Luggage", "Miscellaneous"]
+            console.log("getSimilarity below")
+            getSimilarity(title, categoryList).then((res) => {
+                console.log(`similarity:`)
+                console.log(res)
 
-            if (titleCategoriesRankingOwn.bestMatch.rating > matchRanking.bestMatch.rating) {
-                if (categoryFromRekogRanking.bestMatch.rating > matchRanking.bestMatch.rating) {
-                    console.log(`categoryFromRekogRanking > matchRanking`)
-                    console.log(`categoryFromRekogRanking`)
-                    console.log(categoryFromRekogRanking)
-                    console.log(`matchRanking`)
-                    console.log(matchRanking)
-                    console.log(`titleCategoriesRankingOwn`)
-                    console.log(titleCategoriesRankingOwn)
-                } else {
-                    console.log(`categoryFromRekogRanking < matchRanking`)
-                    console.log(`categoryFromRekogRanking`)
-                    console.log(categoryFromRekogRanking)
-                    console.log(`matchRanking`)
-                    console.log(matchRanking)
-                    console.log(`titleCategoriesRankingOwn`)
-                    console.log(titleCategoriesRankingOwn)
-                }
-            } else {
-                console.log(`titleCategoriesRankingOwn > matchRanking`)
-                console.log(`categoryFromRekogRanking`)
-                console.log(categoryFromRekogRanking)
-                console.log(`matchRanking`)
-                console.log(matchRanking)
-                console.log(`titleCategoriesRankingOwn`)
-                console.log(titleCategoriesRankingOwn)
-            }
+            })
+
+            // let titleCategoriesRankingOwn = findBestMatch(title, categoryListFromObj)
+            // console.log(`titleCategoriesRankingOwn`)
+            // console.log(titleCategoriesRankingOwn)
+            // console.log(`categoryListFromObj`)
+            // console.log(categoryListFromObj)
+            // let categoryFromRekogRanking = findBestMatch(titleCategoriesRankingOwn.bestMatch.target, categoryList)
+            // let matchRanking = findBestMatch(title, categoryList)
+            // console.log(`categoryFromObj`)
+            // console.log(categoryFromObj)
+            // console.log(`matchRanking`)
+            // console.log(matchRanking)
+            // setCategory(matchRanking.bestMatch.target)
+            // console.log(`specificObj`)
+            // console.log(specificObj)
+
+            // if (titleCategoriesRankingOwn.bestMatch.rating > matchRanking.bestMatch.rating) {
+            //     if (categoryFromRekogRanking.bestMatch.rating > matchRanking.bestMatch.rating) {
+            //         console.log(`categoryFromRekogRanking > matchRanking`)
+            //         console.log(`categoryFromRekogRanking`)
+            //         console.log(categoryFromRekogRanking)
+            //         console.log(`matchRanking`)
+            //         console.log(matchRanking)
+            //         console.log(`titleCategoriesRankingOwn`)
+            //         console.log(titleCategoriesRankingOwn)
+            //     } else {
+            //         console.log(`categoryFromRekogRanking < matchRanking`)
+            //         console.log(`categoryFromRekogRanking`)
+            //         console.log(categoryFromRekogRanking)
+            //         console.log(`matchRanking`)
+            //         console.log(matchRanking)
+            //         console.log(`titleCategoriesRankingOwn`)
+            //         console.log(titleCategoriesRankingOwn)
+            //     }
+            // } else {
+            //     console.log(`titleCategoriesRankingOwn > matchRanking`)
+            //     console.log(`categoryFromRekogRanking`)
+            //     console.log(categoryFromRekogRanking)
+            //     console.log(`matchRanking`)
+            //     console.log(matchRanking)
+            //     console.log(`titleCategoriesRankingOwn`)
+            //     console.log(titleCategoriesRankingOwn)
+            // }
             //if titleOwnCategoriesRanking with categgoryList > title with categoryList
 
 
