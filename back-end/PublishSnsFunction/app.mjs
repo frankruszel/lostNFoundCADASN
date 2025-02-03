@@ -8,12 +8,8 @@ export const lambdaHandler = async (event, context) => {
   const topicArn = process.env.TopicArn
 
   let requestBody;
-  // user save button then this function is called
-  // request will be list = [cat1,cat2,cat3] (notificationSubList)
-  // based on the list, MAKE A FILTER policy
-  // then finally subscribe the user's email to the topic
-  // check if list is in req
 
+  
   // then call funciton
   try {
     // Use event directly if it's already an object, otherwise parse event.body

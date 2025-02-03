@@ -9,6 +9,12 @@ Parameters:
   S3StoreItemImagesName:
     Type: String
     Default: "lostnfound-store-item-images"
+  ItemTableName:
+    Type: String
+    Default: "ItemTable"
+  ItemTableStreamName:
+    Type: String
+    Default: "ItemTableCategoryChangeStream"
 
 Globals:
   Function:
@@ -58,7 +64,38 @@ Resources:
       Environment:
         Variables:
           TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode it
-  
+  PublishSnsFunction:
+    DependsOn: 
+      - ItemSnsTopic
+      - ItemTable
+    Type: AWS::Serverless::Function
+    Properties:
+      Tags:
+        Stage: !Sub "${Environment}"
+      CodeUri: PublishSnsFunction/
+      Policies:
+        - SNSPublishMessagePolicy:
+            TopicName: !GetAtt ItemSnsTopic.TopicName
+        - DynamoDBStreamReadPolicy:
+            TableName: !Ref ItemTableName
+            StreamName: !Ref ItemTableStreamName
+      Handler: app.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        PublishSnsFunction:
+          Type: DynamoDB
+          Properties:
+            StartingPosition: LATEST 
+            Stream: !GetAtt ItemTable.StreamArn # ARN of stream
+            Enabled: true
+            BatchSize: 1
+      Environment:
+        Variables:
+          TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode it
+
+
   # ------------------------------  End Notifi SNS & SQS Stack  ------------------------------  #
 
   # ------------------------------  Start Cognito Stack  ------------------------------  #
@@ -459,7 +496,9 @@ Resources:
     Properties:
       SSESpecification:
         SSEEnabled: false
-      TableName: ItemTable
+      TableName: !Ref ItemTableName 
+      StreamSpecification:
+        StreamViewType: "NEW_IMAGE"
       AttributeDefinitions:
         - AttributeType: S
           AttributeName: itemId
