@@ -6,12 +6,17 @@ import PasswordResetPage from './pages/PasswordResetPage'
 import StaffDashboard from './pages/StaffDashboard'
 import StaffListItems from './pages/StaffListItems'
 import StaffAddItem from './pages/StaffAddItem'
+import FindItem from './pages/FindItem'
 
 const PublicRoutes = [
     
     {
         path: "staff/list/add",
         element: <StaffAddItem />,
+    },
+    {
+        path: "find",
+        element: <FindItem />,
     },
     {
         path: "/staff/list",

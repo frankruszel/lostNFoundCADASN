@@ -68,11 +68,11 @@ function ActualNavbar() {
                             </Typography></Link>
                             <Box sx={{ flexGrow: 0.008 }}></Box>
 
-                            <Link to="/faq" ><Typography color="grey" variant='navbarLink' className='navbarLink'
+                            <Link to="/find" ><Typography color="grey" variant='navbarLink' className='navbarLink'
 
                             >
                                 <p class="navbarLink">
-                                    Found Item </p> </Typography></Link>
+                                    Find my Item </p> </Typography></Link>
                             <Box sx={{ flexGrow: 0.9 }}></Box>
 
 
