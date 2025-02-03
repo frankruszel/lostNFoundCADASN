@@ -15,6 +15,9 @@ Parameters:
   ItemTableStreamName:
     Type: String
     Default: "ItemTableCategoryChangeStream"
+  NotificationPreferenceTableName:
+    Type: String
+    Default: "NotificationPreferenceTable"
 
 Globals:
   Function:
@@ -28,6 +31,43 @@ Globals:
       - "multipart/form-data"
 
 Resources:
+# ------------------------------ START NotiificationPreference Table creation------------------------------  # 
+  NotificationPreferenceTable:
+    UpdateReplacePolicy: Retain
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    Properties:
+      SSESpecification:
+        SSEEnabled: false
+      TableName: !Ref NotificationPreferenceTableName
+      AttributeDefinitions:
+        - AttributeType: S
+          AttributeName: userId
+        - AttributeType: S
+          AttributeName: uuid
+      ContributorInsightsSpecification:
+        Enabled: false
+      BillingMode: PAY_PER_REQUEST
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: false
+      WarmThroughput:
+        ReadUnitsPerSecond: 12000
+        WriteUnitsPerSecond: 4000
+      KeySchema:
+        - KeyType: HASH
+          AttributeName: userId
+        - KeyType: RANGE
+          AttributeName: uuid
+      DeletionProtectionEnabled: false
+      TableClass: STANDARD
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: Application
+          Value: ClaimIt
+      TimeToLiveSpecification:
+        Enabled: false
+  # ------------------------------ END NotificationPreference Table creation------------------------------  # 
   # ------------------------------  Start Notifi SNS & SQS Stack  ------------------------------  #
   ItemSnsTopic:
     Type: AWS::SNS::Topic
@@ -36,12 +76,15 @@ Resources:
   UserSubscriptionFunction:
     DependsOn: 
       - ItemSnsTopic
+      - NotificationPreferenceTable
     Type: AWS::Serverless::Function
     Properties:
       Tags:
         Stage: !Sub "${Environment}"
       CodeUri: UserSubscriptionFunction/
       Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref NotificationPreferenceTableName
         - SNSCrudPolicy:
             TopicName: !GetAtt ItemSnsTopic.TopicName
         - Version: '2012-10-17' # Policy Document
@@ -50,6 +93,7 @@ Resources:
               Action:
                 - SNS:Unsubscribe
               Resource: !GetAtt ItemSnsTopic.TopicArn
+        
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
       Architectures:

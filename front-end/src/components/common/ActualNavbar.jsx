@@ -5,12 +5,13 @@ import Menu from '@mui/material/Menu';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useUserContext } from '../../contexts/UserContext';
 import SideNav from './SideNav';
-
+import SignOutApi from "../../api/auth/SignOutApi";
 
 function ActualNavbar() {
     const { IsLoggedIn } = useUserContext();
-    const { user, RefreshUser } = useUserContext()
+    const { user, RefreshUser, accessToken, refreshToken,UserLogOut } = useUserContext()
     const [anchorEl, setAnchorEl] = useState(null);
+    const navigate = useNavigate()
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -19,6 +20,25 @@ function ActualNavbar() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+    function handleLogout() {
+        navigate('/')
+        SignOutApi(accessToken, refreshToken)
+            .then((res) => {
+                UserLogOut();
+            })
+            .catch((error) => {
+                console.error('Error when signing out:', error);
+                if (error.name === 'NotAuthorizedException') {
+                    if (error.message == "Refresh Token has expired" || error.message.includes('Refresh')) {
+                        UserLogOut();
+                    }
+                } else {
+                    console.error('Error fetching user data:', error.message);
+                    UserLogOut();
+                }
+            })
+
+    }
 
     return (
         <>
@@ -85,7 +105,7 @@ function ActualNavbar() {
                                         onClose={handleClose}
                                     >
                                         <MenuItem><Link to={`/profile/${user.id}`} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Profile</Typography></Link></MenuItem>
-                                        <MenuItem >Logout</MenuItem>
+                                        <MenuItem ><Link onClick={handleLogout} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Logout</Typography></Link></MenuItem>
                                     </Menu>
                                     <IconButton aria-label="menu" onClick={handleClick} sx={{ mr: 2 }}>
                                         {/* <MenuIcon /> */}

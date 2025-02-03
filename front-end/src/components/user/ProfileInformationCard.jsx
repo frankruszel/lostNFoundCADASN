@@ -101,6 +101,7 @@ const ProfileInformationCard = () => {
     const requestObj = {
       email: formData.email,
       notificationSubList: notifications,
+      userId: user.Username
     };
     console.log(`requrestObjk: ${JSON.stringify(requestObj)}`)
     UserSubscriptionApi(requestObj)

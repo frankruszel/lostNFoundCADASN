@@ -154,7 +154,7 @@ function Homepage() {
 
 
             render={<IconButton >
-              <CalendarTodayRounded color="primary" sx={{ pt: '10px', pb: '10px', pl: 1 }} /><Typography color={'black'} sx={{ pl: 1.4, pr: 1 }}>When</Typography> <KeyboardArrowDown />
+              <CalendarTodayRounded color="primary" sx={{ pt: '10px', pb: '10px', pl: 1, fontSize:42 }} /><Typography color={'black'} sx={{ pl:0.3, pr: 1 }}>When</Typography> <KeyboardArrowDown />
             </IconButton>}
           />
 
