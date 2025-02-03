@@ -135,6 +135,28 @@ Resources:
         Variables:
           TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode it
 
+  # READ
+  GetNotificationFunction:
+    DependsOn: NotifyPreferenceTable
+    Type: AWS::Serverless::Function
+    Properties:
+      Tags:
+        Stage: !Sub "${Environment}"
+      CodeUri: GetNotificationFunction/
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref NotifyPreferenceTableName
+      Handler: app.lambdaHandler
+      Runtime: nodejs22.x
+      Architectures:
+        - x86_64
+      Events:
+        GetNotificationFunctionApiResource:
+          Type: Api
+          Properties:
+            Path: /Item/RetrieveItem
+            Method: Get
+            RestApiId: !Ref ServerlessRestApi
 
   # ------------------------------  End Notifi SNS & SQS Stack  ------------------------------  #
 

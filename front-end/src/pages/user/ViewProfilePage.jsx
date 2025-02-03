@@ -140,9 +140,7 @@ function ViewProfilePage() {
             <ProfileInformationCard
                 
             />
-            <DeleteUserCard
-                deleteUser={deleteUser}
-            />
+            
         </Stack>
     );
 }

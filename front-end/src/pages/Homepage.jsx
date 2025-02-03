@@ -186,8 +186,8 @@ function Homepage() {
           </Stack>
         </Grid>
 
-
-        <Grid container spacing={4} px={10} mb={10}>
+     
+        <Grid container spacing={4} px={10} mb={10} ml={8.5} >
           {/* start grid  */}
 
           {
@@ -195,7 +195,7 @@ function Homepage() {
               ? itemList.map((item, i) => {
                 return (
                   <>
-                    <Grid item xs={12} md={6} lg={3.5} sx={{ height: 330, mb: 2 }} >
+                    <Grid item xs={12} md={6} lg={3.5} sx={{ height: 330, mb: 15 }} >
 
                       {/* <Box sx={{
   color: "#FFFFFF",
@@ -358,7 +358,7 @@ function Homepage() {
                   </>
                 )
               })
-              : <><Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%" }}>
+              : <><Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%",ml:-8.5 }}>
                 <Box>
                   <Grid>
                     <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />

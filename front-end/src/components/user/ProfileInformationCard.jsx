@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardActions, Grid, TextField, Box, Typography, Avatar, Switch } from '@mui/material';
+import { Card,Button, CardContent, CardActions, Grid, TextField, Box, Typography, Avatar, Switch } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import FileUploadIcon from '@mui/icons-material/UploadFile';
 import BadgeIcon from '@mui/icons-material/Badge';
@@ -14,6 +14,7 @@ import { useAlert } from "../../contexts/AlertContext";
 import Divider from '@mui/material/Divider';
 import * as yup from 'yup';
 import { UserSubscriptionApi } from '../../api/item/UserSubscriptionApi';
+import DeleteUserModal from './DeleteUserModal';
 
 const schema = yup.object({
   email: yup.string().email("Invalid email address").required("Email is required"),
@@ -36,6 +37,8 @@ const ProfileInformationCard = () => {
   const [isModified, setIsModified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [notifications, setNotifications] = useState([]);
+      const [openModal, setOpenModal] = useState(false)
+  
   const navigate = useNavigate();
   const { showAlert } = useAlert();
 
@@ -106,19 +109,24 @@ const ProfileInformationCard = () => {
     console.log(`requrestObjk: ${JSON.stringify(requestObj)}`)
     UserSubscriptionApi(requestObj)
       .then((res) => {
-        
+
         showAlert('success', "Updated Successfully.");
         setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error updating user:", error);
-        
+
         setIsLoading(false);
       });
 
     setIsModified(false);
   };
-  return (
+  return (<>
+    <DeleteUserModal
+      deleteUser={DeleteUser}
+      openModal={openModal}
+      setOpenModal={setOpenModal}
+    />
     <Card>
       <CardContent>
         <CardTitle icon={<BadgeIcon />} title="Profile Information" />
@@ -130,13 +138,15 @@ const ProfileInformationCard = () => {
               alt="Profile Picture"
               sx={{ width: 150, height: 150, margin: '0 auto' }}
             />
-            
+            <Button variant='contained' onClick={() => setOpenModal(true)} sx={{ marginTop: "1rem", backgroundColor: "#d9534f", color: "white" }}>Delete my account</Button>
+
+
 
           </Grid>
           <Divider orientation="vertical" flexItem />
 
 
-          <Grid item container spacing={0} xs={12} sm={6} md={6} lg={6} display={'flex'} sx={{ml:3}}    >
+          <Grid item container spacing={0} xs={12} sm={6} md={6} lg={6} display={'flex'} sx={{ ml: 3 }}    >
             <Grid item xs={12}>
               <TextField
                 label="Email"
@@ -154,7 +164,7 @@ const ProfileInformationCard = () => {
                 Notification Settings
               </Typography>
             </Grid>
-            <Grid item xs={12} sx={{  }}>
+            <Grid item xs={12} sx={{}}>
               <FormControl fullWidth>
                 <Select
                   value={notifications}
@@ -191,7 +201,10 @@ const ProfileInformationCard = () => {
           Save
         </LoadingButton>
       </CardActions>
+
     </Card>
+  </>
+
   );
 };
 

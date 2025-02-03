@@ -5,7 +5,7 @@ import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 const ddbClient = new DynamoDBClient({});
 const ddbDocClient = DynamoDBDocumentClient.from(ddbClient);
 const client = new SNSClient({});
-const tableName = "NotificationPreferenceTable"
+const tableName = "NotificationTable"
 
 
 const updateNotificationSublistData = async (userId, notificationSubList) => {
