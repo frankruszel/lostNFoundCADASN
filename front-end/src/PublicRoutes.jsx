@@ -36,6 +36,10 @@ const PublicRoutes = [
         element: <Homepage />,
     },
     {
+        path: "/",
+        element: <Homepage />,
+    },
+    {
         path:"/login",
         element: <LoginPage />
     },
