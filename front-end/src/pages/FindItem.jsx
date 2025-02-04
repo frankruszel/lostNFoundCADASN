@@ -324,26 +324,26 @@ function FindItem() {
       // let categoryFromObj = categoryListFromObj[0]
       formik.values.title = title
       console.log("getSimilarity below")
-      getSimilarity(title, categoryList).then((res) => {
-        console.log(`similarity:`)
-        console.log(res)
-        setCategory(res.bestMatch.Name)
-        setLoading(false)
-        // Clothing
-        // Electronics
-        // Stationery
-        // Jewelry
-        // Wallet or ID
-        console.log("newsmilarity function")
-        //   console.log(itemList.flatMap((item) => item.title))
+      // getSimilarity(title, categoryList).then((res) => {
+      //   console.log(`similarity:`)
+      //   console.log(res)
+      //   setCategory(res.bestMatch.Name)
+      //   setLoading(false)
+      //   // Clothing
+      //   // Electronics
+      //   // Stationery
+      //   // Jewelry
+      //   // Wallet or ID
+      //   // console.log("newsmilarity function")
+      //   //   console.log(itemList.flatMap((item) => item.title))
 
-        sortBasedOnTitleCosineDifference(title,itemList)
+      //   // sortBasedOnTitleCosineDifference(title,itemList)
 
-      }).catch((error) => {
-        console.error("Error auto suggesting item:", error);
-        enqueueSnackbar('Failed to auto suggesting item', { variant: "error" })
-        setLoading(false)
-      })
+      // }).catch((error) => {
+      //   console.error("Error auto suggesting item:", error);
+      //   enqueueSnackbar('Failed to auto suggesting item', { variant: "error" })
+      //   setLoading(false)
+      // })
 
       // let titleCategoriesRankingOwn = findBestMatch(title, categoryListFromObj)
       // console.log(`titleCategoriesRankingOwn`)
