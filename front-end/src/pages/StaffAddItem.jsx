@@ -108,23 +108,29 @@ function StaffAddItem() {
             setImageFile(fileUrl)
 
             let specificNo = 0
-            let specificObj
+            let specificObj = {}
+            let specificObjList = []
             for (let i = 0; i < labels.length; i++) {
                 // console.log(labels[i])
                 let obj = labels[i]
                 let objParentsLength = obj.Parents.length
                 if (obj.Confidence == 100) {
-                    specificObj = obj
-                    break;
-                } else if (objParentsLength > specificNo) {
+                    specificObjList.push(obj)
+                }  
+                if (objParentsLength > specificNo) {
                     specificObj = obj
                     specificNo = objParentsLength
                 }
             }
+            // console.log("TESATIAUSHDUIASHDUIASHDUIL HAILFHSDIOUFHSDLIFHUISDHFI SDHILFUH")
+            if (specificObjList.length > 0) {
+                let bestNamOutOf100 = specificObjList.sort((a, b) => b.Parents.length - a.Parents.length)[0]
+                specificObj["Name"] = bestNamOutOf100.Name
+            }
             let title = specificObj.Name
             // let categoryListFromObj = specificObj.Categories.map(item => item.Name)
             // let categoryFromObj = categoryListFromObj[0]
-            formik.values.title = title            
+            formik.values.title = title
             console.log("getSimilarity below")
             getSimilarity(title, categoryList).then((res) => {
                 console.log(`similarity:`)
@@ -139,7 +145,7 @@ function StaffAddItem() {
 
             }).catch((error) => {
                 console.error("Error auto suggesting item:", error);
-                enqueueSnackbar('Failed to auto suggesting item', { variant: "error" })                
+                enqueueSnackbar('Failed to auto suggesting item', { variant: "error" })
                 setLoading(false)
             })
 
@@ -355,7 +361,7 @@ function StaffAddItem() {
         }
     };
 
-    
+
 
     return (
 
@@ -493,11 +499,11 @@ function StaffAddItem() {
                                                             onChange={handleCategoryChange}
                                                         >
                                                             {
-                                                            categoryList.map((category, i) => {
-                                                                return <MenuItem value={category}>{category}</MenuItem>
-                                                            })
+                                                                categoryList.map((category, i) => {
+                                                                    return <MenuItem value={category}>{category}</MenuItem>
+                                                                })
                                                             }
-                                                            
+
                                                         </Select>
                                                     </FormControl>
                                                 </Grid>
@@ -524,9 +530,9 @@ function StaffAddItem() {
 
                                                     <Grid container direction={'column'} mt={2}  >
                                                         <Grid item display={'flex'} >
-                                                            <LoadingButton 
-                                                            loading={loading}
-                                                            type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
+                                                            <LoadingButton
+                                                                loading={loading}
+                                                                type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
                                                                 Add Item
                                                             </LoadingButton>
                                                         </Grid>
