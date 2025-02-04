@@ -21,12 +21,9 @@ const schema = yup.object({
   email: yup.string().email("Invalid email address").required("Email is required"),
 });
 
-const notificationArray = [
-  'Personal Items',
-  'Electronics',
-  'Bags & Luggage',
-  'Miscellaneous'
-]
+const notificationArray =  ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
+
+
 
 const ProfileInformationCard = () => {
   const { user, accessToken, refreshToken, RefreshUser, SessionRefreshError, DeleteUser } = useUserContext();

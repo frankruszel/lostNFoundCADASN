@@ -30,10 +30,10 @@
     "react-dom": "^18.3.1",
     "react-multi-date-picker": "^4.5.2",
     "react-phone-number-input": "^3.4.10",
-    "react-qr-reader": "^3.0.0-beta-1",
     "react-router-dom": "^7.0.2",
     "react-scripts": "5.0.1",
     "react-toastify": "^11.0.3",
+    "react-zxing": "^2.0.2",
     "string-similarity": "^4.0.4",
     "yup": "^1.5.0"
   },

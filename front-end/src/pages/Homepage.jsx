@@ -39,10 +39,10 @@ function Homepage() {
       itemId: itemInfo.itemId,
       title: itemInfo.title,
       category: itemInfo.category,
-      description: itemInfo.description
+      description: itemInfo.description,
     }
     console.log(myNewInfo)
-    const image = await qrcode.toDataURL(JSON.stringify(itemInfo))
+    const image = await qrcode.toDataURL(JSON.stringify(myNewInfo))
     setImageQR(image);
     setCurrentItem(myNewInfo);
     setQrOpen(true)

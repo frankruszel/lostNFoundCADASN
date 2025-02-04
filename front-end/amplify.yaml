@@ -6,7 +6,7 @@ applications:
           commands:
             - npm ci --cache .npm --prefer-offline --force
         build:
-          commands:
+          commands:ep
             - npm run build
       artifacts:
         baseDirectory: build

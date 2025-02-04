@@ -13,7 +13,9 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import dayjs from 'dayjs';
 import { enqueueSnackbar } from "notistack";
 import { GetItemApi } from '../api/item/GetItemApi';
-import QrReader from "react-qr-reader";
+import { UpdateItemApi } from '../api/item/UpdateItemApi';
+
+const IMAGE_BUCKET_NAME = process.env.IMAGE_BUCKET_NAME ? process.env.IMAGE_BUCKET_NAME : "prod-lostnfound-store-item-images"
 
 function StaffListItems() {
     // bookingId
@@ -109,6 +111,9 @@ function StaffListItems() {
                 enqueueSnackbar('Failed to fetch Items', { variant: "error" })
             })
     }, []);
+    useEffect(() => {
+        console.log('itemchanged')
+    }, [itemList]);
     const handleTabChange = (event, newValue) => {
 
     };
@@ -145,6 +150,36 @@ function StaffListItems() {
 
         //     });
 
+    }
+
+    function handleClaim(item) {
+        // console.log(`handleClaim: ${JSON.stringify(item)}`)
+        let newItem = {
+            ...item
+        }
+        newItem.itemStatus = "claimed"
+        console.log(`newItem: ${newItem.itemStatus}`)
+        UpdateItemApi(newItem).then((res) => {
+            console.log(`res.data: ${JSON.stringify(res)}`)
+            // toast.success('Form submitted successfully');
+            enqueueSnackbar("Claimed item succesfully.", { variant: "success" });
+            GetItemApi()
+                .then((res) => {
+                    console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
+                    setItemList(res.data)
+                }).catch((error) => {
+                    console.error("Error fetching Items:", error);
+                    enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+                })
+        }).catch((error) => {
+            console.error("Error claiming Item:", error);
+            enqueueSnackbar('Failed to claim item', { variant: "error" })
+        });
+        // CreateItemApi(data)
+        //     .then((res) => {
+        //         console.log(`res.data: ${JSON.stringify(res.data)}`)
+        //         // toast.success('Form submitted successfully');
+        //         enqueueSnackbar("Created item succesfully.", { variant: "success" });
     }
 
 
@@ -269,6 +304,23 @@ function StaffListItems() {
         console.log("handleAddItem")
         navigate("/staff/list/add")
     }
+    const handleCompleted = () => {
+        console.log("handleCompleted")
+        console.log(itemList.filter((item) => item.itemStatus == "claimed" ))
+        setItemList(itemList.filter((item) => item.itemStatus == "claimed"))
+        setTabState("Completed")
+    }
+    const handleAll= () => {
+        GetItemApi()
+        .then((res) => {
+            console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
+            setItemList(res.data)
+        }).catch((error) => {
+            console.error("Error fetching Items:", error);
+            enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+        })
+        setTabState("All")
+    }
     if (user == null) {
         return (
 
@@ -289,12 +341,12 @@ function StaffListItems() {
                                             textColor="secondary"
 
                                         >
-                                            <Tab value="All" label="All" />
-                                            <Tab value="Completed" label="Completed" />
+                                            <Tab value="All" label="All" onClick={() => handleAll()}/>
+                                            <Tab value="Completed" label="Completed" onClick={() => handleCompleted()} />
                                         </Tabs>
                                     </Grid>
                                     <Grid >
-                                    <Button alignSelf="flex-end" variant="claimit_primary" onClick={handleAddItem}  >Add Item</Button>
+                                        <Button alignSelf="flex-end" variant="claimit_primary" onClick={handleAddItem}  >Add Item</Button>
                                     </Grid>
 
                                 </Grid>
@@ -326,7 +378,7 @@ function StaffListItems() {
                                                                         </Grid>
                                                                         <Grid item>
                                                                             {item.image_url && (
-                                                                                <img style={{ paddingTop: "25%" }} height="90px" width="100px" alt="test" src={`${item.image_url}`} sx={{ display: 'flex' }} />
+                                                                                <img style={{ paddingTop: "25%" }} height="90px" width="100px" alt="test" src={`https://${IMAGE_BUCKET_NAME}.s3.amazonaws.com/${item.image_url}`} sx={{ display: 'flex' }} />
 
                                                                             )}
                                                                             {
@@ -335,9 +387,9 @@ function StaffListItems() {
 
                                                                                         <img alt="tutorial"
                                                                                             style={{ paddingTop: "25%" }} height="90px" width="100px" alt="test" src={`${item.image_url}`} sx={{ display: 'flex' }}
-                                                                                            src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png"/>
+                                                                                            src="https://storage.googleapis.com/proudcity/mebanenc/uploads/2021/03/placeholder-image.png" />
 
-                                                                                     
+
 
 
                                                                                     </>
@@ -363,7 +415,7 @@ function StaffListItems() {
                                                                         </Grid>
                                                                         <Grid item sx={{ flexGrow: 1, display: "flex", justifyContent: 'end', mt: 3.2, mr: 2 }}>
                                                                             {
-                                                                                item.status == "claimed"
+                                                                                item.itemStatus == "claimed"
                                                                                     ? <Chip label=" Claimed" color="success" />
                                                                                     : <Chip label="Not Claimed" sx={{ backgroundColor: "#DC3545", color: "#FFFFFF" }} />
                                                                             }
@@ -371,32 +423,7 @@ function StaffListItems() {
 
                                                                         </Grid>
 
-                                                                        {/* <Grid item >
-                                                <Grid sx={{ mt: 3 }} flexDirection={"row"} container>
-                                                    <Grid>
-                                                        <Typography sx={{ fontSize: 16, pt: 0.8, mr: 3 }}>
-                                                            Person
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid>
-                                                        <IconButton sx={{ backgroundColor: "#f9f9f9" }}>
-                                                            <img height="20px" src="https://cdn-icons-png.flaticon.com/128/12184/12184291.png" alt="" />
-                                                        </IconButton>
-                                                    </Grid>
-                                                    <Grid>
-                                                        <Typography sx={{ pt: 0.8, mx: 2 }}>
-                                                          
-                                                        </Typography>
-                                                    </Grid>
-                                                    <Grid>
-                                                        <IconButton sx={{ backgroundColor: "#f9f9f9" }} >
-                                                            <img height="20px" src="https://cdn-icons-png.flaticon.com/128/12964/12964430.png" alt="" />
-                                                        </IconButton>
-                                                    </Grid>
-
-
-                                                </Grid>5
-                                            </Grid> */}
+                                                                    
 
                                                                     </Grid>
 
@@ -411,7 +438,7 @@ function StaffListItems() {
                                                                                 <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
                                                                                     <a
                                                                                         //  href={`/event/${item.event.id}/rate/${item.id}/edit`} 
-                                                                                        style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Edit Review</Typography></a> </Grid>
+                                                                                        style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Edit Item</Typography></a> </Grid>
                                                                             </>
                                                                             : <><Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
                                                                                 <a
@@ -419,7 +446,15 @@ function StaffListItems() {
                                                                                     style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Add Review</Typography></a> </Grid></>
                                                                     }
 
-                                                                    <Grid item flexGrow={1} align={'end'} px={3} pt={1} ><Typography sx={{ fontWeight: "bold", fontSize: 19 }}>$ price</Typography> </Grid>
+                                                                    <Grid item flexGrow={1} align={'end'} px={3} pt={1} >
+                                                                        {
+                                                                            item.itemStatus == "claimed"
+                                                                                ? <></>
+                                                                                : <Button alignSelf="flex-end" variant="claimit_primary" onClick={() => handleClaim(item)}  >Claim</Button>
+
+                                                                        }
+
+                                                                    </Grid>
                                                                 </Grid>
                                                             </Paper>
 
