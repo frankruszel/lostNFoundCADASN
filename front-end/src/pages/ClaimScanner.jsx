@@ -38,16 +38,22 @@ function ClaimScanner() {
 
         GetItemApi()
             .then((res) => {
-                res.data.filter((item) => item.itemId == newItem.itemId)
-                if (res.data[0].itemStatus == "claimed") {
+                let myItemId = res.data.filter((item) => item.itemId == newItem.itemId)[0]
+                console.log(`after filter function`)
+                console.log(myItemId)
+                if (myItemId.itemStatus == "claimed") {
+                    console.log("ITEM HAS BEEN CLAIMED")
                     console.log(`item already claimed`)
                     enqueueSnackbar('item already claimed', { variant: "error" })
 
                 }
                 else {
+                    console.log("ITEM NOT BEEN CLAIMEDCLAIMED")
+
                     UpdateItemApi(newItem).then((res) => {
                         console.log(`res.data: ${JSON.stringify(res)}`)
                         // toast.success('Form submitted successfully');
+
                         enqueueSnackbar("Claimed item succesfully.", { variant: "success" });
 
                     }).catch((error) => {
@@ -93,8 +99,7 @@ function ClaimScanner() {
     }
 
 
-    const codeReader = new BrowserQRCodeReader();
-
+    const codeReader = new BrowserQRCodeReader()
     console.log("ZXing code reader initialized");
 
     useEffect(() => {
@@ -131,6 +136,7 @@ function ClaimScanner() {
     }
 
     function decodeContinuously(selectedDeviceId) {
+        codeReader.timeBetweenDecodingAttempts = 1500;
         codeReader.decodeFromInputVideoDeviceContinuously(
             selectedDeviceId,
             "video",
@@ -150,6 +156,7 @@ function ClaimScanner() {
                         itemStatus: 'claimed'
                     }
                     handleClaim(newItemData)
+                    codeReader.stopContinuousDecode();
                 }
 
                 if (err) {
