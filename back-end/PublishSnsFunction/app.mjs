@@ -29,7 +29,7 @@ export const lambdaHandler = async (event, context) => {
     },
   };
   console.log(`MessageAttributes`)
-  console.log(MessageAttributes)
+  console.log(input.MessageAttributes)
   const command = new PublishCommand(input);
   const response = await client.send(command);
   
