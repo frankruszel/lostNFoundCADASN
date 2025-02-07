@@ -27,7 +27,7 @@ Metadata:
 Parameters:
   ProjectSubfolder:
     Type: String
-    Default: "./back-end"
+    Default: "back-end"
   CodeCommitRepositoryName:
     Type: String
     Default: "lostNFoundCADASN"
