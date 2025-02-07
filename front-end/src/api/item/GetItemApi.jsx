@@ -6,16 +6,19 @@ export const GetItemApi = async (userId, itemId) => {
         if (!userId && !itemId) {
             response = await ClaimItApi.get(`/Item/RetrieveItem/`);
         }
-        if (userId) {
+        if (itemId && !userId) {
+            response = await ClaimItApi.get(`/Item/RetrieveItem/?itemId=${itemId}`);
+        }
+        if (userId && !itemId) {
             response = await ClaimItApi.get(`/Item/RetrieveItem/?userId=${userId}`);
         }
-        if (itemId) {
+        if (itemId && userId) {
             response = await ClaimItApi.get(`/Item/RetrieveItem/?userId=${userId}&itemId=${itemId}`);
         }
         // Return the successful response
         return response.data;
     } catch (error) {
-        console.error('Error getting Preference:', error);
+        console.error('Error getting Item:', error);
         // Re-throw the error for higher-level handling
         throw error;
     }
