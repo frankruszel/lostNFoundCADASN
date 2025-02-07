@@ -185,6 +185,7 @@ function StaffUpdateItem() {
             date: Yup.date().typeError('Invalid date').required('Date is required'),
         }),
         onSubmit: (data) => {
+            setLoading(true)
             console.log(`submitStart: ${JSON.stringify(data)}`)
             console.log(`typeof imageFile: ${imageFile}`)
             if (imageFile) {
@@ -223,13 +224,14 @@ function StaffUpdateItem() {
                 console.log(`res.data: ${JSON.stringify(res.data)}`)
                 // toast.success('Form submitted successfully');
                 enqueueSnackbar("Updated item succesfully.", { variant: "success" });
+                setLoading(false)
 
 
             })
             .catch((error) => {
                 console.error("Error creating Item:", error);
                 enqueueSnackbar('Failed to update item', { variant: "error" })
-
+                setLoading(false)
             });
         // CreateItemApi
     }

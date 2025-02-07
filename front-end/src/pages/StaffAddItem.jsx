@@ -239,6 +239,7 @@ function StaffAddItem() {
             date: Yup.date().typeError('Invalid date').required('Date is required'),
         }),
         onSubmit: (data) => {
+            setLoading(true)
             console.log(`submitStart: ${JSON.stringify(data)}`)
             console.log(`typeof imageFile: ${imageFile}`)
             if (imageFile) {
@@ -263,26 +264,27 @@ function StaffAddItem() {
             dataToSubmit["item"]["image_labels"] = imageLabels;
             dataToSubmit["item"]["itemStatus"] = "lost"
             console.log(`dataToSubmASDASDASDit:${JSON.stringify(dataToSubmit)}`)
-            handleAddEvent(dataToSubmit)
+            handleAddItem(dataToSubmit)
             // toast.success('Form submitted successfully');
         }
 
     })
     const componentRef = useRef();
 
-    const handleAddEvent = (data) => {
-        console.log(`handleAddEvent: ${JSON.stringify(data)}`)
+    const handleAddItem = (data) => {
+        console.log(`handleAddItem: ${JSON.stringify(data)}`)
         CreateItemApi(data)
             .then((res) => {
                 console.log(`res.data: ${JSON.stringify(res.data)}`)
                 // toast.success('Form submitted successfully');
                 enqueueSnackbar("Created item succesfully.", { variant: "success" });
 
-
+                setLoading(false)
             })
             .catch((error) => {
                 console.error("Error creating Item:", error);
                 enqueueSnackbar('Failed to create item', { variant: "error" })
+                setLoading(false)
 
             });
         // CreateItemApi
