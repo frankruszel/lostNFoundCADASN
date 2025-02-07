@@ -8,7 +8,6 @@ import SideNav from './components/common/SideNav';
 import { Navbar } from './components/common/Navbar/Navbar';
 import { SnackbarProvider } from 'notistack';
 import { UserProvider } from './contexts/UserContext';
-import { GoogleSSOProvider } from './contexts/GoogleSSOContext';
 import GreyBackground from './components/GreyBackground';
 import ShowNavBar from './components/common/ShowNavBar';
 import ShowActualNavBar from './components/common/ShowActualNavBar';
@@ -185,9 +184,7 @@ const theme = createTheme({
 function Root() {
     return (
         <>
-            <QueryClientProvider client={queryClient}>
-
-                <GoogleSSOProvider>
+            <QueryClientProvider client={queryClient}>            
                     <ThemeProvider theme={theme}>
                         <AlertProvider>
                             <UserProvider>
@@ -220,9 +217,7 @@ function Root() {
                                 </SnackbarProvider>
                             </UserProvider>
                         </AlertProvider>
-                    </ThemeProvider>
-                </GoogleSSOProvider>
-
+                    </ThemeProvider>              
             </QueryClientProvider>
         </>
     );
