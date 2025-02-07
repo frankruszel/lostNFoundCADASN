@@ -21,7 +21,7 @@ const schema = yup.object({
   email: yup.string().email("Invalid email address").required("Email is required"),
 });
 
-const notificationArray =  ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
+const categoryArray =  ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
 
 
 
@@ -178,7 +178,7 @@ const ProfileInformationCard = () => {
 
                 >
                   {
-                    notificationArray.map((notification, index) => {
+                    categoryArray.map((notification, index) => {
                       return (
                         <MenuItem key={index} value={notification}>
                           {notification}
