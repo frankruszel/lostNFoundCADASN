@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { Box,Backdrop, TextField, Dialog, DialogTitle, DialogActions, DialogContentText, DialogContent, InputLabel, FormControl, MenuItem, Select, Button, Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
+import { Box, Backdrop, TextField, Dialog, DialogTitle, DialogActions, DialogContentText, DialogContent, InputLabel, FormControl, MenuItem, Select, Button, Autocomplete as AutocompleteMUI, Chip, Stack, Checkbox, CardContent, IconButton, InputBase, Paper, Divider, Typography, Grid, Card } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { AccessTime, CalendarTodayRounded, Favorite, FavoriteBorder, LocationOn, Clear, Room, KeyboardArrowDown } from '@mui/icons-material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -40,63 +40,76 @@ function Homepage() {
     // then backend split dates
     // then backend chec whether it has dates
     let dateRange = dateRangeValues
-    console.log(dateRange)
-    var allDates = []
-
     if (dateRange.length > 1) {
-      var startDate = new Date(dateRange[0]);
-      var endDate = new Date(dateRange[1]);
-      if (startDate < endDate) {
-        for (let currentLoopItem = startDate; currentLoopItem <= endDate; currentLoopItem.setDate(currentLoopItem.getDate() + 1)) {
-          // console.log(`current loopitem:${currentLoopItem}`)
-          allDates.push(new Date(currentLoopItem).toISOString())
+      console.log(dateRange)
+      var allDates = []
 
+      if (dateRange.length > 1) {
+        var startDate = new Date(dateRange[0]);
+        var endDate = new Date(dateRange[1]);
+        if (startDate < endDate) {
+          for (let currentLoopItem = startDate; currentLoopItem <= endDate; currentLoopItem.setDate(currentLoopItem.getDate() + 1)) {
+            // console.log(`current loopitem:${currentLoopItem}`)
+            allDates.push(new Date(currentLoopItem).toISOString())
+
+          }
         }
+        else {
+          // console.log("this is same")
+          allDates.push(startDate.toISOString())
+        }
+
+
       }
       else {
-        // console.log("this is same")
+        // only 1 value
+        var startDate = new Date(dateRange[0]);
         allDates.push(startDate.toISOString())
       }
 
+      console.log(`allDates:${allDates}`)
+      if (allDates.length > 0) {
+        let startDate = allDates[0]
+        let endDate = allDates[allDates.length - 1]
 
-    }
-    else {
-      // only 1 value
-      var startDate = new Date(dateRange[0]);
-      allDates.push(startDate.toISOString())
-    }
-
-    console.log(`allDates:${allDates}`)
-    if (allDates.length > 0) {
-      let startDate = allDates[0]
-      let endDate = allDates[allDates.length - 1]
-
-      console.log(`endDate:${endDate}`)
-      console.log(categorySelected)
+        console.log(`endDate:${endDate}`)
+        console.log(categorySelected)
 
 
+        if (categorySelected == 'All Items') {
+          let allItems = mainItemList
+          //   let testData = allItems.map((item) => new Date(item.dateFound))
+          //  for (let i = 0; i < testData.length; i++) {
+          //   console.log(testData[i] )
+          //   console.log(new Date("2022-01-01"))
+          //    if (testData[i] >= new Date(startDate)) {
+          //      console.log("date is greater or equal to than startDate")
+          //    }
+          //  }
+          allItems = allItems.filter((item) => new Date(item.dateFound).getDate() >= new Date(startDate).getDate() && new Date(item.dateFound).getDate() <= new Date(endDate).getDate())
+          setitemList(allItems)
+          console.log(`allItems:${JSON.stringify(allItems)}`)
+        }
+        else {
+          let filteredItemList = mainItemList.filter((item) => item.category == categorySelected)
+          // allDates = [startDate,endDate]
+          filteredItemList = filteredItemList.filter((item) => new Date(item.dateFound).getDate() >= new Date(startDate).getDate() && new Date(item.dateFound).getDate() <= new Date(endDate).getDate())
+          setitemList(filteredItemList)
+          console.log(`filteredItemList:${JSON.stringify(filteredItemList)}`)
+        }
+      }
+    } else {
+      console.log("dont have anything in daterange")
       if (categorySelected == 'All Items') {
         let allItems = mainItemList
-        //   let testData = allItems.map((item) => new Date(item.dateFound))
-        //  for (let i = 0; i < testData.length; i++) {
-        //   console.log(testData[i] )
-        //   console.log(new Date("2022-01-01"))
-        //    if (testData[i] >= new Date(startDate)) {
-        //      console.log("date is greater or equal to than startDate")
-        //    }
-        //  }
-        allItems = allItems.filter((item) => new Date(item.dateFound).getDate() >= new Date(startDate).getDate() && new Date(item.dateFound).getDate() <= new Date(endDate).getDate())
         setitemList(allItems)
-        console.log(`allItems:${JSON.stringify(allItems)}`)
       }
       else {
         let filteredItemList = mainItemList.filter((item) => item.category == categorySelected)
-        // allDates = [startDate,endDate]
-        filteredItemList = filteredItemList.filter((item) => new Date(item.dateFound).getDate() >= new Date(startDate).getDate() && new Date(item.dateFound).getDate() <= new Date(endDate).getDate())
         setitemList(filteredItemList)
-        console.log(`filteredItemList:${JSON.stringify(filteredItemList)}`)
       }
     }
+
 
   };
 
