@@ -23,6 +23,8 @@ const scanItemDataFromDynamoDB = async ( itemId, userId ) => {
   if (userId) {
     if ("FilterExpression" in params){
       params.FilterExpression += ' AND userId = :userId';
+    }else{
+      params.FilterExpression = 'userId = :userId';
     }
     params.ExpressionAttributeValues[':userId'] = userId;
 
@@ -32,8 +34,28 @@ const scanItemDataFromDynamoDB = async ( itemId, userId ) => {
     console.log(`Scanned data: ${result}`);
     return result.Items || [];
   } catch (error) {
-    console.error('Error querying Preference data from DynamoDB:', error);
-    throw new Error('Failed to query Preference data from DynamoDB.');
+    console.error('Error querying Item data from DynamoDB:', error);
+    throw new Error('Failed to query Item data from DynamoDB.');
+  }
+};
+
+
+const queryItemDataFromDynamoDB = async (itemId) => {
+  try {
+    let params = {
+      TableName: tableName,
+      KeyConditionExpression: 'itemId = :itemId', // Query only by userId initially
+      ExpressionAttributeValues: {
+        ':itemId': itemId,
+      },
+    };
+
+    const result = await dynamoDB.query(params).promise();
+    console.log(`Queried item data for itemId: ${itemId} w`);
+    return result.Items || [];
+  } catch (error) {
+    console.error('Error querying item data from DynamoDB:', error);
+    throw new Error('Failed to query item data from DynamoDB.');
   }
 };
 
@@ -46,8 +68,15 @@ export const lambdaHandler = async (event, context) => {
     const userId = event.queryStringParameters && event.queryStringParameters.userId ? event.queryStringParameters.userId : null;
     const itemId = event.queryStringParameters && event.queryStringParameters.itemId ? event.queryStringParameters.itemId : null;
 
-    // Query DynamoDB for Preference data with or without uuid based on its presence
-    const ItemData = await scanItemDataFromDynamoDB(itemId, userId);
+    // Query DynamoDB for Item data with or without uuid based on its presence
+    let ItemData
+    if (!userId && itemId){
+      ItemData = await queryItemDataFromDynamoDB(itemId);
+    }
+    else {
+      ItemData = await scanItemDataFromDynamoDB(itemId, userId);
+    }
+    
 
     // Ensure that at least one item is returned
     if (ItemData.length === 0) {
@@ -59,7 +88,7 @@ export const lambdaHandler = async (event, context) => {
           "Access-Control-Allow-Headers": "Content-Type, Authorization", 
         },
         body: JSON.stringify({
-          message: 'Preference data not found for the specified userId and/or uuid.',
+          message: 'Item data not found for the specified userId and/or uuid.',
         }),
       };
     }
