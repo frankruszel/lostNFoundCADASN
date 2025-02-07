@@ -13,7 +13,7 @@ import GreyBackground from './components/GreyBackground';
 import ShowNavBar from './components/common/ShowNavBar';
 import ShowActualNavBar from './components/common/ShowActualNavBar';
 import ActualNavbar from './components/common/ActualNavbar';
-import {  QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
 const queryClient = new QueryClient()
 const theme = createTheme({
@@ -80,6 +80,9 @@ const theme = createTheme({
                                 fontSize: "14px"
                             }
                         },
+                        "&:disabled": {
+                            backgroundColor: "#EBEBE4",
+                        }
 
                     },
                 },

@@ -87,7 +87,7 @@ function ActualNavbar() {
                                         open={Boolean(anchorEl)}
                                         onClose={handleClose}
                                     >
-                                        <MenuItem><Link to={`/profile/${user.id}`} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Profile</Typography></Link></MenuItem>
+                                        <MenuItem><Link to={`/profile`} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Profile</Typography></Link></MenuItem>
                                         <MenuItem ><Link onClick={handleLogout} style={{ textDecoration: 'none' }}><Typography style={{ color: "MenuText" }}>Logout</Typography></Link></MenuItem>
                                     </Menu>
                                     <IconButton aria-label="menu" onClick={handleClick} sx={{ mr: 2 }}>

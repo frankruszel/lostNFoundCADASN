@@ -138,3 +138,7 @@ p.navbarLink::after {
 p.navbarLink:hover::after {
     width: 100%;
 }
+
+html {
+  overflow-x: hidden;
+}

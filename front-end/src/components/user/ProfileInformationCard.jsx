@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Card, Button, CardContent, CardActions, Grid, TextField, Box, Stack, Typography, Avatar, Switch } from '@mui/material';
+import { Container,Backdrop,Paper, Card, Button, CardContent, CardActions, Grid, TextField, Box, Stack, Typography, Avatar, Switch } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import FileUploadIcon from '@mui/icons-material/UploadFile';
 import BadgeIcon from '@mui/icons-material/Badge';
@@ -16,6 +16,7 @@ import * as yup from 'yup';
 import { UserSubscriptionApi } from '../../api/item/UserSubscriptionApi';
 import DeleteUserModal from './DeleteUserModal';
 import { GetUserNotificationApi } from '../../api/item/GetUserNotificationApi';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const schema = yup.object({
   email: yup.string().email("Invalid email address").required("Email is required"),
@@ -36,13 +37,16 @@ const ProfileInformationCard = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [openModal, setOpenModal] = useState(false)
+  const [init, setInit] = useState(false)
 
   const navigate = useNavigate();
   const { showAlert } = useAlert();
 
   // Populate form data from user context
   useEffect(() => {
+    
     if (user?.UserAttributes) {
+      
       setFormData({
         email: user.UserAttributes.email || '',
       });
@@ -50,6 +54,7 @@ const ProfileInformationCard = () => {
         console.log(`res.data: FOR GETUSER NOTIFIACTION ${JSON.stringify(res.data)}`)
         let notifications = res.data[0].notificationSubList
         setNotifications(notifications)
+        setInit(true)
       }).catch((error) => {
         console.error("Error getting user notification:", error);
       });
@@ -127,6 +132,31 @@ const ProfileInformationCard = () => {
     setIsModified(false);
   };
   return (<>
+
+    {
+      init === false && (
+        <>
+          <Backdrop
+            sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            open={true}
+
+          >
+
+            <Paper sx={{ background: 'rgba(14,65,148, 0.4)', p: 6, borderRadius: 2, alignContent: 'center', alignItems: 'center', }}>
+              <Box sx={{ display: "flex", flexGrow: 1, textAlign: 'center', justifyContent: "center", mb: 3 }}>
+                <CircularProgress sx={{ color: "#ffffff", }} />
+              </Box>
+              <Typography sx={{ color: 'black', textAlign: 'center', letterSpacing: 2 }}>
+                Please wait <br />
+                it might take a few seconds
+              </Typography>
+            </Paper>
+          </Backdrop>
+        </>
+      )
+
+
+    }
     <Container maxWidth="xl" sx={{ marginTop: "2rem", marginBottom: "1rem" }}>
 
 
@@ -205,13 +235,13 @@ const ProfileInformationCard = () => {
           <CardActions sx={{ paddingX: '16px', display: "flex", justifyContent: "end" }}>
             <LoadingButton
               loading={isLoading}
-              variant="contained"
-              color="primaryColor"
+              variant="claimit_primary"
+              
               startIcon={<EditIcon />}
               onClick={handleEditProfile}
               disabled={!isModified}
             >
-              Save
+             Save
             </LoadingButton>
           </CardActions>
 
