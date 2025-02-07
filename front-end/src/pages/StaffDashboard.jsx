@@ -235,7 +235,7 @@ function StaffDashboard() {
                     <Grid lg={6} item container direction="row" spacing={2}>
                         <Grid lg={6} item>
                             <Link style={{ textDecoration: "none" }} to="/staff/list/scan">
-                                <Card sx={{ borderRadius: 5, width: "100%", height: 340 }}>
+                                <Card sx={{ borderRadius: 5, width: "100%", height: 295 }}>
                                     <Grid container direction={"row"}>
                                         <Grid lg={4} md={3} sm={5} sx={{ display: "flex", pt: "11%", ml: "14%" }} item>
                                             <img style={{ width: 100, height: 100, marginRight: 11 }} src="https://cdn-icons-png.flaticon.com/128/6521/6521815.png" alt="" />
@@ -245,8 +245,10 @@ function StaffDashboard() {
                                         <Grid lg={6} md={3} sm={5} sx={{ display: "flex", pt: "11%" }} item>
                                             <Box >
 
-                                                <Typography sx={{ fontSize: 40, fontWeight: 'bold' }}>
-                                                    Scan Attendance
+                                            <Typography sx={{ fontSize: 40, fontWeight: 'bold' }}>
+                                                    Scan  
+                                                </Typography><Typography sx={{ fontSize: 40, fontWeight: 'bold' }}>
+                                                    Item  
                                                 </Typography>
 
                                                 <Typography >
@@ -365,11 +367,11 @@ function StaffDashboard() {
                                                 })
                                                 : <> <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%" }}>
                                                     <Box>
-                                                        <Grid>
-                                                            <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/3702/3702886.png" />
+                                                        <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center'}}>
+                                                            <img style={{ opacity: 0.3, pt: 0 }} width="100px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />
                                                         </Grid>
-                                                        <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1 }}>There is no events</Typography></Grid>
-                                                        <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/events' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center' }} fullWidth variant="uplay_primary">Explore</Button></Grid>
+                                                        <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1 }}>There is no items</Typography></Grid>
+                                                        <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center' }} fullWidth variant="claimit_primary">Explore</Button></Grid>
                                                     </Box>
 
                                                 </Box>

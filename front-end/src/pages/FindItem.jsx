@@ -775,7 +775,7 @@ function FindItem() {
                   <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />
                 </Grid>
                 <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1, color: 'text.secondary' }}>There is no items</Typography></Grid>
-                <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/events' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center', backgroundColor: 'primaryColor' }} fullWidth variant="contained">Explore</Button></Grid>
+                <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center', backgroundColor: 'primaryColor' }} fullWidth variant="contained">Explore</Button></Grid>
               </Box>
 
             </Box>

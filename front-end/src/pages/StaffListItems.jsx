@@ -23,21 +23,7 @@ function StaffListItems() {
     const componentRef = useRef();
 
     const [userList, setUserList] = useState([]);
-    const [itemList, setItemList] = useState([{
-
-        event: {
-            imageFile: "https://i.ibb.co/4R8WzBs/ecowise.png",
-            title: "title",
-            guest_Price: 10,
-            purchased_Price: 10,
-        },
-        timeSlot: {
-            event_StartTime: "2024-02-29T00:00:00.000Z",
-            event_EndTime: "2024-02-29T00:00:00.000Z",
-        },
-
-
-    }]);
+    const [itemList, setItemList] = useState([]);
     const [open, setOpen] = useState(false);
     const [rowID, setRowID] = useState();
     const [search, setSearch] = useState('');
@@ -277,7 +263,7 @@ function StaffListItems() {
                 <div>
 
 
-                    {/* if timeslot == today then show attendance options */}
+                    {/* if timeslot == today then show Item options */}
                     {/* if attended show tick */}
                     {/* if not attended show QR code action */}
 
@@ -285,14 +271,14 @@ function StaffListItems() {
                         dayjs().isBefore(dayjs(params.row.timeSlot.event_StartTime))
                             ? <Button variant="uplay_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
                             : dayjs().isAfter(dayjs(params.row.timeSlot.event_EndTime))
-                                ? <Button variant="uplay_primary" href={`/event/${params.row.event.id}/rate/${params.row.id}`}>Rate</Button>
+                                ? <Button variant="claimit_primary" href={`/event/${params.row.event.id}/rate/${params.row.id}`}>Rate</Button>
                                 : params.row.attended
-                                    ? <Button variant="uplay_primary" href={`/event/${params.row.event.id}/rate/${params.row.id}`}>{console.log("attended")}Rate</Button>
+                                    ? <Button variant="claimit_primary" href={`/event/${params.row.event.id}/rate/${params.row.id}`}>{console.log("attended")}Rate</Button>
                                     : <Button variant="uplay_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
                     }
                     {/* : dayjs("2024-02-29").hour(1).minute(0).second(0).isBetween(dayjs(params.row.timeSlot.event_StartTime),dayjs(params.row.timeSlot.event_EndTime)) 
                             ? <Typography>Its NOW</Typography>
-                            :<Typography>so now add actions rate / attendance / tick</Typography> */}
+                            :<Typography>so now add actions rate / Item / tick</Typography> */}
                 </div>
             ),
             textAlign: 'right',
@@ -306,19 +292,19 @@ function StaffListItems() {
     }
     const handleCompleted = () => {
         console.log("handleCompleted")
-        console.log(itemList.filter((item) => item.itemStatus == "claimed" ))
+        console.log(itemList.filter((item) => item.itemStatus == "claimed"))
         setItemList(itemList.filter((item) => item.itemStatus == "claimed"))
         setTabState("Completed")
     }
-    const handleAll= () => {
+    const handleAll = () => {
         GetItemApi()
-        .then((res) => {
-            console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
-            setItemList(res.data)
-        }).catch((error) => {
-            console.error("Error fetching Items:", error);
-            enqueueSnackbar('Failed to fetch Items', { variant: "error" })
-        })
+            .then((res) => {
+                console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
+                setItemList(res.data)
+            }).catch((error) => {
+                console.error("Error fetching Items:", error);
+                enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+            })
         setTabState("All")
     }
     if (user == null) {
@@ -341,7 +327,7 @@ function StaffListItems() {
                                             textColor="secondary"
 
                                         >
-                                            <Tab value="All" label="All" onClick={() => handleAll()}/>
+                                            <Tab value="All" label="All" onClick={() => handleAll()} />
                                             <Tab value="Completed" label="Completed" onClick={() => handleCompleted()} />
                                         </Tabs>
                                     </Grid>
@@ -423,7 +409,7 @@ function StaffListItems() {
 
                                                                         </Grid>
 
-                                                                    
+
 
                                                                     </Grid>
 
@@ -465,11 +451,12 @@ function StaffListItems() {
                                             : <><Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%" }}>
                                                 <Box>
                                                     <Grid>
-                                                        <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/3702/3702886.png" />
+                                                        <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />
                                                     </Grid>
-                                                    <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1 }}>There is no events</Typography></Grid>
-                                                    <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/events' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center' }} fullWidth variant="uplay_primary">Explore</Button></Grid>
+                                                    <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1, color: 'text.secondary' }}>There is no items</Typography></Grid>
+                                                    <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center', backgroundColor: 'primaryColor' }} fullWidth variant="contained">Explore</Button></Grid>
                                                 </Box>
+
 
                                             </Box>
 
@@ -502,7 +489,7 @@ function StaffListItems() {
                                                     ?
                                                     <>
                                                         <a href={imageQR} download style={{ justifyContent: 'center', display: 'flex', flexGrow: 1 }}><img src={imageQR} alt="" style={{ width: "60%" }} /></a>
-                                                        <Button sx={{ mt: 3 }} fullWidth variant='uplay_primary' onClick={() => handleSendEmailQR(imageQR)}>Send</Button>
+                                                        <Button sx={{ mt: 3 }} fullWidth variant='claimit_primary' onClick={() => handleSendEmailQR(imageQR)}>Send</Button>
                                                     </>
                                                     : <Typography>Something went wrong with the Ticket</Typography>
                                                 }
