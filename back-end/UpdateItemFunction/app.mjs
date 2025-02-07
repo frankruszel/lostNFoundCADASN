@@ -13,23 +13,32 @@ const updateItemDataInDynamoDB = async (itemId, userId, updatedData) => {
       Key: { itemId },
       UpdateExpression: `
         SET 
-          title = :title,
-          description = :description,
-          image_url = :image_url,
-          category = :category,
           itemStatus = :itemStatus,
           updatedAt = :updatedAt
       `,
       ExpressionAttributeValues: {
-        ':title': updatedData.title,
-        ':description': updatedData.description,
-        ':image_url': updatedData.image_url,
-        ':category': updatedData.category,
         ':itemStatus': updatedData.itemStatus,
         ':updatedAt': new Date().toISOString(),
       },
       ReturnValues: 'ALL_NEW', // Returns the updated item
     };
+    if (updatedData.title) {
+      params.UpdateExpression += ', title = :title';
+      params.ExpressionAttributeValues[':title'] = updatedData.title;
+    }
+    if (updatedData.description) {
+      params.UpdateExpression += ', description = :description';
+      params.ExpressionAttributeValues[':description'] = updatedData.description;
+    }
+    if (updatedData.image_url) {
+      params.UpdateExpression += ', image_url = :image_url';
+      params.ExpressionAttributeValues[':image_url'] = updatedData.image_url;
+    }
+    if (updatedData.category) {
+      params.UpdateExpression += ', category = :category';
+      params.ExpressionAttributeValues[':category'] = updatedData.category;
+    }
+
 
     console.log("DynamoDB Update Params:", JSON.stringify(params, null, 2));
 
@@ -69,22 +78,22 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { itemId, userId, category, description, image_url, title, itemStatus,dateFound } = requestBody;
+    const { itemId, userId, category, description, image_url, title, itemStatus, dateFound } = requestBody;
 
     // Validate input
-    if (!itemId || !userId || !category || !description || !image_url || !title || !itemStatus || !dateFound) {
-      return {
-        statusCode: 400,
-        headers: {
-          "Access-Control-Allow-Origin": "*", 
-          "Access-Control-Allow-Methods": "GET, POST,PUT, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization", 
-        },
-        body: JSON.stringify({
-          message: 'Missing or invalid itemid, userId,description,image_url,title,itemStatus or category in request body.',
-        }),
-      };
-    }
+    // if (!itemId || !itemStatus ) {
+    //   return {
+    //     statusCode: 400,
+    //     headers: {
+    //       "Access-Control-Allow-Origin": "*", 
+    //       "Access-Control-Allow-Methods": "GET, POST,PUT, OPTIONS",
+    //       "Access-Control-Allow-Headers": "Content-Type, Authorization", 
+    //     },
+    //     body: JSON.stringify({
+    //       message: 'Missing or invalid itemid,itemStatus in request body.',
+    //     }),
+    //   };
+    // }
     let dateClaimed = null
     if ("dateClaimed" in requestBody) {
       let dateClaimed = requestBody.dateClaimed;
@@ -99,9 +108,12 @@ export const lambdaHandler = async (event, context) => {
       "image_url": image_url,
       "itemStatus": itemStatus,
       "category": category,
-      "dateFound": new Date(dateFound).toISOString(),
+      "dateFound": dateFound != null ? new Date(dateFound).toISOString() : null,
       "dateClaimed": dateClaimed != null ? new Date(dateClaimed).toISOString() : null,
     };
+
+    console.log("itemStatus")
+    console.log(itemStatus)
 
     // Update DynamoDB
     const updatedItem = await updateItemDataInDynamoDB(itemId, userId, updatedData);

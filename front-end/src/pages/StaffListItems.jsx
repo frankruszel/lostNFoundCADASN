@@ -21,7 +21,6 @@ function StaffListItems() {
     // bookingId
 
     const componentRef = useRef();
-
     const [userList, setUserList] = useState([]);
     const [itemList, setItemList] = useState([]);
     const [open, setOpen] = useState(false);
@@ -49,7 +48,21 @@ function StaffListItems() {
         window.open(url, '_blank', 'noopener,noreferrer');
     }
 
+    const handleCloseDelete = () => {
+        setDeleteOpen(false);
+    };
+    const deleteItem = (id) => {
+        // http.delete(`/Event/${id}`).then((res) => {
+        //     console.log(res.data);
+        //     setDeleteOpen(false);
+        //     http.get('/Event/').then((res) => {
+        //         console.log(res.data);
+        //         setEventDateList(res.data);
+        //     });
 
+
+        // });
+    };
     const handleMultipleCalendarClick = (ticketInfo) => {
         console.log(ticketInfo)
         // dayjs(myTimeslotObj.event_StartTime).toISOString()
@@ -307,6 +320,10 @@ function StaffListItems() {
             })
         setTabState("All")
     }
+
+    const handleUpdateItem = (itemId) => {
+        navigate(`/staff/list/update/${itemId}`)
+    }
     if (user == null) {
         return (
 
@@ -315,7 +332,7 @@ function StaffListItems() {
                 <Box pt={0} mt={0} sx={{ backgroundColor: "#f0f0f0", height: "150%", position: "absolute", zIndex: -1, left: 0, right: 0, top: 0 }}></Box>
                 <Typography variant='h4' sx={{ py: 2 }}> </Typography>
                 <Box px={10}>
-                    <Card sx={{}}>
+                    <Card sx={{ minWidth: 600 }}>
                         <CardContent sx={{ mb: 4, px: 5, py: 5 }}>
                             <Grid container direction='row' sx={{ flexGrow: 1, display: 'flex' }} justifyContent={'space-between'}>
 
@@ -352,7 +369,7 @@ function StaffListItems() {
                                                 return (
                                                     <>
                                                         <Grid sx={{ flexGrow: 1 }} item>
-                                                            <Link style={{ textDecoration: 'none' }} onClick={() => generateQRCode(item)}>
+                                                            <Link style={{ textDecoration: 'none' }} onClick={() => handleUpdateItem(item.itemId)}>
 
                                                                 <Paper pt={3} sx={{
                                                                     display: "flex", borderRadius: 3.5, borderBottomLeftRadius: 0, borderBottomRightRadius: 0, height: "140px", boxShadow: 2,
@@ -415,6 +432,27 @@ function StaffListItems() {
 
                                                                 </Paper>
                                                             </Link>
+                                                            <Dialog open={deleteOpen} onClose={handleCloseDelete}>
+                                                                <DialogTitle>
+                                                                    Delete event?
+                                                                </DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText>
+                                                                        Are you sure you want to delete this event?
+
+                                                                    </DialogContentText>
+                                                                </DialogContent>
+                                                                <DialogActions>
+                                                                    <Button variant="contained" color="inherit"
+                                                                        onClick={handleCloseDelete}>
+                                                                        Cancel
+                                                                    </Button>
+                                                                    <Button variant="contained" color="error"
+                                                                        onClick={() => deleteItem(rowID)}>
+                                                                        Delete
+                                                                    </Button>
+                                                                </DialogActions>
+                                                            </Dialog>
                                                             <Paper style={{ boxShadow: "0px 3px 10px -2px rgba(0,0,0,0.2), 0px 3px 1px 1px rgba(0,0,0,0.0.3), 0px 1px 3px 3px rgba(0,0,0,0.12)" }} sx={{ borderRadius: 3.5, borderTopLeftRadius: 0, borderTopRightRadius: 0, }}>
                                                                 <Grid container display={"flex"} sx={{ height: "50px", }} >
                                                                     {
@@ -427,6 +465,7 @@ function StaffListItems() {
                                                                                     style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#dc3545" }}>Delete Item</Typography></a> </Grid>
                                                                             <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
                                                                                 <a
+                                                                                    href={`/staff/list/update/${item.itemId}`}
                                                                                     //  href={`/event/${item.event.id}/rate/${item.id}/edit`} 
                                                                                     style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Edit Item</Typography></a> </Grid>
 
