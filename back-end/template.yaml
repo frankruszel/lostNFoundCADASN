@@ -33,7 +33,7 @@ Globals:
 Resources:
 # ------------------------------ START NotiificationPreference Table creation------------------------------  # 
   NotifyPreferenceTable:
-    UpdateReplacePolicy: Retain
+    UpdateReplacePolicy: Retain 
     Type: AWS::DynamoDB::Table
     DeletionPolicy: Retain
     Properties:
