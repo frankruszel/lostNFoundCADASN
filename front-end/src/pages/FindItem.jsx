@@ -30,6 +30,8 @@ import CalendarToday from '@mui/icons-material/CalendarToday';
 import { GetItemApi } from '../api/item/GetItemApi';
 import * as tf from '@tensorflow/tfjs';
 import * as sentenceEncoder from "@tensorflow-models/universal-sentence-encoder";
+import VerifiedIcon from '@mui/icons-material/Verified';
+
 const model = sentenceEncoder.load()
 
 const categoryList = ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
@@ -212,6 +214,9 @@ function FindItem() {
       if (imageFile) {
         data.image_url = imageFile;
 
+      } else {
+        setImageError(true)
+
       }
 
       let key = filename
@@ -230,30 +235,14 @@ function FindItem() {
       dataToSubmit["item"]["image_url"] = key;
       dataToSubmit["item"]["itemStatus"] = "lost"
       console.log(`dataToSubmASDASDASDit:${JSON.stringify(dataToSubmit)}`)
-      handleAddEvent(dataToSubmit)
+      // handleAddEvent(dataToSubmit)
       // toast.success('Form submitted successfully');
     }
 
   })
   const componentRef = useRef();
 
-  const handleAddEvent = (data) => {
-    console.log(`handleAddEvent: ${JSON.stringify(data)}`)
-    CreateItemApi(data)
-      .then((res) => {
-        // console.log(`res.data: ${JSON.stringify(res.data)}`)
-        // toast.success('Form submitted successfully');
-        enqueueSnackbar("Created item succesfully.", { variant: "success" });
 
-
-      })
-      .catch((error) => {
-        console.error("Error creating Item:", error);
-        enqueueSnackbar('Failed to create item', { variant: "error" })
-
-      });
-    // CreateItemApi
-  }
   const [currentItem, setCurrentItem] = useState()
   const [imageLabels, setImageLabels] = useState(null);
 
@@ -360,6 +349,7 @@ function FindItem() {
       setItemLabels(comparedLabels)
       let matchedItemList = mainItemList.filter(item => comparedLabels.hasOwnProperty(item.itemId)).sort((a, b) => comparedLabels[b.itemId].length - comparedLabels[a.itemId].length)
       setitemList(matchedItemList)
+      setLoading(false)
       //{
       //     "815c64ad-8346-4586-9953-8c23143c70b4": [
       //       "Ball",
@@ -426,7 +416,7 @@ function FindItem() {
         <Box pt={0} mt={0} sx={{ backgroundColor: "#f0f0f0", height: "150%", position: "absolute", zIndex: -1, left: 0, right: 0, top: 0 }}></Box>
         <Typography variant='h4' sx={{ py: 2 }}> </Typography>
         <Box px={10}>
-          <Card sx={{minWidth:600}}>
+          <Card sx={{ minWidth: 600 }}>
             <CardContent sx={{ mb: 4, px: 5, py: 5 }}>
               <Grid container direction='row' display="flex" justifyContent="center" alignItems="center">
 
@@ -519,7 +509,7 @@ function FindItem() {
 
                             <Grid container direction={'column'} mt={2}  >
                               <Grid item display={'flex'} >
-                                <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
+                                <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="claimit_primary" sx={{ height: 45 }} >
                                   Find Item
                                 </LoadingButton>
                               </Grid>
@@ -581,6 +571,17 @@ function FindItem() {
 
 
       </Box >
+      {
+        itemList.length > 0 && (
+
+          <>
+            <Typography color="black" fontSize={30} px={10} pt={2} pb={1}>
+              Similar Items({itemList.length}):
+            </Typography>
+          </>
+        )
+      }
+
       <Grid container spacing={4} px={10} mb={10} >
         {/* start grid  */}
 
@@ -644,10 +645,10 @@ function FindItem() {
                           </Box>
                           <Box sx={{ display: 'flex', alignItems: 'center' }}
                             color="text.secondary" >
-                            <LocationOn sx={{ mr: 1 }} />
+                            <VerifiedIcon sx={{ mr: 1 }} />
 
                             <Typography noWrap>
-                              Labels matched: {itemLabels[item.itemId]?.length}
+                              Match: {((itemLabels[item.itemId]?.length / item.image_labels.length) * 100).toFixed(2)}%
                             </Typography>
                           </Box>
 
