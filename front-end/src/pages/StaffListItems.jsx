@@ -14,6 +14,7 @@ import dayjs from 'dayjs';
 import { enqueueSnackbar } from "notistack";
 import { GetItemApi } from '../api/item/GetItemApi';
 import { UpdateItemApi } from '../api/item/UpdateItemApi';
+import { DeleteItemApi } from '../api/item/DeleteItemApi';
 
 const IMAGE_BUCKET_NAME = process.env.IMAGE_BUCKET_NAME ? process.env.IMAGE_BUCKET_NAME : "prod-lostnfound-store-item-images"
 
@@ -52,16 +53,24 @@ function StaffListItems() {
         setDeleteOpen(false);
     };
     const deleteItem = (id) => {
-        // http.delete(`/Event/${id}`).then((res) => {
-        //     console.log(res.data);
-        //     setDeleteOpen(false);
-        //     http.get('/Event/').then((res) => {
-        //         console.log(res.data);
-        //         setEventDateList(res.data);
-        //     });
+        console.log("delete id")
+        console.log(id)
+        DeleteItemApi(id).then((res) => {
+            console.log(`res.data: ${JSON.stringify(res.data)}`)
+            // toast.success('Form submitted successfully');
+            enqueueSnackbar("Deleted item succesfully.", { variant: "success" });
+            setDeleteOpen(false)
 
+        }).catch((error) => {
+            console.error("Error deleting Item:", error);
+            enqueueSnackbar('Failed to delete item', { variant: "error" })
 
-        // });
+        });
+
+    };
+    const handleOpenDelete = (id) => {
+        setDeleteOpen(true);
+        setRowID(id)
     };
     const handleMultipleCalendarClick = (ticketInfo) => {
         console.log(ticketInfo)
@@ -357,6 +366,27 @@ function StaffListItems() {
 
                             </Grid>
                             <Divider sx={{ borderBottomWidth: 3, py: 0 }} />
+                            <Dialog open={deleteOpen} onClose={handleCloseDelete}>
+                                                                <DialogTitle>
+                                                                    Delete item?
+                                                                </DialogTitle>
+                                                                <DialogContent>
+                                                                    <DialogContentText>
+                                                                        Are you sure you want to delete this item?
+
+                                                                    </DialogContentText>
+                                                                </DialogContent>
+                                                                <DialogActions>
+                                                                    <Button variant="contained" color="inherit"
+                                                                        onClick={handleCloseDelete}>
+                                                                        Cancel
+                                                                    </Button>
+                                                                    <Button variant="contained" color="error"
+                                                                        onClick={() => deleteItem(rowID)}>
+                                                                        Delete
+                                                                    </Button>
+                                                                </DialogActions>
+                                                            </Dialog>
                             <Card sx={{ minHeight: 450, maxHeight: 450, overflow: "auto", pt: 2, border: "0px solid", boxShadow: 0 }}>
 
 
@@ -432,27 +462,7 @@ function StaffListItems() {
 
                                                                 </Paper>
                                                             </Link>
-                                                            <Dialog open={deleteOpen} onClose={handleCloseDelete}>
-                                                                <DialogTitle>
-                                                                    Delete event?
-                                                                </DialogTitle>
-                                                                <DialogContent>
-                                                                    <DialogContentText>
-                                                                        Are you sure you want to delete this event?
-
-                                                                    </DialogContentText>
-                                                                </DialogContent>
-                                                                <DialogActions>
-                                                                    <Button variant="contained" color="inherit"
-                                                                        onClick={handleCloseDelete}>
-                                                                        Cancel
-                                                                    </Button>
-                                                                    <Button variant="contained" color="error"
-                                                                        onClick={() => deleteItem(rowID)}>
-                                                                        Delete
-                                                                    </Button>
-                                                                </DialogActions>
-                                                            </Dialog>
+                                                            
                                                             <Paper style={{ boxShadow: "0px 3px 10px -2px rgba(0,0,0,0.2), 0px 3px 1px 1px rgba(0,0,0,0.0.3), 0px 1px 3px 3px rgba(0,0,0,0.12)" }} sx={{ borderRadius: 3.5, borderTopLeftRadius: 0, borderTopRightRadius: 0, }}>
                                                                 <Grid container display={"flex"} sx={{ height: "50px", }} >
                                                                     {
@@ -461,7 +471,7 @@ function StaffListItems() {
                                                                         <>
                                                                             <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
                                                                                 <a
-                                                                                    //  href={`/event/${item.event.id}/rate/${item.id}/edit`} 
+                                                                                   onClick={() => handleOpenDelete(item.itemId)}
                                                                                     style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#dc3545" }}>Delete Item</Typography></a> </Grid>
                                                                             <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
                                                                                 <a
