@@ -18,17 +18,96 @@ import qrcode from "qrcode";
 
 const IMAGE_BUCKET_NAME = process.env.IMAGE_BUCKET_NAME ? process.env.IMAGE_BUCKET_NAME : "prod-lostnfound-store-item-images"
 console.log(`IMAGE_BUCKET_NAME:${IMAGE_BUCKET_NAME}`)
+const categoryArray = ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
 
 
 function Homepage() {
   const { user, RefreshUser } = useUserContext()
-  const [categorySelected, setCategorySelected] = useState('All Activities')
+  const [categorySelected, setCategorySelected] = useState('All Items')
   const [itemList, setitemList] = useState([])
+  const [mainItemList, setMainItemList] = useState([])
   const [search, setSearch] = useState('');
   const [itemListForAutoComplete, setItemListForAutoComplete] = useState([])
   const [currentItem, setCurrentItem] = useState()
   const [imageQR, setImageQR] = useState();
   const [qrOpen, setQrOpen] = useState(false)
+  const [dateRangeValues, setDateRangeValues] = useState([])
+
+  const handleOnCloseDateRange = () => {
+    // algorithm to put all dates
+    // then backend split dates
+    // then backend chec whether it has dates
+    let dateRange = dateRangeValues
+    console.log(dateRange)
+    var allDates = []
+
+    if (dateRange.length > 1) {
+      var startDate = new Date(dateRange[0]);
+      var endDate = new Date(dateRange[1]);
+      if (startDate < endDate) {
+        for (let currentLoopItem = startDate; currentLoopItem <= endDate; currentLoopItem.setDate(currentLoopItem.getDate() + 1)) {
+          // console.log(`current loopitem:${currentLoopItem}`)
+          allDates.push(new Date(currentLoopItem).toISOString())
+
+        }
+      }
+      else {
+        // console.log("this is same")
+        allDates.push(startDate.toISOString())
+      }
+
+
+    }
+    else {
+      // only 1 value
+      var startDate = new Date(dateRange[0]);
+      allDates.push(startDate.toISOString())
+    }
+
+    console.log(`allDates:${allDates}`)
+    if (allDates.length > 0) {
+      let startDate = allDates[0]
+      let endDate = allDates[allDates.length - 1]
+
+      console.log(`endDate:${endDate}`)
+      console.log(categorySelected)
+
+
+      if (categorySelected == 'All Items') {
+        let allItems = mainItemList
+        //   let testData = allItems.map((item) => new Date(item.dateFound))
+        //  for (let i = 0; i < testData.length; i++) {
+        //   console.log(testData[i] )
+        //   console.log(new Date("2022-01-01"))
+        //    if (testData[i] >= new Date(startDate)) {
+        //      console.log("date is greater or equal to than startDate")
+        //    }
+        //  }
+        allItems = allItems.filter((item) => new Date(item.dateFound).getDate() >= new Date(startDate).getDate() && new Date(item.dateFound).getDate() <= new Date(endDate).getDate())
+        setitemList(allItems)
+        console.log(`allItems:${JSON.stringify(allItems)}`)
+      }
+      else {
+        let filteredItemList = mainItemList.filter((item) => item.category == categorySelected)
+        // allDates = [startDate,endDate]
+        filteredItemList = filteredItemList.filter((item) => new Date(item.dateFound).getDate() >= new Date(startDate).getDate() && new Date(item.dateFound).getDate() <= new Date(endDate).getDate())
+        setitemList(filteredItemList)
+        console.log(`filteredItemList:${JSON.stringify(filteredItemList)}`)
+      }
+    }
+
+  };
+
+  useEffect(() => {
+    dateRangeValues.forEach((date, index) => {
+
+      dateRangeValues[index] = new Date(date);
+
+
+    });
+
+    console.log(`I changed my dateRange: ${dateRangeValues}`)
+  }, [dateRangeValues]);
 
   const generateQRCode = async (itemInfo) => {
     // console.log(JSON.parse(JSON.stringify(myNewInfo)))
@@ -53,20 +132,40 @@ function Homepage() {
   const handleCategoryChange = (e) => {
     if (e != categorySelected) {
       setCategorySelected(e)
+      // sort the list
+
     }
     else {
-      setCategorySelected('All Activities')
+      setCategorySelected('All Items')
+      // getEvents
     }
 
   };
 
+
+  useEffect(() => {
+    // getEvents();
+    // filter list
+    // This list is not good cause the date
+    if (categorySelected == "All Items") {
+      let allItems = mainItemList
+      setitemList(allItems)
+    }
+    else {
+      let filteredItemList = mainItemList.filter((item) => item.category == categorySelected)
+      setitemList(filteredItemList)
+    }
+
+
+  }, [categorySelected]);
+
   const searchEvents = () => {
     GetItemApi()
       .then((res) => {
-        console.log(`res.data:${JSON.stringify(res.data)}`)
+        // console.log(`res.data:${JSON.stringify(res.data)}`)
         let itemList = res.data
         let filteredItemList = itemList.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
-        console.log(`filteredItemList:${JSON.stringify(filteredItemList)}`)
+        // console.log(`filteredItemList:${JSON.stringify(filteredItemList)}`)
         console.log(`searchValue: ${search}`)
 
         setitemList(filteredItemList)
@@ -90,6 +189,7 @@ function Homepage() {
     GetItemApi()
       .then((res) => {
         // console.log(`res.data:${JSON.stringify(res.data)}`)
+        setMainItemList(res.data)
         setitemList(res.data)
         setItemListForAutoComplete(res.data)
       }).catch((error) => {
@@ -107,9 +207,9 @@ function Homepage() {
     // EmailService/TicketQR/{user.email}
     var data = {}
     data.imageQR = imageQR
-    
 
-}
+
+  }
 
   return (
     <>
@@ -138,9 +238,9 @@ function Homepage() {
               ?
               <>
                 <a href={imageQR} download style={{ justifyContent: 'center', display: 'flex', flexGrow: 1 }}><img src={imageQR} alt="" style={{ width: "60%" }} /></a>
-                { user && user.email
+                {user && user.email
                   ? <Button sx={{ mt: 3 }} fullWidth variant='claimit_primary' onClick={() => handleSendEmailQR(imageQR)}>Send</Button>
-                  : <Button sx={{ mt: 3 }} fullWidth variant='claimit_primary'  disable>Send</Button>
+                  : <Button sx={{ mt: 3 }} fullWidth variant='claimit_primary' disable>Send</Button>
                 }
 
               </>
@@ -209,12 +309,14 @@ function Homepage() {
 
 
           <DatePicker
-            // value={dateRangeValues}
-            // onChange={setDateRangeValues}
-
-            multiple
+            value={dateRangeValues}
+            onChange={setDateRangeValues}
+            // multiple
             range
-            // onClose={handleOnCloseDateRange}
+
+
+
+            onClose={handleOnCloseDateRange}
             plugins={[
 
               <Toolbar position="bottom" sort={["", "deselect", "close"]} names={{
@@ -242,51 +344,45 @@ function Homepage() {
 
         </Paper>
 
-        <Typography sx={{ textAlign: 'center', fontSize: '42px', pb: 1.5, mt: -0.5 }} color="black">Category Selcted</Typography>
+        <Typography sx={{ textAlign: 'center', fontSize: '42px', pb: 1.5, mt: -0.5 }} color="black">{categorySelected}</Typography>
 
         <Grid container direction="row" alignItems={"center"} justifyContent={"space-between"}
-          px={23} pr={16}
+          px={23}
+
         >
-          <Grid sx={{ pb: 2 }}>
+          <Grid sx={{ pb: 2 }} >
             <FormControl fullWidth>
-              <InputLabel id="eventType" sx={{ fontSize: 12, position: 'relative', top: 12 }}>Category</InputLabel>
+              <InputLabel id="eventType" sx={{ fontSize: 12, position: 'relative', top: 12 }}>Sort</InputLabel>
               <Select
-                labelId="category"
-                id="category-select"
-                // value={category}
-                label="category"
-                // onChange={handleCategoryChange}
+                labelId="sort"
+                id="sort-select"
+                // value={sort}
+                label="sort"
+                // onChange={handleSortChange}
                 sx={{ height: 38, borderRadius: 3, minWidth: 100 }}
 
               >
-                <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
-                <MenuItem value={'Electronics'}>Electronics</MenuItem>
-                <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
-                <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem>
+                <MenuItem value={'Newest'}>Newest</MenuItem>
+                <MenuItem value={'Oldest'}>Oldest</MenuItem>
               </Select>
             </FormControl>
           </Grid>
           <Grid>
             <Stack direction="row" spacing={2}>
-              {/* <Chip label="All Activities" onClick variant="uplay_primary" sx={{}} /> */}
-              {/* <Chip label="Dine & Wine" onClick variant="uplay_secondary" sx={{}} /> */}
-              { }
-              {/* if a true then 'a' else 'd' */}
-              {/* a === true ? 'a' : 'd' */}
-              {/* <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
-              <MenuItem value={'Electronics'}>Electronics</MenuItem>
-              <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
-              <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem> */}
-              <Chip label="Personal Items" onClick={() => handleCategoryChange("Dine & Wine")} variant={categorySelected === 'Dine & Wine' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-              <Chip label="Electronics" onClick={() => handleCategoryChange("Family Bonding")} variant={categorySelected === 'Family Bonding' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-              <Chip label="Bags & Luggage" onClick={() => handleCategoryChange("Hobbies & Wellness")} variant={categorySelected === 'Hobbies & Wellness' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
-              <Chip label="Miscellaneous" onClick={() => handleCategoryChange("Sports & Adventure")} variant={categorySelected === 'Sports & Adventure' ? "uplay_primary" : "uplay_secondary"} sx={{}} />
+              {
+                categoryArray.map((category, index) => {
+                  return (
+                    <Chip label={`${category}`} onClick={() => handleCategoryChange(`${category}`)} variant={categorySelected === `${category}` ? "claimit_primary" : "claimit_secondary"} sx={{}} />
+
+                  )
+                })
+              }
               ``            </Stack>
           </Grid>
 
           <Grid sx={{ pb: 2 }} >
             <FormControl fullWidth>
-              <InputLabel id="eventType" sx={{ fontSize: 12, position: 'relative', top: 12 }}>Category</InputLabel>
+              <InputLabel id="eventType" sx={{ fontSize: 12, position: 'relative', top: 12 }}>Filter</InputLabel>
               <Select
                 labelId="category"
                 id="category-select"
@@ -315,41 +411,6 @@ function Homepage() {
                 return (
                   <>
                     <Grid item xs={12} md={6} lg={3.5} sx={{ height: 330, mb: 15 }} >
-
-                      {/* <Box sx={{
-  color: "#FFFFFF",
-  opacity: 1,
-  position: 'relative',
-
-  top: "13%",
-  zIndex: 10,
-  left: "72%",
-  display: 'table',
-  margin: 0,
-  padding: 0,
-
-
-  background: 'rgba(0, 0, 0, 0.7)',
-  opacity: 1,
-  borderRadius: 3,
-  height: 28,
-  pr: 1.5,
-  pl: 1,
-
-
-
-
-
-
-}}>
-
-  <DepartureBoardIcon fontSize="20px" sx={{ pr: 0.7, pt: 0.85, }} />
-
-  <Typography sx={{ display: "inline", verticalAlign: '07%' }} fontSize={15} textAlign={"center"}>
-    Duration
-  </Typography>
-
-</Box> */}
 
 
                       <Link style={{ textDecoration: 'none' }}>
@@ -458,26 +519,12 @@ function Homepage() {
 
 
 
-                      {/* <Checkbox
-  checked={true}
-  onChange={(change) => { }}
-  sx={{ position: "relative", left: '81%', bottom: "19%" }}
-  icon={<FavoriteBorder
-    style={{ fontSize: '2rem' }} />}
-  checkedIcon={<Favorite style={{ fontSize: '2rem' }} />} /> */}
-                      {/* 
-                              </>
-                          )
-                      } */}
 
-
-                      {/* maybe put outside and absoultely position it */}
-                      {/* <Checkbox icon={<FavoriteBorder />} checkedIcon={<Favorite />} /> */}
                     </Grid>
                   </>
                 )
               })
-              : <><Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%", ml: -8.5 }}>
+              : <><Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%", ml: -20 }}>
                 <Box>
                   <Grid>
                     <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />
