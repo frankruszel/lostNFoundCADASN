@@ -426,7 +426,7 @@ function FindItem() {
         <Box pt={0} mt={0} sx={{ backgroundColor: "#f0f0f0", height: "150%", position: "absolute", zIndex: -1, left: 0, right: 0, top: 0 }}></Box>
         <Typography variant='h4' sx={{ py: 2 }}> </Typography>
         <Box px={10}>
-          <Card sx={{}}>
+          <Card sx={{minWidth:600}}>
             <CardContent sx={{ mb: 4, px: 5, py: 5 }}>
               <Grid container direction='row' display="flex" justifyContent="center" alignItems="center">
 
