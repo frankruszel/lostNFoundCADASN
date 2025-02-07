@@ -353,10 +353,10 @@ function FindItem() {
       //loop through all items
       // for each item, find how many matched labels
       // if match then put in dict = {name: noOfMatch+=1}
-      // console.log("match_labels fn:")
-      // console.log(compareLabels(labels, itemList))
+      console.log("match_labels fn:")
+      console.log(compareLabels(labels, mainItemList))
 
-      let comparedLabels = compareLabels(labels, itemList)
+      let comparedLabels = compareLabels(labels, mainItemList)
       setItemLabels(comparedLabels)
       let matchedItemList = mainItemList.filter(item => comparedLabels.hasOwnProperty(item.itemId)).sort((a, b) => comparedLabels[b.itemId].length - comparedLabels[a.itemId].length)
       setitemList(matchedItemList)
@@ -581,7 +581,7 @@ function FindItem() {
 
 
       </Box >
-      <Grid container spacing={4} px={10} mb={10} ml={8.5} >
+      <Grid container spacing={4} px={10} mb={10} >
         {/* start grid  */}
 
         {
@@ -698,16 +698,7 @@ function FindItem() {
                 </>
               )
             })
-            : <><Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%", ml: -8.5 }}>
-              <Box>
-                <Grid>
-                  <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />
-                </Grid>
-                <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1, color: 'text.secondary' }}>There is no items</Typography></Grid>
-                <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center', backgroundColor: 'primaryColor' }} fullWidth variant="contained">Explore</Button></Grid>
-              </Box>
-
-            </Box>
+            : <>
 
             </>
         }
