@@ -419,17 +419,19 @@ function StaffListItems() {
                                                                 <Grid container display={"flex"} sx={{ height: "50px", }} >
                                                                     {
                                                                         (tabState != "Completed")
-                                                                            ?
-                                                                            <>
-                                                                                <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
-                                                                                    <a
-                                                                                        //  href={`/event/${item.event.id}/rate/${item.id}/edit`} 
-                                                                                        style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Edit Item</Typography></a> </Grid>
-                                                                            </>
-                                                                            : <><Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
+                                                                        &&
+                                                                        <>
+                                                                            <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
                                                                                 <a
-                                                                                    //  href={`/event/${item.event.id}/rate/${item.id}`} 
-                                                                                    style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Add Review</Typography></a> </Grid></>
+                                                                                    //  href={`/event/${item.event.id}/rate/${item.id}/edit`} 
+                                                                                    style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#dc3545" }}>Delete Item</Typography></a> </Grid>
+                                                                            <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
+                                                                                <a
+                                                                                    //  href={`/event/${item.event.id}/rate/${item.id}/edit`} 
+                                                                                    style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#2F8FFF" }}>Edit Item</Typography></a> </Grid>
+
+                                                                        </>
+
                                                                     }
 
                                                                     <Grid item flexGrow={1} align={'end'} px={3} pt={1} >
