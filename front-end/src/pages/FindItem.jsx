@@ -107,6 +107,65 @@ const sortBasedOnTitleCosineDifference = async (mainTitle, itemList) => {
   })
 
 }
+// def match_labels(current_labels, item_list):
+//     # Extract all current label names for quick lookup
+//     current_label_names = {label['Name'] for label in current_labels}
+
+//     result = {}
+//     for item in item_list:
+//         item_id = item['itemId']
+//         # Collect all unique label names from the item's image_labels
+//         item_label_names = {label['Name'] for label in item['image_labels']}
+//         # Find intersection with current_label_names to get matched labels
+//         matched_labels = item_label_names & current_label_names
+//         result[item_id] = list(matched_labels)
+
+//     return result
+
+function compareLabels(currentLabels, itemList) {
+  const result = {};
+
+  itemList.forEach(item => {
+    const matched = [];
+
+    currentLabels.forEach(currentLabel => {
+      const currentName = currentLabel.Name;
+
+      // Check if any image label in this item matches the current label.
+      const found = item.image_labels.some(imageLabel => {
+        // Direct match on the label's Name.
+        if (imageLabel.Name === currentName) return true;
+
+        // Check if any of the Parents have a matching Name.
+        if (Array.isArray(imageLabel.Parents) &&
+          imageLabel.Parents.some(parent => parent.Name === currentName)) {
+          return true;
+        }
+
+        // Check if any of the Aliases have a matching Name.
+        if (Array.isArray(imageLabel.Aliases) &&
+          imageLabel.Aliases.some(alias => alias.Name === currentName)) {
+          return true;
+        }
+
+        return false;
+      });
+
+      if (found) {
+        matched.push(currentName);
+      }
+    });
+
+    // Only add the item if it has at least one match.
+    if (matched.length > 0) {
+      result[item.itemId] = matched;
+    }
+  });
+
+  return result;
+}
+
+
 function FindItem() {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -125,6 +184,7 @@ function FindItem() {
   const [filename, setFilename] = useState(null);
   const [imageError, setImageError] = useState(false);
   const [category, setCategory] = useState('');
+  const [itemLabels, setItemLabels] = useState({});
 
 
 
@@ -181,7 +241,7 @@ function FindItem() {
     console.log(`handleAddEvent: ${JSON.stringify(data)}`)
     CreateItemApi(data)
       .then((res) => {
-        console.log(`res.data: ${JSON.stringify(res.data)}`)
+        // console.log(`res.data: ${JSON.stringify(res.data)}`)
         // toast.success('Form submitted successfully');
         enqueueSnackbar("Created item succesfully.", { variant: "success" });
 
@@ -198,21 +258,8 @@ function FindItem() {
   const [imageLabels, setImageLabels] = useState(null);
 
   const [userList, setUserList] = useState([]);
-  const [itemList, setitemList] = useState([{
-
-    event: {
-      imageFile: "https://i.ibb.co/jkKYxDxR/image-removebg-preview-2.png",
-      title: "title",
-      guest_Price: 10,
-      purchased_Price: 10,
-    },
-    timeSlot: {
-      event_StartTime: "2024-02-29T00:00:00.000Z",
-      event_EndTime: "2024-02-29T00:00:00.000Z",
-    },
-
-
-  }]);
+  const [mainItemList, setMainItemList] = useState([]);
+  const [itemList, setitemList] = useState([]);
 
   const handleCategoryChange = (event) => {
     // setCategoryError(false)
@@ -272,7 +319,8 @@ function FindItem() {
     GetItemApi()
       .then((res) => {
         // console.log(`res.data:${JSON.stringify(res.data)}`)
-        setitemList(res.data)
+        // setitemList(res.data)
+        setMainItemList(res.data)
 
       }).catch((error) => {
         console.error("Error fetching Items:", error);
@@ -298,98 +346,33 @@ function FindItem() {
       setImageLabels(labels)
       console.log(`fileUrl:${fileUrl}`)
       setImageFile(fileUrl)
-
-      let specificNo = 0
-      let specificObj = {}
-      let specificObjList = []
-      for (let i = 0; i < labels.length; i++) {
-        // console.log(labels[i])
-        let obj = labels[i]
-        let objParentsLength = obj.Parents.length
-        if (obj.Confidence == 100) {
-          specificObjList.push(obj)
-        }
-        if (objParentsLength > specificNo) {
-          specificObj = obj
-          specificNo = objParentsLength
-        }
-      }
-      // console.log("TESATIAUSHDUIASHDUIASHDUIL HAILFHSDIOUFHSDLIFHUISDHFI SDHILFUH")
-      if (specificObjList.length > 0) {
-        let bestNamOutOf100 = specificObjList.sort((a, b) => b.Parents.length - a.Parents.length)[0]
-        specificObj["Name"] = bestNamOutOf100.Name
-      }
-      let title = specificObj.Name
-      // let categoryListFromObj = specificObj.Categories.map(item => item.Name)
-      // let categoryFromObj = categoryListFromObj[0]
-      formik.values.title = title
       console.log("getSimilarity below")
-      // getSimilarity(title, categoryList).then((res) => {
-      //   console.log(`similarity:`)
-      //   console.log(res)
-      //   setCategory(res.bestMatch.Name)
-      //   setLoading(false)
-      //   // Clothing
-      //   // Electronics
-      //   // Stationery
-      //   // Jewelry
-      //   // Wallet or ID
-      //   // console.log("newsmilarity function")
-      //   //   console.log(itemList.flatMap((item) => item.title))
 
-      //   // sortBasedOnTitleCosineDifference(title,itemList)
+      // compare labels
+      //function(currentLabels, itemList)
+      //loop through all items
+      // for each item, find how many matched labels
+      // if match then put in dict = {name: noOfMatch+=1}
+      // console.log("match_labels fn:")
+      // console.log(compareLabels(labels, itemList))
 
-      // }).catch((error) => {
-      //   console.error("Error auto suggesting item:", error);
-      //   enqueueSnackbar('Failed to auto suggesting item', { variant: "error" })
-      //   setLoading(false)
-      // })
-
-      // let titleCategoriesRankingOwn = findBestMatch(title, categoryListFromObj)
-      // console.log(`titleCategoriesRankingOwn`)
-      // console.log(titleCategoriesRankingOwn)
-      // console.log(`categoryListFromObj`)
-      // console.log(categoryListFromObj)
-      // let categoryFromRekogRanking = findBestMatch(titleCategoriesRankingOwn.bestMatch.target, categoryList)
-      // let matchRanking = findBestMatch(title, categoryList)
-      // console.log(`categoryFromObj`)
-      // console.log(categoryFromObj)
-      // console.log(`matchRanking`)
-      // console.log(matchRanking)
-      // setCategory(matchRanking.bestMatch.target)
-      // console.log(`specificObj`)
-      // console.log(specificObj)
-
-      // if (titleCategoriesRankingOwn.bestMatch.rating > matchRanking.bestMatch.rating) {
-      //     if (categoryFromRekogRanking.bestMatch.rating > matchRanking.bestMatch.rating) {
-      //         console.log(`categoryFromRekogRanking > matchRanking`)
-      //         console.log(`categoryFromRekogRanking`)
-      //         console.log(categoryFromRekogRanking)
-      //         console.log(`matchRanking`)
-      //         console.log(matchRanking)
-      //         console.log(`titleCategoriesRankingOwn`)
-      //         console.log(titleCategoriesRankingOwn)
-      //     } else {
-      //         console.log(`categoryFromRekogRanking < matchRanking`)
-      //         console.log(`categoryFromRekogRanking`)
-      //         console.log(categoryFromRekogRanking)
-      //         console.log(`matchRanking`)
-      //         console.log(matchRanking)
-      //         console.log(`titleCategoriesRankingOwn`)
-      //         console.log(titleCategoriesRankingOwn)
-      //     }
-      // } else {
-      //     console.log(`titleCategoriesRankingOwn > matchRanking`)
-      //     console.log(`categoryFromRekogRanking`)
-      //     console.log(categoryFromRekogRanking)
-      //     console.log(`matchRanking`)
-      //     console.log(matchRanking)
-      //     console.log(`titleCategoriesRankingOwn`)
-      //     console.log(titleCategoriesRankingOwn)
+      let comparedLabels = compareLabels(labels, itemList)
+      setItemLabels(comparedLabels)
+      let matchedItemList = mainItemList.filter(item => comparedLabels.hasOwnProperty(item.itemId)).sort((a, b) => comparedLabels[b.itemId].length - comparedLabels[a.itemId].length)
+      setitemList(matchedItemList)
+      //{
+      //     "815c64ad-8346-4586-9953-8c23143c70b4": [
+      //       "Ball",
+      //       "Football",
+      //       "Soccer",
+      //       "Soccer Ball",
+      //       "Sport"
+      //   ],
+      //   "dba4b7a1-2bda-485f-bd3c-460cab99d28b": [
+      //       "Ball",
+      //       "Sport"
+      //   ]
       // }
-      //if titleOwnCategoriesRanking with categgoryList > title with categoryList
-
-
 
 
     },
@@ -607,49 +590,7 @@ function FindItem() {
               return (
                 <>
                   <Grid item xs={12} md={6} lg={3.5} sx={{ height: 330, mb: 15 }} >
-
-                    {/* <Box sx={{
-  color: "#FFFFFF",
-  opacity: 1,
-  position: 'relative',
-
-  top: "13%",
-  zIndex: 10,
-  left: "72%",
-  display: 'table',
-  margin: 0,
-  padding: 0,
-
-
-  background: 'rgba(0, 0, 0, 0.7)',
-  opacity: 1,
-  borderRadius: 3,
-  height: 28,
-  pr: 1.5,
-  pl: 1,
-
-
-
-
-
-
-}}>
-
-  <DepartureBoardIcon fontSize="20px" sx={{ pr: 0.7, pt: 0.85, }} />
-
-  <Typography sx={{ display: "inline", verticalAlign: '07%' }} fontSize={15} textAlign={"center"}>
-    Duration
-  </Typography>
-
-</Box> */}
-
-
                     <Link style={{ textDecoration: 'none' }}>
-
-
-
-
-
                       <Card sx={{ position: "relative", borderColor: '#D3D3D3', borderStyle: 'solid', borderWidth: 0.3, minHeight: 420, maxHeight: 420, borderRadius: 4 }}>
 
                         <Box sx={{ borderColor: '#D3D3D3', borderBottomStyle: 'solid', borderWidth: 0.3, justifyContent: "center", display: "flex", alignItems: "center", height: "100%" }}>
@@ -673,19 +614,7 @@ function FindItem() {
                               </>
                             )
                           }
-
-
-
-
-
-
-
-
                         </Box>
-
-
-
-
                         <CardContent sx={{ pb: 0, pt: 1 }}>
                           <Box sx={{ display: 'flex', mb: 1 }}>
 
@@ -718,7 +647,7 @@ function FindItem() {
                             <LocationOn sx={{ mr: 1 }} />
 
                             <Typography noWrap>
-                              location
+                              Labels matched: {itemLabels[item.itemId]?.length}
                             </Typography>
                           </Box>
 
