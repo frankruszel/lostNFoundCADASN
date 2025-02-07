@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card,Button, CardContent, CardActions, Grid, TextField, Box, Typography, Avatar, Switch } from '@mui/material';
+import { Container, Card, Button, CardContent, CardActions, Grid, TextField, Box, Stack, Typography, Avatar, Switch } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import FileUploadIcon from '@mui/icons-material/UploadFile';
 import BadgeIcon from '@mui/icons-material/Badge';
@@ -21,7 +21,7 @@ const schema = yup.object({
   email: yup.string().email("Invalid email address").required("Email is required"),
 });
 
-const categoryArray =  ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
+const categoryArray = ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
 
 
 
@@ -35,8 +35,8 @@ const ProfileInformationCard = () => {
   const [isModified, setIsModified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [notifications, setNotifications] = useState([]);
-      const [openModal, setOpenModal] = useState(false)
-  
+  const [openModal, setOpenModal] = useState(false)
+
   const navigate = useNavigate();
   const { showAlert } = useAlert();
 
@@ -127,87 +127,97 @@ const ProfileInformationCard = () => {
     setIsModified(false);
   };
   return (<>
-    <DeleteUserModal
-      deleteUser={DeleteUser}
-      openModal={openModal}
-      setOpenModal={setOpenModal}
-    />
-    <Card>
-      <CardContent>
-        <CardTitle icon={<BadgeIcon />} title="Profile Information" />
-        <Grid container spacing={2} marginTop="1rem">
-
-          <Grid item xs={12} sm={5} md={5} lg={5} textAlign="center">
-            <Avatar
-
-              alt="Profile Picture"
-              sx={{ width: 150, height: 150, margin: '0 auto' }}
-            />
-            <Button variant='contained' onClick={() => setOpenModal(true)} sx={{ marginTop: "1rem", backgroundColor: "#d9534f", color: "white" }}>Delete my account</Button>
+    <Container maxWidth="xl" sx={{ marginTop: "2rem", marginBottom: "1rem" }}>
 
 
 
-          </Grid>
-          <Divider orientation="vertical" flexItem />
+      <Stack direction="column" spacing={2} sx={{ mx: 30 }}>
 
 
-          <Grid item container spacing={0} xs={12} sm={6} md={6} lg={6} display={'flex'} sx={{ ml: 3 }}    >
-            <Grid item xs={12}>
-              <TextField
-                label="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                fullWidth
-                disabled
-                error={!!errors.email}
-                helperText={errors.email}
-              />
+
+        <DeleteUserModal
+          deleteUser={DeleteUser}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
+        />
+        <Card>
+          <CardContent>
+            <CardTitle icon={<BadgeIcon />} title="Profile Information" />
+            <Grid container spacing={2} marginTop="1rem">
+
+              <Grid item xs={12} sm={5} md={5} lg={5} textAlign="center">
+                <Avatar
+
+                  alt="Profile Picture"
+                  sx={{ width: 150, height: 150, margin: '0 auto' }}
+                />
+                <Button variant='contained' onClick={() => setOpenModal(true)} sx={{ marginTop: "1rem", backgroundColor: "#d9534f", color: "white" }}>Delete my account</Button>
+
+
+
+              </Grid>
+              <Divider orientation="vertical" flexItem />
+
+
+              <Grid item container spacing={0} xs={12} sm={6} md={6} lg={6} display={'flex'} sx={{ ml: 3 }}    >
+                <Grid item xs={12}>
+                  <TextField
+                    label="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled
+                    error={!!errors.email}
+                    helperText={errors.email}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <Typography>
+                    Notification Settings
+                  </Typography>
+                </Grid>
+                <Grid item xs={12} sx={{}}>
+                  <FormControl fullWidth>
+                    <Select
+                      value={notifications}
+                      onChange={handleNotificationChange}
+                      multiple
+
+                    >
+                      {
+                        categoryArray.map((notification, index) => {
+                          return (
+                            <MenuItem key={index} value={notification}>
+                              {notification}
+                            </MenuItem>
+                          )
+                        })
+                      }
+
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <Typography>
-                Notification Settings
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sx={{}}>
-              <FormControl fullWidth>
-                <Select
-                  value={notifications}
-                  onChange={handleNotificationChange}
-                  multiple
+          </CardContent>
+          <CardActions sx={{ paddingX: '16px', display: "flex", justifyContent: "end" }}>
+            <LoadingButton
+              loading={isLoading}
+              variant="contained"
+              color="primaryColor"
+              startIcon={<EditIcon />}
+              onClick={handleEditProfile}
+              disabled={!isModified}
+            >
+              Save
+            </LoadingButton>
+          </CardActions>
 
-                >
-                  {
-                    categoryArray.map((notification, index) => {
-                      return (
-                        <MenuItem key={index} value={notification}>
-                          {notification}
-                        </MenuItem>
-                      )
-                    })
-                  }
-
-                </Select>
-              </FormControl>
-            </Grid>
-
-          </Grid>
-        </Grid>
-      </CardContent>
-      <CardActions sx={{ paddingX: '16px', display: "flex", justifyContent: "end" }}>
-        <LoadingButton
-          loading={isLoading}
-          variant="contained"
-          color="primaryColor"
-          startIcon={<EditIcon />}
-          onClick={handleEditProfile}
-          disabled={!isModified}
-        >
-          Save
-        </LoadingButton>
-      </CardActions>
-
-    </Card>
+        </Card>
+      </Stack>
+    </Container>
   </>
 
   );
