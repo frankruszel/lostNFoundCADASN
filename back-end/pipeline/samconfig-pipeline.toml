@@ -22,7 +22,7 @@ capabilities = "CAPABILITY_IAM"
 [1.global.parameters]
 stack_name = "sam-prod"
 s3_prefix = "sam-prod"
-s3_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-iwglhilsinhd"
+s3_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-rhsbdcvmkmzl"
 region = "us-east-1"
 
 [1.deploy]
@@ -37,8 +37,8 @@ capabilities = "CAPABILITY_IAM"
 [pipeline]
 [pipeline.deploy]
 [pipeline.deploy.parameters]
-stack_name = "SAM-Pipeline-Stack"
-s3_prefix = "SAM-Pipeline-Stack"
+stack_name = "pipeline-stack"
+s3_prefix = "pipeline-stack"
 resolve_s3 = true
 fail_on_empty_changeset = false
 template = "codepipeline.yaml"

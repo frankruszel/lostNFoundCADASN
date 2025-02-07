@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion : '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   This template deploys a CodePipeline with its required resources.
@@ -27,14 +27,10 @@ Metadata:
 Parameters:
   ProjectSubfolder:
     Type: String
-    Default: "back-end"
-  ResourceNamePrefix:
-    Description: Please specify the prefix for all the resources
-    Type: String
-    Default: "frankcad"
+    Default: "./back-end"
   CodeCommitRepositoryName:
     Type: String
-    Default: "frankcad"
+    Default: "lostNFoundCADASN"
   MainGitBranch:
     Type: String
     Default: "main"
@@ -60,10 +56,10 @@ Parameters:
     Default: "1"
   ProdPipelineExecutionRole:
     Type: String
-    Default: "arn:aws:iam::992382578667:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-xq5sSlVAHFAi"
+    Default: "arn:aws:iam::774305613815:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-EZSJN7W75ziD"
   ProdCloudFormationExecutionExeRole:
     Type: String
-    Default: "arn:aws:iam::992382578667:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-n2aZj1RC6Cc8"
+    Default: "arn:aws:iam::774305613815:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-eCRr2m9csbgO"
   GithubOwner:
     AllowedPattern: ".+"
     Type: String
@@ -81,6 +77,10 @@ Parameters:
   ProdApprovalSNSEmail:
     Type: String
     Default: "frankruszel@gmail.com"
+  ResourceNamePrefix:
+    Description: Please specify the prefix for all the resources
+    Type: String
+    Default: "frankcad"
 
 Resources:
   GithubConnection:
