@@ -9,8 +9,7 @@ const deleteItemFromDynamoDB = async (itemId) => {
     const params = {
       TableName: tableName,
       Key: {
-        itemId: itemId,
-        userId: userId,
+        itemId: itemId
       },
     };
 
@@ -29,19 +28,18 @@ export const lambdaHandler = async (event, context) => {
   console.log('Received event:', JSON.stringify(event, null, 2));
   console.log('Lambda context:', JSON.stringify(context, null, 2));
 
-  let requestBody;
+  let itemId;
 
   try {
-    // Use event directly if it's already an object, otherwise parse event.body
-    requestBody = typeof event === 'object' && event.itemId ? event : JSON.parse(event.body);
+    itemId = event.queryStringParameters && event.queryStringParameters.itemId ? event.queryStringParameters.itemId : null;
   } catch (error) {
     console.error('Invalid JSON in event or event.body:', event.body || event);
     return {
       statusCode: 400,
       headers: {
-        "Access-Control-Allow-Origin": "*", 
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS,DELETE",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization", 
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
       body: JSON.stringify({
         message: 'Invalid JSON format in request body.',
@@ -50,16 +48,14 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { itemId, userId } = requestBody;
-
     // Validate input
-    if (!itemId ) {
+    if (!itemId) {
       return {
         statusCode: 400,
         headers: {
-          "Access-Control-Allow-Origin": "*", 
+          "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "GET, POST, OPTIONS,DELETE",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization", 
+          "Access-Control-Allow-Headers": "Content-Type, Authorization",
         },
         body: JSON.stringify({
           message: 'Missing or invalid itemId in request body.',
@@ -73,9 +69,9 @@ export const lambdaHandler = async (event, context) => {
     return {
       statusCode: 200,
       headers: {
-        "Access-Control-Allow-Origin": "*", 
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS,DELETE",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization", 
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
       body: JSON.stringify({
         message: 'Item successfully deleted from DynamoDB.',
@@ -86,13 +82,12 @@ export const lambdaHandler = async (event, context) => {
     return {
       statusCode: 500,
       headers: {
-        "Access-Control-Allow-Origin": "*", 
+        "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, OPTIONS,DELETE",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization", 
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
       body: JSON.stringify({
         message: 'An error occurred while processing the request.',
-        error: error.message,
       }),
     };
   }
