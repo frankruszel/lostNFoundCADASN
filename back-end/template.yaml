@@ -23,7 +23,7 @@ Parameters:
     Default: "claimit"
   PipelineUserSecretKey:
     Type: String
-    Default: "PipelineUserSecretKey-nTS7XzBG1BtT"
+    Default: "PipelineUserSecretKey-YkMEtZUF6cQS"
 
 Globals:
   Function:

@@ -40,10 +40,10 @@ Parameters:
     Default: "1"
   ProdPipelineExecutionRole:
     Type: String
-    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-6Y0oVLInpQDM"
+    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-ZGoXaf1cySDg"
   ProdCloudFormationExecutionExeRole:
     Type: String
-    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-wK6vz2ZVs1ny"
+    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-DNoKkV4DOL3g"
   GithubOwner:
     AllowedPattern: ".+"
     Type: String
@@ -57,7 +57,7 @@ Parameters:
     AllowedPattern: ".+"
     Type: String
     Description: "Github branch name e.g. development"
-    Default: "back-end"
+    Default: "main"
   ProdApprovalSNSEmail:
     Type: String
     Default: "frankruszel@gmail.com"
