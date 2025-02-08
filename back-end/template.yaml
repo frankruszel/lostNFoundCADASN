@@ -456,7 +456,7 @@ Resources:
       Runtime: nodejs22.x
       Environment:
         Variables:
-          IMAGE_BUCKET_NAME: !GetAtt S3StoreItemImages #So that can retrieve Arn from env , and not hardcode it
+          IMAGE_BUCKET_NAME: !Ref S3StoreItemImagesName #So that can retrieve Arn from env , and not hardcode it
       Architectures:
         - x86_64
       Events:
@@ -484,7 +484,7 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: ItemTable
         - S3CrudPolicy:
-            BucketName: !Ref S3StoreItemImagesName
+            BucketName: !Ref S3StoreItemImages
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
       Architectures:

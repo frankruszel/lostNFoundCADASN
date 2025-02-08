@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid'; // UUID library for generating unique IDs
 import parser from 'lambda-multipart-parser';
 const s3 = new AWS.S3();
 
-const bucketName = 'prod-lostnfound-store-item-images';
+const bucketName = process.env.IMAGE_BUCKET_NAME;
 const rekognition = new AWS.Rekognition();
 
 
