@@ -656,15 +656,15 @@ Resources:
         - Name: IMAGE_BUCKET_NAME
           Value: !Ref S3StoreItemImagesName
       #   - Name: REACT_APP_REDIRECT_URI
-          Value: !ImportValue REACT_APP_REDIRECT_URI
-        - Name: REACT_APP_CLAIMIT_API_URL
-          Value: !ImportValue REACT_APP_CLAIMIT_API_URL
-        - Name: REACT_APP_COGNITO_OAUTH_DOMAIN
-          Value: !ImportValue REACT_APP_COGNITO_OAUTH_DOMAIN
-        - Name: REACT_APP_USER_POOL_ID
-          Value: !ImportValue REACT_APP_USER_POOL_ID
-        - Name: REACT_APP_COGNITO_CLIENT_ID
-          Value: !ImportValue REACT_APP_COGNITO_CLIENT_ID
+      #     Value: !ImportValue REACT_APP_REDIRECT_URI
+      #   - Name: REACT_APP_CLAIMIT_API_URL
+      #     Value: !ImportValue REACT_APP_CLAIMIT_API_URL
+      #   - Name: REACT_APP_COGNITO_OAUTH_DOMAIN
+      #     Value: !ImportValue REACT_APP_COGNITO_OAUTH_DOMAIN
+      #   - Name: REACT_APP_USER_POOL_ID
+      #     Value: !ImportValue REACT_APP_USER_POOL_ID
+        # - Name: REACT_APP_COGNITO_CLIENT_ID
+        #   Value: !ImportValue REACT_APP_COGNITO_CLIENT_ID
                
       
       
@@ -722,10 +722,6 @@ Resources:
   # ------------------------------  END Amplify Stack  ------------------------------  #
 
 Outputs:
-  ResourceNamePrefix:
-    Value: !Ref ResourceNamePrefix
-    Export:
-      Name: ResourceNamePrefix
   REACT_APP_COGNITO_CLIENT_ID:
     Value: !GetAtt CognitoUserPoolClient.ClientId
     Export:
