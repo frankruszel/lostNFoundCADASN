@@ -409,7 +409,7 @@ Resources:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Delete
     Properties:
-      BucketName: !Sub "${Environment}-${S3StoreItemImagesName}"
+      BucketName: !Ref S3StoreItemImagesName
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
