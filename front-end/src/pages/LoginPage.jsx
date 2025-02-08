@@ -9,7 +9,6 @@ import ResendAuthCodeApi from "../api/auth/ResendAuthCodeApi";
 import GetCurrentUserApi from "../api/auth/GetCurrentUserApi";
 import SendPasswordResetApi from "../api/auth/SendPasswordResetApi";
 import { useUserContext } from "../contexts/UserContext";
-import { useAlert } from "../contexts/AlertContext";
 import ResendVerificationEmailDialog from "../components/login/ResendVerificationEmailDialog";
 import ResetPasswordDialog from "../components/login/ResetPasswordDialog";
 import LogInRightCard from "../components/login/LogInRightCard";
@@ -32,7 +31,6 @@ function LoginPage() {
     const [isMfaRequired, setIsMfaRequired] = useState(false);
 
     const { UserLogIn } = useUserContext();
-    const { showAlert } = useAlert();
     const location = useLocation(); // Access the current URL location
     
     useEffect(() => {
@@ -49,7 +47,7 @@ function LoginPage() {
                 .then((user) => {
                     console.log('User data fetched:', user);
                     UserLogIn(user, accessToken, idToken, null); // Handle successful login
-                    showAlert('success', 'Log in successful');
+                    enqueueSnackbar('Log in successful', { variant: "success" });
                     navigate('/'); // Redirect to home page
                 })
                 .catch((error) => {
@@ -93,7 +91,7 @@ function LoginPage() {
                     // MFA challenge triggered
                     setSession(response.session);
                     setIsMfaRequired(true);
-                    showAlert('info', 'MFA required. Please enter the code sent to your phone.');
+                    enqueueSnackbar('MFA required. Please enter the code sent to your phone.', { variant: "info" });
                 } else {
                     // Successfully signed in
                     const { accessToken, idToken, refreshToken } = response;
@@ -103,7 +101,7 @@ function LoginPage() {
                         .then((user) => {
                             console.log('User data fetched:', user);
                             UserLogIn(user, accessToken, idToken, refreshToken); // Handle successful login
-                            showAlert('success', 'Log in successful');
+                            enqueueSnackbar("Log in successful", { variant: "success" });
                             navigate('/'); // Redirect to home page
                         })
                         .catch((error) => {
@@ -116,7 +114,7 @@ function LoginPage() {
                 console.error('Error during sign-in:', error);
                 if (error.name === 'NotAuthorizedException') {
                     if (error.message == "Invalid session for the user, session is expired.") {
-                        showAlert('error', 'MFA code has expired, please try again.')
+                        enqueueSnackbar('MFA code has expired, please try again.', { variant: "error" })
                         setIsMfaRequired(false);
                         setMfaCode("");
                         setSession("");
@@ -167,7 +165,7 @@ function LoginPage() {
             SendPasswordResetApi(data.email)
                 .then((res) => {
                     console.log('success', res)
-                    showAlert('success', 'Reset password e-mail sent!')
+                    enqueueSnackbar('Reset password e-mail sent!', { variant: "success" });
                     setResetPasswordDialog(false);
                     setResetLoading(false)
                 })
@@ -193,7 +191,7 @@ function LoginPage() {
             ResendAuthCodeApi(data.email)
                 .then((res) => {
                     console.log('success', res)
-                    showAlert('success', 'Verification e-mail sent!')
+                    enqueueSnackbar('Verification e-mail sent!', { variant: "success" });
                     setResendDialog(false);
                     setResendLoading(false)
                 })

@@ -13,14 +13,12 @@ import SupportIcon from '@mui/icons-material/Support';
 import { enqueueSnackbar } from "notistack";
 import { useUserContext } from "../../../contexts/UserContext";
 import SignOutApi from "../../../api/auth/SignOutApi";
-import { useAlert } from "../../../contexts/AlertContext";
 
 export function NavbarProfile() {
     const [isPopoverOpen, setIsPopoverOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const navigate = useNavigate()
     const { user, accessToken, refreshToken, UserLogOut, SessionRefreshError } = useUserContext();
-    const { showAlert } = useAlert();
 
     function handlePopoverOpen(event) {
         setAnchorEl(event.currentTarget);

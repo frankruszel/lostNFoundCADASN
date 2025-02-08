@@ -12,7 +12,6 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useAlert } from "../../contexts/AlertContext";
 import GoogleSSOButton from "./GoogleSSOButton";
 import { useState } from "react";
 import FacebookSSOButton from "./FacebookSSOButton";
@@ -31,7 +30,6 @@ function LogInLeftCard(props) {
         open,
         setOpen
     } = props
-    const { showAlert } = useAlert()
 
     const [googleLoading, setGoogleLoading] = useState(false)
     const [facebookLoading, setFacebookLoading] = useState(false);

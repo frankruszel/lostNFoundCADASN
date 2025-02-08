@@ -10,8 +10,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useUserContext } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { useAlert } from "../../contexts/AlertContext";
 import Divider from '@mui/material/Divider';
+import { enqueueSnackbar } from "notistack";
 import * as yup from 'yup';
 import { UserSubscriptionApi } from '../../api/item/UserSubscriptionApi';
 import DeleteUserModal from './DeleteUserModal';
@@ -40,7 +40,6 @@ const ProfileInformationCard = () => {
   const [init, setInit] = useState(false)
 
   const navigate = useNavigate();
-  const { showAlert } = useAlert();
 
   // Populate form data from user context
   useEffect(() => {
@@ -120,12 +119,12 @@ const ProfileInformationCard = () => {
     UserSubscriptionApi(requestObj)
       .then((res) => {
 
-        showAlert('success', "Updated Successfully.");
+        enqueueSnackbar("Updated Succesfully succesfully.", { variant: "success" });
         setIsLoading(false);
       })
       .catch((error) => {
         console.error("Error updating user:", error);
-
+        enqueueSnackbar(`Error updating user: ${error}`, { variant: "error" });
         setIsLoading(false);
       });
 

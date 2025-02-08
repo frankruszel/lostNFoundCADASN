@@ -6,7 +6,6 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as yup from 'yup';
 import { useNavigate } from "react-router-dom";
-import { useAlert } from '../contexts/AlertContext';
 import CardTitle from '../components/common/CardTitle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import SignUpUserApi from '../api/auth/SignUpApi';
@@ -40,7 +39,6 @@ function RegisterPage() {
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate();
-    const { showAlert } = useAlert();
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -89,7 +87,7 @@ function RegisterPage() {
                         // Handle successful sign-up
                         console.log('Sign-up successful:', res);
                         navigate('/login');
-                        showAlert('success', 'Sign up successfull. Please verify your email.')
+                        enqueueSnackbar("Sign up successfull. Please verify your email.", { variant: "success" });
                         setLoading(false);
                     })
                     .catch((err) => {

@@ -4,7 +4,6 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import GetCurrentUserApi from "../api/auth/GetCurrentUserApi"
 import RefreshTokenApi from "../api/auth/RefreshTokenApi"
-import { useAlert } from "./AlertContext";
 
 const userContext = createContext(null);
 
@@ -18,7 +17,6 @@ export const UserProvider = (props) => {
     const [isReady, setIsReady] = useState(false);
 
     const navigate = useNavigate();
-    const { showAlert } = useAlert();
 
     useEffect(() => {
         const accessTokenCheck = localStorage.getItem('accessToken');
@@ -76,7 +74,7 @@ export const UserProvider = (props) => {
         setIdToken(null);
         setRefreshToken(null);
         setUser(null);
-        showAlert('info', 'Your account has been deleted')
+        enqueueSnackbar('Your account has been deleted', { variant: "info" });
         navigate('/')
     }
 
@@ -92,13 +90,13 @@ export const UserProvider = (props) => {
         setRefreshToken(null);
         setUser(null);
 
-        showAlert('success', 'Log out successful')
+        enqueueSnackbar("Log out successful", { variant: "success" });
     }
 
     const SessionRefreshError = async () => {
         await navigate('/login')
         UserLogOut();
-        showAlert('warning', 'Your session has expired. Please log in again.')
+        enqueueSnackbar("Your session has expired. Please log in again.", { variant: "warning " });
     }
 
     const SetNewTokens = (inputAccessToken, inputIdToken) => {

@@ -6,7 +6,6 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as yup from 'yup';
 import { useNavigate, useParams } from "react-router-dom";
-import { useAlert } from '../contexts/AlertContext';
 import CardTitle from '../components/common/CardTitle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ResetPasswordApi from '../api/auth/ResetPasswordApi';
@@ -39,7 +38,6 @@ function PasswordResetPage() {
     const [loading, setLoading] = useState(false)
 
     const navigate = useNavigate();
-    const { showAlert } = useAlert()
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -88,7 +86,7 @@ function PasswordResetPage() {
                         console.log('Sign-up successful:', res);
                         setLoading(false)
                         navigate('/login');
-                        showAlert('success', 'Password Reset Successfull.')
+                        enqueueSnackbar("'Password Reset Successfull.'", { variant: "success" });
                     })
                     .catch((err) => {
                         // Handle errors thrown by ResetPassword API
