@@ -380,7 +380,7 @@ Resources:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       UserPoolId: !GetAtt CognitoUserPool.UserPoolId
-      Domain: claimit
+      Domain: !Sub "${Environment}-${ResourceNamePrefix}-${app_name}" #claimit
       ManagedLoginVersion: 2
 
   CognitoManagedLoginBranding:
