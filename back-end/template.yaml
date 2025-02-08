@@ -76,7 +76,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        Stage: !Ref Environment
+        Stage: !Sub "${Environment}"
       CodeUri: UserSubscriptionFunction/
       Policies:
         - DynamoDBCrudPolicy:
@@ -101,9 +101,9 @@ Resources:
             Path: /user/notification/
             Method: POST
             RestApiId: !Ref ServerlessRestApi
-      :
+      Environment:
         Variables:
-          TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode itEnvironment
+          TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode it
   PublishSnsFunction:
     DependsOn: 
       - ItemSnsTopic
