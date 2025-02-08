@@ -76,7 +76,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Tags:
-        Stage: !Sub "${Environment}"
+        Stage: !Ref Environment
       CodeUri: UserSubscriptionFunction/
       Policies:
         - DynamoDBCrudPolicy:
