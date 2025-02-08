@@ -1,0 +1,7 @@
+{
+  "ReactAppClaimitAPIURL": "https://zfvvh6gzua.execute-api.us-east-1.amazonaws.com/Prod/",
+  "ReactAppCognitoClientId": "2ubbpv6ch5io2ps2svpch66pg",
+  "ReactAppCognitoOAuthDomain": "https://prod-frankcad-claimit.auth.us-east-1.amazoncognito.com",
+  "ReactAppCognitoRedirectURI": "https://main.d1dp6reji9vvj9.amplifyapp.com/login",
+  "ReactAppUserPoolID": "us-east-1_U9DtU88YP"
+}
