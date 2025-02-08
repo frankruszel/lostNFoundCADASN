@@ -655,16 +655,16 @@ Resources:
           Value: SMS_MFA
         - Name: IMAGE_BUCKET_NAME
           Value: !Ref S3StoreItemImagesName
-        - Name: REACT_APP_REDIRECT_URI
-          Value: !ImportValue ReactAppCognitoRedirectURI
-        - Name: REACT_APP_CLAIMIT_API_URL
-          Value: !ImportValue ReactAppClaimitAPIURL
-        - Name: REACT_APP_COGNITO_OAUTH_DOMAIN
-          Value: !ImportValue ReactAppCognitoOAuthDomain
-        - Name: REACT_APP_USER_POOL_ID
-          Value: !ImportValue ReactAppUserPoolID
-        - Name: REACT_APP_COGNITO_CLIENT_ID
-          Value: !ImportValue ReactAppCognitoClientId
+        - Name: REACT_APP_REDIRECT_URI #start comment here
+          Value: !ImportValue ReactAppCognitoRedirectURI #start comment here
+        - Name: REACT_APP_CLAIMIT_API_URL #start comment here
+          Value: !ImportValue ReactAppClaimitAPIURL #start comment here
+        - Name: REACT_APP_COGNITO_OAUTH_DOMAIN #start comment here
+          Value: !ImportValue ReactAppCognitoOAuthDomain #start comment here
+        - Name: REACT_APP_USER_POOL_ID #start comment here
+          Value: !ImportValue ReactAppUserPoolID #start comment here
+        - Name: REACT_APP_COGNITO_CLIENT_ID #start comment here
+          Value: !ImportValue ReactAppCognitoClientId #start comment here
                
       
       
