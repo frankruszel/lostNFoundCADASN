@@ -664,7 +664,7 @@ Resources:
         # - Name: REACT_APP_USER_POOL_ID #start comment here
         #   Value: !ImportValue ReactAppUserPoolID #start comment here
         # - Name: REACT_APP_COGNITO_CLIENT_ID #start comment here
-        #   Value: !ImportValue ReactAppCognitoClientId #start comment here
+        #   Value: !ImportValue ReactAppCognitoClientId #start comment here 
                
       
       
