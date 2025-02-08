@@ -24,6 +24,9 @@ Parameters:
   ResourceNamePrefix:
     Type: String
     Default: "frankcad"
+  PipelineUserSecretKey:
+    Type: String
+    Default: "PipelineUserSecretKey-nTS7XzBG1BtT"
 
 Globals:
   Function:
@@ -629,7 +632,9 @@ Resources:
       Tags:
         - Key: Stage
           Value: !Ref Environment
-      AccessToken: "{{resolve:secretsmanager:PipelineUserSecretKey-t5mbKk44PCme:SecretString:github_access_key}}"
+      AccessToken: !Sub 
+        - "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:github_access_key}}"
+        - PipelineUserSecretKey: !Ref PipelineUserSecretKey
       Repository: !Sub
         - "https://github.com/${GithubOwner}/${AppRepositoryName}"
         - GithubOwner: !ImportValue GithubOwnerOutput
