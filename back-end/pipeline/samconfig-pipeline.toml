@@ -5,8 +5,9 @@ version = 0.1
 [2.global.parameters]
 stack_name = "sam-dev"
 s3_prefix = "sam-dev"
-s3_bucket = "aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-7l0mopz3wnp7"
+s3_bucket = "aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-uwgrgia9afoj"
 region = "us-east-1"
+image_repository = "273354638471.dkr.ecr.us-east-1.amazonaws.com/aws-sam-cli-managed-dev-pipeline-resources-imagerepository-qtzmrb2avc8r"
 
 [2.deploy]
 [2.deploy.parameters]
@@ -22,8 +23,9 @@ capabilities = "CAPABILITY_IAM"
 [1.global.parameters]
 stack_name = "sam-prod"
 s3_prefix = "sam-prod"
-s3_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-rhsbdcvmkmzl"
+s3_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-afqwhrghhaix"
 region = "us-east-1"
+image_repository = "273354638471.dkr.ecr.us-east-1.amazonaws.com/aws-sam-cli-managed-prod-pipeline-resources-imagerepository-w4kvmu58xsp8"
 
 [1.deploy]
 [1.deploy.parameters]
