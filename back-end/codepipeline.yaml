@@ -40,10 +40,10 @@ Parameters:
     Default: "1"
   ProdPipelineExecutionRole:
     Type: String
-    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-ZGoXaf1cySDg"
+    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-BNuy1UNwUXyO"
   ProdCloudFormationExecutionExeRole:
     Type: String
-    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-DNoKkV4DOL3g"
+    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-RJlbQROn1wiP"
   GithubOwner:
     AllowedPattern: ".+"
     Type: String

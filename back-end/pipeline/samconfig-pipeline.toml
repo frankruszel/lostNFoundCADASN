@@ -5,9 +5,9 @@ version = 0.1
 [1.global.parameters]
 stack_name = "sam-prod"
 s3_prefix = "sam-prod"
-s3_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-8ixqfvfmufio"
+s3_bucket = "aws-sam-cli-managed-prod-pipeline--artifactsbucket-bxkm3tflwcco"
 region = "us-east-1"
-image_repository = "273354638471.dkr.ecr.us-east-1.amazonaws.com/aws-sam-cli-managed-prod-pipeline-resources-imagerepository-x2hyvuxrdiry"
+image_repository = "273354638471.dkr.ecr.us-east-1.amazonaws.com/aws-sam-cli-managed-prod-pipeline-resources-imagerepository-fvqtlmfdqpgi"
 
 [1.deploy]
 [1.deploy.parameters]
