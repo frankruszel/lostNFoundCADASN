@@ -592,7 +592,7 @@ Resources:
           - Name: PROJECT_SUBFOLDER
             Value: !Ref ProjectSubfolder
           # - Name: TESTING_PIPELINE_EXECUTION_ROLE
-          #   Value: !Ref TestingPipelineExecutionRole
+          #   Value: !Ref TestingPipelineExecutionRole 
           # - Name: TESTING_ENV_CONFIG_NAME
           #   Value: !Ref TestConfigEnvName
           - Name: PROD_PIPELINE_EXECUTION_ROLE
