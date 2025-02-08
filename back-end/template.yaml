@@ -18,6 +18,9 @@ Parameters:
   NotifyPreferenceTableName:
     Type: String
     Default: "NotificationTable"
+  App_Name:
+    Type: String
+    Default: "claimit"
 
 Globals:
   Function:
@@ -380,7 +383,7 @@ Resources:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       UserPoolId: !GetAtt CognitoUserPool.UserPoolId
-      Domain: !Sub "${Environment}-${ResourceNamePrefix}-${app_name}" #claimit
+      Domain: !Sub "${Environment}-${ResourceNamePrefix}-${App_Name}" #claimit
       ManagedLoginVersion: 2
 
   CognitoManagedLoginBranding:
