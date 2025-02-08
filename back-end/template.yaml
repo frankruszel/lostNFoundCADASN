@@ -101,9 +101,9 @@ Resources:
             Path: /user/notification/
             Method: POST
             RestApiId: !Ref ServerlessRestApi
-      Environment:
+      :
         Variables:
-          TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode it
+          TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode itEnvironment
   PublishSnsFunction:
     DependsOn: 
       - ItemSnsTopic
@@ -119,6 +119,9 @@ Resources:
         - DynamoDBStreamReadPolicy:
             TableName: !Ref ItemTableName 
             StreamName: !Ref ItemTableStreamName
+      Environment:
+        Variables:
+          TopicArn: !GetAtt ItemSnsTopic.TopicArn #So that can retrieve Arn from env , and not hardcode it
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
       Architectures:

@@ -9,6 +9,7 @@ const client = new SNSClient({});
 export const lambdaHandler = async (event, context) => {
   console.log('Received event:', JSON.stringify(event));
   console.log('Lambda context:', JSON.stringify(context));
+  console.log(process.env.TopicArn)
   let ddbInfo = event.Records[0].dynamodb
   let itemId = ddbInfo.NewImage.itemId.S // returns dict of {S: itemId}
   let title = ddbInfo.NewImage.title.S // returns dict of {S: itemId}
@@ -18,7 +19,7 @@ export const lambdaHandler = async (event, context) => {
   //start send publish
 
   const input = { // PublishInput
-    TopicArn: "arn:aws:sns:us-east-1:992382578667:ItemSnsTopic",
+    TopicArn: process.env.TopicArn,
     Message: `Item of ${category} has been uploaded \n \n the details of the item is as follows: \n Title: ${title}\nCategory:${category}\nDescription:${description}`, // required
     Subject: "[New] NYP Lost and Found - new item of your category",
     MessageAttributes: { // MessageAttributeMap
