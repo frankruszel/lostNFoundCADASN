@@ -427,7 +427,7 @@ Resources:
             Action:
               - s3:GetObject
             Resource:
-              - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}/*
+              - !Sub arn:aws:s3:::${S3StoreItemImagesName}-${Environment}/*
 #  RoleForS3:
 #     Type: AWS::IAM::Role
 #     Properties:
