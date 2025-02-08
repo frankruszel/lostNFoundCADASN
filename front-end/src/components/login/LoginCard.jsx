@@ -6,8 +6,8 @@ import HelpIcon from '@mui/icons-material/Help';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link } from "react-router-dom";
-import CardTitle from "../../components/common/CardTitle";
-import SmallCardTitle from "../../components/common/SmallCardTitle";
+import CardTitle from "../common/CardTitle";
+import SmallCardTitle from "../common/SmallCardTitle";
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
@@ -16,7 +16,7 @@ import GoogleSSOButton from "./GoogleSSOButton";
 import { useState } from "react";
 import FacebookSSOButton from "./FacebookSSOButton";
 
-function LogInLeftCard(props) {
+function LoginCard(props) {
     const {
         formik,
         togglePasswordVisibility,
@@ -74,7 +74,7 @@ function LogInLeftCard(props) {
             <Grid mt={-7}>
                 <a href="/">
                     <Box sx={{ backgroundColor: "secondaryColor", height: 100, boxShadow: 5 }} container direction={'row'} display={'flex'} justifyContent={'center'} >
-                        <img src="https://i.ibb.co/HTD2T9gF/image-removebg-preview-5.png" alt="EcoWise" height={'32'} style={{ margin: 'auto' }} />
+                        <img src="https://i.ibb.co/HTD2T9gF/image-removebg-preview-5.png" alt="Claimit" height={'32'} style={{ margin: 'auto' }} />
 
                     </Box>
                 </a>
@@ -216,4 +216,4 @@ function LogInLeftCard(props) {
     )
 }
 
-export default LogInLeftCard
+export default LoginCard

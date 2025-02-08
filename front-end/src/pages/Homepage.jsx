@@ -184,6 +184,13 @@ function Homepage() {
         console.log(`searchValue: ${search}`)
 
         setitemList(filteredItemList)
+      }).catch((error) => {
+        if (error.response.status != 404) {
+          console.error("Error fetching Items:", error);
+          enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+        }
+        setInit(true)
+
       })
   };
   const onSearchKeyDown = (e) => {
@@ -209,8 +216,12 @@ function Homepage() {
         setitemList(res.data)
         setItemListForAutoComplete(res.data)
       }).catch((error) => {
-        console.error("Error fetching Items:", error);
-        enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+        if (error.response.status != 404) {
+          console.error("Error fetching Items:", error);
+          enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+        }
+        setInit(true)
+
       })
   }, [])
   useEffect(() => {
@@ -363,27 +374,11 @@ function Homepage() {
 
         <Typography sx={{ textAlign: 'center', fontSize: '42px', pb: 1.5, mt: -0.5 }} color="black">{categorySelected}</Typography>
 
-        <Grid container direction="row" alignItems={"center"} justifyContent={"space-between"}
+        <Grid container direction="row" alignItems={"center"} justifyContent={"center"}
           px={23}
 
         >
-          <Grid sx={{ pb: 2 }} >
-            <FormControl fullWidth>
-              <InputLabel id="eventType" sx={{ fontSize: 12, position: 'relative', top: 12 }}>Sort</InputLabel>
-              <Select
-                labelId="sort"
-                id="sort-select"
-                // value={sort}
-                label="sort"
-                // onChange={handleSortChange}
-                sx={{ height: 38, borderRadius: 3, minWidth: 100 }}
 
-              >
-                <MenuItem value={'Newest'}>Newest</MenuItem>
-                <MenuItem value={'Oldest'}>Oldest</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
           <Grid>
             <Stack direction="row" spacing={2}>
               {
@@ -397,25 +392,7 @@ function Homepage() {
               ``            </Stack>
           </Grid>
 
-          <Grid sx={{ pb: 2 }} >
-            <FormControl fullWidth>
-              <InputLabel id="eventType" sx={{ fontSize: 12, position: 'relative', top: 12 }}>Filter</InputLabel>
-              <Select
-                labelId="category"
-                id="category-select"
-                // value={category}
-                label="category"
-                // onChange={handleCategoryChange}
-                sx={{ height: 38, borderRadius: 3, minWidth: 100 }}
 
-              >
-                <MenuItem value={'Personal Items'}>Personal Items</MenuItem>
-                <MenuItem value={'Electronics'}>Electronics</MenuItem>
-                <MenuItem value={'Bags & Luggage'}>Bags & Luggage</MenuItem>
-                <MenuItem value={'Miscellaneous'}>Miscellaneous</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
         </Grid>
 
 
@@ -565,26 +542,26 @@ function Homepage() {
                 )
               })
               : <>
-              {
-                init === false 
-                ?  (
-                  <>
+                {
+                  init === false
+                    ? (
+                      <>
 
 
-                  </>
-                )
-                : <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%", ml: -20 }}>
-                <Box>
-                  <Grid>
-                    <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />
-                  </Grid>
-                  <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1, color: 'text.secondary' }}>There is no items</Typography></Grid>
-                  <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/events' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center', backgroundColor: 'primaryColor' }} fullWidth variant="contained">Explore</Button></Grid>
-                </Box>
+                      </>
+                    )
+                    : <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%", ml: -20 }}>
+                      <Box>
+                        <Grid>
+                          <img style={{ opacity: 0.3, pt: 0 }} width="200px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />
+                        </Grid>
+                        <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1, color: 'text.secondary' }}>There is no items</Typography></Grid>
+                        <Grid sx={{ flexGrow: 1, display: "flex", justifyContent: "center", mt: 4 }}><Button href='/home' sx={{ fontSize: 18, maxWidth: '70%', textAlign: 'center', backgroundColor: 'primaryColor' }} fullWidth variant="contained">Explore</Button></Grid>
+                      </Box>
 
-              </Box>
-              }
-              
+                    </Box>
+                }
+
 
               </>
           }

@@ -11,8 +11,7 @@ import SendPasswordResetApi from "../api/auth/SendPasswordResetApi";
 import { useUserContext } from "../contexts/UserContext";
 import ResendVerificationEmailDialog from "../components/login/ResendVerificationEmailDialog";
 import ResetPasswordDialog from "../components/login/ResetPasswordDialog";
-import LogInRightCard from "../components/login/LogInRightCard";
-import LogInLeftCard from "../components/login/LogInLeftCard";
+import LoginCard from "../components/login/LoginCard";
 import { useLocation } from "react-router-dom"; // Import useLocation
 
 function LoginPage() {
@@ -208,7 +207,7 @@ function LoginPage() {
             <Container maxWidth="xl" sx={{ marginY: "1rem", marginTop: '2rem', }}>
                 <Grid container spacing={2} justifyContent="center">
                     <Grid item xs={12} sm={6} md={5} lg={4}>
-                        <LogInLeftCard
+                        <LoginCard
                             formik={formik}
                             togglePasswordVisibility={togglePasswordVisibility}
                             showPassword={showPassword}
@@ -222,11 +221,6 @@ function LoginPage() {
                             setOpen={setOpen}
                         />
                     </Grid>
-                    {/* <Grid item xs={12} sm={6} md={5} lg={4}>
-                        <LogInRightCard
-                            handleResendDialog={handleResendDialog}
-                        />
-                    </Grid> */}
                 </Grid>
             </Container>
             <ResetPasswordDialog
