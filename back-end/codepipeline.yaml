@@ -776,3 +776,7 @@ Outputs:
     Value: !Ref AppRepositoryName
     Export:
       Name: AppRepositoryNameOutput
+  ResourceNamePrefix:
+    Value: !Ref ResourceNamePrefix
+    Export:
+      Name: ResourceNamePrefix

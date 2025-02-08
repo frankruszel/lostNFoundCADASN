@@ -21,9 +21,6 @@ Parameters:
   AppName:
     Type: String
     Default: "claimit"
-  ResourceNamePrefix:
-    Type: String
-    Default: "frankcad"
   PipelineUserSecretKey:
     Type: String
     Default: "PipelineUserSecretKey-nTS7XzBG1BtT"
@@ -389,7 +386,9 @@ Resources:
     Type: AWS::Cognito::UserPoolDomain
     Properties:
       UserPoolId: !GetAtt CognitoUserPool.UserPoolId
-      Domain: !Sub "${Environment}-${ResourceNamePrefix}-${AppName}" #claimit
+      Domain: !Sub 
+      - "${Environment}-${ResourceNamePrefix}-${AppName}" #claimit
+      - ResourceNamePrefix: !ImportValue ResourceNamePrefix
       ManagedLoginVersion: 2
 
   CognitoManagedLoginBranding:
@@ -637,76 +636,41 @@ Resources:
         - "https://github.com/${GithubOwner}/${AppRepositoryName}"
         - GithubOwner: !ImportValue GithubOwnerOutput
           AppRepositoryName: !ImportValue AppRepositoryNameOutput
-      # EnvironmentVariables:
-      #   - Name: REACT_APP_ADMIN_SECRET_KEY_ID
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_ADMIN_SECRET_KEY_ID}}'
-      #   - Name: REACT_APP_COGNITO_CLIENT_ID
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_COGNITO_CLIENT_ID}}'
-      #   - Name: AMPLIFY_MONOREPO_APP_ROOT
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:AMPLIFY_MONOREPO_APP_ROOT}}'
-      #   - Name: REACT_APP_COGNITO_AUTH_FLOW
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_COGNITO_AUTH_FLOW}}'
+      EnvironmentVariables:
+        - Name: REACT_APP_ADMIN_SECRET_KEY_ID
+          Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:aws_secret_access_key}}"
+        - Name: REACT_APP_ADMIN_ACCESS_KEY_ID
+          Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:aws_access_key_id}}"
+        - Name: AMPLIFY_MONOREPO_APP_ROOT
+          Value: front-end
+        - Name: REACT_APP_COGNITO_AUTH_FLOW
+          Value: "USER_PASSWORD_AUTH"
+        - Name: AMPLIFY_DIFF_DEPLOY
+          Value: false
+        - Name: REACT_APP_COGNITO_REFRESH_TOKEN_FLOW
+          Value: "REFRESH_TOKEN_AUTH"
+        - Name: REACT_APP_AWS_REGION
+          Value: !Ref AWS::Region
+        - Name: REACT_APP_COGNITO_SMS_MFA_CHALLENGE
+          Value: SMS_MFA
+        - Name: IMAGE_BUCKET_NAME
+          Value: !Ref S3StoreItemImagesName
       #   - Name: REACT_APP_REDIRECT_URI
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_REDIRECT_URI}}'
-      #   - Name: AMPLIFY_DIFF_DEPLOY
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:AMPLIFY_DIFF_DEPLOY}}'
-      #   - Name: REACT_APP_ADMIN_ACCESS_KEY_ID
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_ADMIN_ACCESS_KEY_ID}}'
-      #   - Name: REACT_APP_COGNITO_REFRESH_TOKEN_FLOW
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_COGNITO_REFRESH_TOKEN_FLOW}}'
-      #   - Name: REACT_APP_AWS_REGION
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_AWS_REGION}}'
-      #   - Name: REACT_APP_CLAIMIT_API_URL
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_CLAIMIT_API_URL}}'
-      #   - Name: REACT_APP_COGNITO_OAUTH_DOMAIN
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_COGNITO_OAUTH_DOMAIN}}'
-      #   - Name: REACT_APP_COGNITO_SMS_MFA_CHALLENGE
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_COGNITO_SMS_MFA_CHALLENGE}}'
-      #   - Name: REACT_APP_USER_POOL_ID
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_USER_POOL_ID}}'
-      #   - Name: IMAGE_BUCKET_NAME
-      #     Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:IMAGE_BUCKET_NAME}}'
+          Value: !ImportValue REACT_APP_REDIRECT_URI
+        - Name: REACT_APP_CLAIMIT_API_URL
+          Value: !ImportValue REACT_APP_CLAIMIT_API_URL
+        - Name: REACT_APP_COGNITO_OAUTH_DOMAIN
+          Value: !ImportValue REACT_APP_COGNITO_OAUTH_DOMAIN
+        - Name: REACT_APP_USER_POOL_ID
+          Value: !ImportValue REACT_APP_USER_POOL_ID
+        - Name: REACT_APP_COGNITO_CLIENT_ID
+          Value: !ImportValue REACT_APP_COGNITO_CLIENT_ID
+               
+      
+      
+      
+     
         
-
-        
-        # - Name: REACT_APP_ADMIN_SECRET_KEY_ID
-        #   Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_ADMIN_SECRET_KEY_ID}}'
-        # # - Name: REACT_APP_GOOGLE_AUTH_PROVIDER_CLIENT_ID
-        # #   Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_GOOGLE_AUTH_PROVIDER_CLIENT_ID}}'
-        # - Name: REACT_APP_COGNITO_CLIENT_ID
-        #   Value: !GetAtt CognitoUserPoolClient.ClientId
-        # - Name: AMPLIFY_MONOREPO_APP_ROOT
-        #   Value: front-end
-        # - Name: REACT_APP_COGNITO_AUTH_FLOW
-        #   Value: "USER_PASSWORD_AUTH"
-        # - Name: REACT_APP_REDIRECT_URI
-        #   Value: !Sub #https://main.d3n6kwiat2qkiw.amplifyapp.com/login
-        #     - "https://main.${DomainName}/login"
-        #     - DomainName: !GetAtt AmplifyApp.DefaultDomain          
-        # - Name: AMPLIFY_DIFF_DEPLOY
-        #   Value: false
-        # - Name: REACT_APP_ADMIN_ACCESS_KEY_ID
-        #   Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_ADMIN_ACCESS_KEY_ID}}'
-        # - Name: REACT_APP_COGNITO_REFRESH_TOKEN_FLOW
-        #   Value: "REFRESH_TOKEN_AUTH"
-        # - Name: REACT_APP_AWS_REGION
-        #   Value: !Ref AWS::Region
-        # # - Name: REACT_APP_FACEBOOK_SSO_APP_ID
-        # #   Value: !Sub "{{resolve:secretsmanager:${PipelineUserSecretKey}:SecretString:REACT_APP_FACEBOOK_SSO_APP_ID}}'
-        # - Name: REACT_APP_CLAIMIT_API_URL
-        #   Value: !Sub
-        #     - 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'  
-        #     - ServerlessRestApi: !Ref ServerlessRestApi            
-        # - Name: REACT_APP_COGNITO_OAUTH_DOMAIN
-        #   Value: !Sub
-        #     - "https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com"
-        #     - CognitoUserPoolDomain: !Ref CognitoUserPoolDomain
-        # - Name: REACT_APP_COGNITO_SMS_MFA_CHALLENGE
-        #   Value: SMS_MFA
-        # - Name: REACT_APP_USER_POOL_ID
-        #   Value: !GetAtt CognitoUserPool.UserPoolId
-        # - Name: IMAGE_BUCKET_NAME
-        #   Value: !Ref S3StoreItemImagesName
       Platform: "WEB"
       EnableBranchAutoDeletion: false
       BuildSpec: |
@@ -756,3 +720,37 @@ Resources:
       BranchName: "main"
       Framework: "React"
   # ------------------------------  END Amplify Stack  ------------------------------  #
+
+Outputs:
+  ResourceNamePrefix:
+    Value: !Ref ResourceNamePrefix
+    Export:
+      Name: ResourceNamePrefix
+  REACT_APP_COGNITO_CLIENT_ID:
+    Value: !GetAtt CognitoUserPoolClient.ClientId
+    Export:
+      Name: REACT_APP_COGNITO_CLIENT_ID
+  REACT_APP_REDIRECT_URI:
+    Value: !Sub #https://main.d3n6kwiat2qkiw.amplifyapp.com/login
+      - "https://main.${DomainName}/login"
+      - DomainName: !GetAtt AmplifyApp.DefaultDomain
+    Export:
+      Name: REACT_APP_REDIRECT_URI
+  REACT_APP_CLAIMIT_API_URL:
+    Value: !Sub
+      - 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/'  
+      - ServerlessRestApi: !Ref ServerlessRestApi
+    Export: 
+      Name: REACT_APP_CLAIMIT_API_URL
+  REACT_APP_COGNITO_OAUTH_DOMAIN:
+    Value: !Sub
+      - "https://${CognitoUserPoolDomain}.auth.${AWS::Region}.amazoncognito.com"
+      - CognitoUserPoolDomain: !Ref CognitoUserPoolDomain
+    Export:
+      Name: REACT_APP_COGNITO_OAUTH_DOMAIN
+  REACT_APP_USER_POOL_ID:
+    Value: !GetAtt CognitoUserPool.UserPoolId
+    Export:
+      Name: REACT_APP_USER_POOL_ID
+
+    
