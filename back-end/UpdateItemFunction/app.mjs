@@ -6,7 +6,7 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const tableName = 'ItemTable';
 
 // Function to update data in DynamoDB
-const updateItemDataInDynamoDB = async (itemId, userId, updatedData) => {
+const updateItemDataInDynamoDB = async (itemId, userId_UpdatedBy, updatedData) => {
   try {
     const params = {
       TableName: tableName,
@@ -22,6 +22,14 @@ const updateItemDataInDynamoDB = async (itemId, userId, updatedData) => {
       },
       ReturnValues: 'ALL_NEW', // Returns the updated item
     };
+    if (updatedData.userId_HandledClaim) {
+      params.UpdateExpression += ', userId_HandledClaim = :userId_HandledClaim';
+      params.ExpressionAttributeValues[':userId_HandledClaim'] = updatedData.userId_HandledClaim;
+    }
+    if (updatedData.userId_UpdatedBy) {
+      params.UpdateExpression += ', userId_UpdatedBy = :userId_UpdatedBy';
+      params.ExpressionAttributeValues[':userId_UpdatedBy'] = updatedData.userId_UpdatedBy;
+    }
     if (updatedData.title) {
       params.UpdateExpression += ', title = :title';
       params.ExpressionAttributeValues[':title'] = updatedData.title;
@@ -78,7 +86,7 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { itemId, userId, category, description, image_url, title, itemStatus, dateFound } = requestBody;
+    const { itemId, userId_UpdatedBy,userId_HandledClaim, category, description, image_url, title, itemStatus, dateFound } = requestBody;
 
     // Validate input
     // if (!itemId || !itemStatus ) {
@@ -102,7 +110,8 @@ export const lambdaHandler = async (event, context) => {
     // Process budgets data
     const updatedData = {
       "itemId": itemId,
-      "userId": userId,
+      "userId_UpdatedBy": userId_UpdatedBy != null ? userId_UpdatedBy : null,
+      "userId_HandledClaim": userId_HandledClaim != null ? userId_HandledClaim : null,
       "title": title,
       "description": description,
       "image_url": image_url,
@@ -116,7 +125,7 @@ export const lambdaHandler = async (event, context) => {
     console.log(itemStatus)
 
     // Update DynamoDB
-    const updatedItem = await updateItemDataInDynamoDB(itemId, userId, updatedData);
+    const updatedItem = await updateItemDataInDynamoDB(itemId, userId_UpdatedBy, updatedData);
 
     return {
       statusCode: 200,

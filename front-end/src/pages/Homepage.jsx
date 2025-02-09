@@ -92,7 +92,7 @@ function Homepage() {
     "itemStatus": "lost",
     "dateFound": "2025-02-09T01:56:21.286Z",
     "dateClaimed": null,
-    "userId": "testUser",
+    "userId_CreatedBy": "testUser",
     "updatedAt": "2025-02-09T01:56:38.354Z",
     "image_labels": [
         {

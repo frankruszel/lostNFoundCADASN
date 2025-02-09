@@ -45,10 +45,10 @@ export const lambdaHandler = async (event, context) => {
   }
 
   try {
-    const { userId, item } = requestBody;
-    // console.log(userId,budgets, typeof(budgets) === 'object')
+    const { userId_CreatedBy, item } = requestBody;
+    // console.log(userId_CreatedBy,budgets, typeof(budgets) === 'object')
     // Validate input
-    if ( !userId || typeof(item) !== 'object' ) {
+    if ( !userId_CreatedBy || typeof(item) !== 'object' ) {
       return {
         statusCode: 400,
         headers: {
@@ -67,7 +67,7 @@ export const lambdaHandler = async (event, context) => {
 
 
     const itemData = {
-      userId,
+      userId_CreatedBy,
       itemId:itemId,
       title: item.title,
       description: item.description,
