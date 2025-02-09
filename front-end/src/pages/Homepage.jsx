@@ -391,7 +391,7 @@ function Homepage() {
 
         >
 
-          <Grid>
+          <Grid mb={3}>
             <Stack direction="row" spacing={2}>
               {
                 categoryArray.map((category, index) => {
@@ -439,7 +439,7 @@ function Homepage() {
               ? itemList.map((item, i) => {
                 return (
                   <>
-                    <Grid item xs={12} md={6} lg={3.5} sx={{ height: 330, mb: 15 }} >
+                    <Grid item xs={12} md={6} lg={3.5} sx={{ height: 330, mb: 10 }} >
 
 
                       <Link style={{ textDecoration: 'none' }}>

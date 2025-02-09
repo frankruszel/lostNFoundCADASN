@@ -301,12 +301,12 @@ function StaffListItems() {
 
                     {
                         dayjs().isBefore(dayjs(params.row.timeSlot.event_StartTime))
-                            ? <Button variant="uplay_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
+                            ? <Button variant="claimit_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
                             : dayjs().isAfter(dayjs(params.row.timeSlot.event_EndTime))
                                 ? <Button variant="claimit_primary" href={`/event/${params.row.event.id}/rate/${params.row.id}`}>Rate</Button>
                                 : params.row.attended
                                     ? <Button variant="claimit_primary" href={`/event/${params.row.event.id}/rate/${params.row.id}`}>{console.log("attended")}Rate</Button>
-                                    : <Button variant="uplay_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
+                                    : <Button variant="claimit_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
                     }
                     {/* : dayjs("2024-02-29").hour(1).minute(0).second(0).isBetween(dayjs(params.row.timeSlot.event_StartTime),dayjs(params.row.timeSlot.event_EndTime)) 
                             ? <Typography>Its NOW</Typography>
