@@ -59,6 +59,7 @@ function StaffListItems() {
         DeleteItemApi(id).then((res) => {
             console.log(`res.data: ${JSON.stringify(res.data)}`)
             // toast.success('Form submitted successfully');
+            setItemList(itemList.filter((item) => item.itemId != id))
             enqueueSnackbar("Deleted item succesfully.", { variant: "success" });
             setDeleteOpen(false)
 

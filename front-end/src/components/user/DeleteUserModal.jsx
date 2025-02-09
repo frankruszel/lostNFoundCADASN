@@ -43,11 +43,11 @@ export default function DeleteUserModal(props) {
             </IconButton>
             <DialogContent dividers>
                 <Typography gutterBottom>
-                    Deleting your account is a permanent action and cannot be undone. Are you are sure you want to delete your account, please confirm
+                    Are you sure you want to delete your account?
                 </Typography>
             </DialogContent>
             <DialogActions>
-                <Button  sx={{ marginTop: "1rem", backgroundColor: "#f1e0e3", color: "rgb(220, 53, 69)" }} variant='contained' color='error' autoFocus onClick={() => {
+                <Button  color="error" variant='contained' autoFocus onClick={() => {
                     props.setOpenModal(false)
                     props.deleteUser()
                     }}>
