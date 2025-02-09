@@ -290,12 +290,14 @@ function Homepage() {
     // console.log(JSON.parse(JSON.stringify(myNewInfo)))
     // console.log("test")
     // console.log(ticketInfo)
+    setItemDialog(false)
     console.log(itemInfo)
     var myNewInfo = {
       itemId: itemInfo.itemId,
       title: itemInfo.title,
       category: itemInfo.category,
       description: itemInfo.description,
+      image_url: itemInfo.image_url
     }
     console.log(myNewInfo)
     const image = await qrcode.toDataURL(JSON.stringify(myNewInfo))
@@ -448,14 +450,15 @@ function Homepage() {
     setItemDialog(false);
   }
   const handleItemDialogOpen = (item) => {
-    
+    if (qrOpen != true) {
     setItemDialog(true);
-    setCurrentItem(item)
+    setCurrentItem(item);
+    }
   }
   return (
     <>
       <Dialog open={itemDialog} onClose={handleItemDialogClose}   disableScrollLock sx={{position:"fixed"}} >
-
+    
         <Box >                
 
             <Card sx={{ minHeight: 450,minWidth:300, border: "0px solid", boxShadow: 0, p:10 }} >
@@ -553,7 +556,7 @@ function Homepage() {
                           <Grid item display={'flex'} >
                             <LoadingButton
                               loading={loading}
-                              type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
+                              type="submit" loadingPosition="start" onClick={() => generateQRCode(currentItem)} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
                               Claim
                             </LoadingButton>
                           </Grid>
@@ -602,12 +605,7 @@ function Homepage() {
           </Typography>
 
         </DialogTitle>
-        <Box >
-          {currentItem?.image_url && (
-            <img style={{ maxWidth: "100%", height: 170 }} height="100%" width="100%" alt="test" src={`https://${IMAGE_BUCKET_NAME}.s3.amazonaws.com/${currentItem.image_url}`} sx={{ display: 'flex' }} />
-
-          )}
-        </Box>
+        
         <DialogContent sx={{ pt: 0, mt: 0 }}>
 
           <DialogContentText>
