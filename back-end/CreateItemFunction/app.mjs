@@ -73,6 +73,7 @@ export const lambdaHandler = async (event, context) => {
       description: item.description,
       image_url: item.image_url,
       itemStatus: item.itemStatus, // lost (someone is finding this), found (someone has found a lost item), claimed (someone claimed a lost item)
+      image_labels: item.image_labels,
       category: item.category,
       dateFound: new Date(item.dateFound).toISOString(),
       dateClaimed: item.dateClaimed != null ? new Date(item.dateClaimed).toISOString() : null,

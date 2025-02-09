@@ -178,6 +178,7 @@ function Homepage() {
     GetItemApi()
       .then((res) => {
         // console.log(`res.data:${JSON.stringify(res.data)}`)
+        res.data = res.data.filter((item) => item.itemStatus != "claimed")
         let itemList = res.data
         let filteredItemList = itemList.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
         // console.log(`filteredItemList:${JSON.stringify(filteredItemList)}`)
@@ -211,6 +212,7 @@ function Homepage() {
     GetItemApi()
       .then((res) => {
         // console.log(`res.data:${JSON.stringify(res.data)}`)
+        res.data = res.data.filter((item) => item.itemStatus != "claimed")
         setMainItemList(res.data)
         setInit(true)
         setitemList(res.data)
@@ -360,14 +362,6 @@ function Homepage() {
               <CalendarTodayRounded color="primary" sx={{ pt: '10px', pb: '10px', pl: 1, fontSize: 42 }} /><Typography color={'black'} sx={{ pl: 0.3, pr: 1 }}>When</Typography> <KeyboardArrowDown />
             </IconButton>}
           />
-
-          {/* 
-          <Divider sx={{ height: 34, mr: 0.2 }} orientation="vertical" />
-          <IconButton color="primary" sx={{ p: '10px' }} aria-label="directions" onClick={() => { }
-            // handleOpenLocationMap()
-          }>
-            <Room /><Typography color={'black'} pr={1} sx={{ pt: '10px', pb: '10px', pl: 1 }}>Date</Typography><KeyboardArrowDown />
-          </IconButton> */}
 
 
         </Paper>

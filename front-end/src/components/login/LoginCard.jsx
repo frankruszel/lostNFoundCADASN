@@ -12,9 +12,7 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import GoogleSSOButton from "./GoogleSSOButton";
 import { useState } from "react";
-import FacebookSSOButton from "./FacebookSSOButton";
 
 function LoginCard(props) {
     const {
@@ -126,33 +124,18 @@ function LoginCard(props) {
                                             <Link onClick={handleResetPasswordDialog}>Forgot Password
                                             </Link>
                                         </Grid>
-                                        <Grid container direction={'column'} mt={2}  >
-                                            <Grid item display={'flex'} >
-                                                <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'secondaryColor', height:45 }} >Login</LoadingButton>
-                                            </Grid>
-                                            {/* <Grid item display={'flex'} >
-                                    <Button fullWidth variant="contained" color="primary" href="/" startIcon={<AddIcon />} LinkComponent={Link} to="/register">Register</Button>
-                                </Grid> */}
 
-
-
-                                        </Grid>
                                         <Grid my={3}>
-                                            
-                                        <Divider />
+
+                                           
 
                                         </Grid>
                                         <Grid>
-                                            <Stack spacing={1}>
-                                                <GoogleSSOButton
-                                                    onClick={handleGoogleLogin}
-                                                    loading={googleLoading}
-                                                />
-                                                <FacebookSSOButton
-                                                    onClick={handleFacebookLogin}
-                                                    loading={facebookLoading}
-                                                />
-                                            </Stack>
+                                            <Grid container direction={'column'} mt={2}  >
+                                                <Grid item display={'flex'} >
+                                                    <LoadingButton type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'secondaryColor', height: 45 }} >Login</LoadingButton>
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
 
                                     </Grid>

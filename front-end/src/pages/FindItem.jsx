@@ -312,9 +312,11 @@ function FindItem() {
         setMainItemList(res.data)
 
       }).catch((error) => {
-        console.error("Error fetching Items:", error);
-        enqueueSnackbar('Failed to fetch Items', { variant: "error" })
-      })
+              if (error.response.status != 404) {
+                console.error("Error fetching Items:", error);
+                enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+              }      
+            })
   }, [])
 
 
@@ -343,6 +345,7 @@ function FindItem() {
       // for each item, find how many matched labels
       // if match then put in dict = {name: noOfMatch+=1}
       console.log("match_labels fn:")
+      console.log(mainItemList)
       console.log(compareLabels(labels, mainItemList))
 
       let comparedLabels = compareLabels(labels, mainItemList)

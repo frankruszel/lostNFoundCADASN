@@ -219,6 +219,9 @@ function StaffAddItem() {
     useEffect(() => {
         console.log("useEffect triggered")
     }, [imageFile])
+    useEffect(() => {
+        console.log("useEffect imagelabels triggered")
+    }, [imageLabels])
     //END
     // bookingId
     const formik = useFormik({
