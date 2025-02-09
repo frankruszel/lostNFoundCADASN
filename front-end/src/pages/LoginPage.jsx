@@ -10,14 +10,18 @@ import GetCurrentUserApi from "../api/auth/GetCurrentUserApi";
 import SendPasswordResetApi from "../api/auth/SendPasswordResetApi";
 import { useUserContext } from "../contexts/UserContext";
 import ResendVerificationEmailDialog from "../components/login/ResendVerificationEmailDialog";
-import ResetPasswordDialog from "../components/login/ResetPasswordDialog";
 import LoginCard from "../components/login/LoginCard";
 import { useLocation } from "react-router-dom"; // Import useLocation
+import { Box, Button, TextField, Dialog, DialogActions, DialogContent, DialogTitle, DialogContentText } from "@mui/material"
+import LoadingButton from '@mui/lab/LoadingButton';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import CloseIcon from '@mui/icons-material/Close';
 
 function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [resetLoading, setResetLoading] = useState(false);
     const [resetPasswordDialog, setResetPasswordDialog] = useState(false);
+    const [otpDialog, setOtpDialog] = useState(false);
     const [resendDialog, setResendDialog] = useState(false);
     const [resendLoading, setResendLoading] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
@@ -28,10 +32,10 @@ function LoginPage() {
     const [mfaCode, setMfaCode] = useState('');
     const [session, setSession] = useState(null);
     const [isMfaRequired, setIsMfaRequired] = useState(false);
-
+    const [otpEmail, setOtpEmail] = useState("")
     const { UserLogIn } = useUserContext();
     const location = useLocation(); // Access the current URL location
-    
+
     useEffect(() => {
         const hash = window.location.hash.substring(1); // Remove the #
         const params = new URLSearchParams(hash);
@@ -69,6 +73,13 @@ function LoginPage() {
 
     const handleResetPasswordDialogClose = () => {
         setResetPasswordDialog(false);
+    }
+    const handleOtpDialog = () => {
+        setOtpDialog(true);
+    }
+
+    const handleOtpDialogClose = () => {
+        setOtpDialog(false);
     }
 
     const handleResendDialog = () => {
@@ -144,6 +155,7 @@ function LoginPage() {
         }),
         onSubmit: (data) => {
             setLoading(true);
+            
             data.email = data.email.trim();
             data.password = data.password.trim();
 
@@ -151,11 +163,26 @@ function LoginPage() {
         }
 
     })
-
-    const resetFormik = useFormik({
+    const otpFormik = useFormik({
         initialValues: {
             email: "",
+            otp: "",
         },
+        validationSchema: Yup.object({
+            email: Yup.string().email("Invalid email address").required("Required"),
+            otp: Yup.string().required("OTP is required"),
+        }),
+        onSubmit: (data) => {
+            data.email = data.email.trim();
+            data.otp = data.otp.trim();
+        }
+    }
+    )
+    const resetFormik = useFormik({
+        initialValues: {
+            email: otpEmail,
+        },
+        enableReinitialize: true,
         validationSchema: Yup.object({
             email: Yup.string().email("Invalid email address").required("Required"),
         }),
@@ -167,6 +194,8 @@ function LoginPage() {
                     enqueueSnackbar('Reset password e-mail sent!', { variant: "success" });
                     setResetPasswordDialog(false);
                     setResetLoading(false)
+                    setOtpEmail(data.email)
+                    setOtpDialog(true)
                 })
                 .catch((error) => {
                     console.error('Error during password reset:', error);
@@ -201,6 +230,11 @@ function LoginPage() {
                 });
         }
     })
+    useEffect(() => {
+        console.log("otpEmail Changed")
+        console.log(otpEmail)
+
+    }, [otpEmail]);
 
     return (
         <>
@@ -223,18 +257,73 @@ function LoginPage() {
                     </Grid>
                 </Grid>
             </Container>
-            <ResetPasswordDialog
-                resetPasswordDialog={resetPasswordDialog}
-                handleResetPasswordDialogClose={handleResetPasswordDialogClose}
-                resetFormik={resetFormik}
-                resetLoading={resetLoading}
-            />
-            <ResendVerificationEmailDialog
-                resendDialog={resendDialog}
-                handleResendDialogClose={handleResendDialogClose}
-                resendFormik={resendFormik}
-                resendLoading={resendLoading}
-            />
+            <Dialog open={resetPasswordDialog} onClose={handleResetPasswordDialogClose}>
+                <DialogTitle>Forgot Password</DialogTitle>
+                <Box component="form" onSubmit={resetFormik.handleSubmit}>
+                    <DialogContent sx={{ paddingTop: 0 }}>
+                        <DialogContentText>
+                            To reset your password, please enter your e-mail address below. We will send you a link to reset your password.
+                        </DialogContentText>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="email"
+                            label="E-mail"
+                            type="email"
+                            name="email"
+                            fullWidth
+                            variant="outlined"
+                            value={resetFormik.values.email}
+                            onChange={resetFormik.handleChange}
+                            error={resetFormik.touched.email && Boolean(resetFormik.errors.email)}
+                            helperText={resetFormik.touched.email && resetFormik.errors.email}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleResetPasswordDialogClose} startIcon={<CloseIcon />} color="error" variant="contained">Cancel</Button>
+                        <LoadingButton type="submit" loadingPosition="start" loading={resetLoading} variant="claimit_primary" >Reset</LoadingButton>
+                    </DialogActions>
+                </Box>
+
+            </Dialog>
+            <Dialog open={otpDialog} onClose={handleOtpDialogClose}>
+                <DialogTitle>OTP</DialogTitle>
+                <Box component="form" onSubmit={otpFormik.handleSubmit}>
+                    <DialogContent sx={{ paddingTop: 0 }}>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="email"
+                            label="E-mail"
+                            type="email"
+                            name="email"
+                            fullWidth
+                            variant="outlined"
+                            value={otpEmail}
+
+                            disabled
+                        />
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="otp"
+                            label="OTP Code"
+                            type="string"
+                            name="otp"
+                            fullWidth
+                            variant="outlined"
+                            value={otpFormik.values.otp}
+                            onChange={otpFormik.handleChange}
+                            error={otpFormik.touched.otp && Boolean(otpFormik.errors.otp)}
+                            helperText={otpFormik.touched.otp && otpFormik.errors.otp}
+                        />
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleOtpDialogClose} startIcon={<CloseIcon />} color="error" variant="contained">Cancel</Button>
+                        <LoadingButton type="submit" loadingPosition="start" loading={resetLoading} variant="claimit_primary" >Reset</LoadingButton>
+                    </DialogActions>
+                </Box>
+            </Dialog>
         </>
     )
 }
