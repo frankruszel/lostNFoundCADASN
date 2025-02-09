@@ -55,6 +55,13 @@ const ProfileInformationCard = () => {
         setNotifications(notifications)
         setInit(true)
       }).catch((error) => {
+        
+        let defaultNotifications = [{"notificationSubList":[],"userId":user.Username}]
+        console.log(`defaultNotifications: FOR GETUSER NOTIFIACTION ${JSON.stringify(defaultNotifications)}`)
+        setInit(true)
+        setNotifications(defaultNotifications[0].notificationSubList)
+
+
         console.error("Error getting user notification:", error);
       });
     }
