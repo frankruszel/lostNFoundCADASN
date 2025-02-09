@@ -18,9 +18,17 @@ import { enqueueSnackbar } from "notistack";
 import qrcode from "qrcode";
 import * as tf from '@tensorflow/tfjs';
 import * as sentenceEncoder from "@tensorflow-models/universal-sentence-encoder";
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Collapse from '@mui/material/Collapse';
+import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
+import { DatePicker as DatePickerMui} from '@mui/x-date-pickers/DatePicker';
 
 
 const model = sentenceEncoder.load()
+const categoryList = ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
 
 
 const getSimilarity = async (mainString, stringListToCompare) => {
@@ -80,7 +88,85 @@ function Homepage() {
   const [itemList, setitemList] = useState([])
   const [mainItemList, setMainItemList] = useState([])
   const [itemListForAutoComplete, setItemListForAutoComplete] = useState([])
-  const [currentItem, setCurrentItem] = useState()
+  const [currentItem, setCurrentItem] = useState({
+    "itemStatus": "lost",
+    "dateFound": "2025-02-09T01:56:21.286Z",
+    "dateClaimed": null,
+    "userId": "testUser",
+    "updatedAt": "2025-02-09T01:56:38.354Z",
+    "image_labels": [
+        {
+            "Instances": [],
+            "Aliases": [],
+            "Confidence": 100,
+            "Categories": [
+                {
+                    "Name": "Sports"
+                }
+            ],
+            "Name": "Ball",
+            "Parents": []
+        },
+        {
+            "Instances": [],
+            "Aliases": [],
+            "Confidence": 100,
+            "Categories": [
+                {
+                    "Name": "Sports"
+                }
+            ],
+            "Name": "Football",
+            "Parents": [
+                {
+                    "Name": "Sport"
+                }
+            ]
+        },
+        {
+            "Instances": [
+                {
+                    "Confidence": 98.69540405273438,
+                    "BoundingBox": {
+                        "Height": 0.8122726678848267,
+                        "Left": 0.08943954110145569,
+                        "Top": 0.09587734937667847,
+                        "Width": 0.8199071884155273
+                    }
+                }
+            ],
+            "Aliases": [],
+            "Confidence": 100,
+            "Categories": [
+                {
+                    "Name": "Sports"
+                }
+            ],
+            "Name": "Soccer Ball",
+            "Parents": [
+                {
+                    "Name": "Ball"
+                },
+                {
+                    "Name": "Football"
+                },
+                {
+                    "Name": "Soccer"
+                },
+                {
+                    "Name": "Sport"
+                }
+            ]
+        }
+    ],
+    "category": "Recreational",
+    "createdAt": "2025-02-09T01:56:38.354Z",
+    "itemId": "862e6d7e-6de4-4afd-aa9a-a9223153728d",
+    "image_url": "footgball.jpeg",
+    "description": "My description",
+    "title": "Soccer Ball"
+}
+)
   const [imageQR, setImageQR] = useState();
   const [qrOpen, setQrOpen] = useState(false)
   const [dateRangeValues, setDateRangeValues] = useState([])
@@ -89,6 +175,9 @@ function Homepage() {
   const [currentSearch, setCurrentSearch] = useState('');
   const [relevantItems, setRelevantItems] = useState([]);
   const [isRelevantItems, setIsRelevantItems] = useState(false);
+  const [itemDialog, setItemDialog] = useState(false);
+    const [loading, setLoading] = useState(false);
+
 
   const handleOnCloseDateRange = () => {
     // algorithm to put all dates
@@ -355,9 +444,152 @@ function Homepage() {
     searchEvents();
   };
 
-
+  const handleItemDialogClose = () => {
+    setItemDialog(false);
+  }
+  const handleItemDialogOpen = (item) => {
+    
+    setItemDialog(true);
+    setCurrentItem(item)
+  }
   return (
     <>
+      <Dialog open={itemDialog} onClose={handleItemDialogClose}   disableScrollLock sx={{position:"fixed"}} >
+
+        <Box >                
+
+            <Card sx={{ minHeight: 450,minWidth:300, border: "0px solid", boxShadow: 0, p:10 }} >
+
+
+              <Grid container direction={'column'} spacing={2} sx={{ px: 2 }}  >
+
+                <Grid>
+                  <Box sx={{ textAlign: 'center'}} >
+
+                    
+                    {
+                      currentItem.image_url && (
+                        <>
+                          <Button className="aspect-ratio-container" variant="outlined-striped" component="label" sx={{ height: 250, width: "100%" }}>
+                            <img alt="tutorial"
+
+                              src={`https://${IMAGE_BUCKET_NAME}.s3.amazonaws.com/${currentItem.image_url}`}>
+
+                            </img>
+                            
+                          </Button>
+                        </>
+                      )
+                    }
+                  
+                  </Box>
+                </Grid>
+                <Grid>
+                  <Stack spacing={2} sx={{ marginTop: 2, overflow: "auto" }}>
+                    <TextField
+                      type="string"
+                      fullWidth
+                      label="Title"
+                      variant="filled"  
+                      value={currentItem.title}
+                     disabled
+                    />
+                    <Grid container direction={'row'} display={'flex'} >
+                      <Grid lg={5.75}>
+                        <FormControl fullWidth margin="dense" sx={{ position: 'relative', bottom: 7 }}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DatePickerMui format="DD/MM/YYYY"
+                              label="Date Lost"
+                              name="date"
+                              value={dayjs(currentItem.dateFound)}  
+                              disabled    
+                              variant="filled"                          
+                            />
+                          </LocalizationProvider>
+                        </FormControl>
+                      </Grid>
+                      <Grid lg={0.5}>
+
+                      </Grid>
+                      <Grid lg={5.75}>
+                        <FormControl fullWidth>
+                          <InputLabel id="eventType">Category</InputLabel>
+                          <Select
+                            labelId="category"
+                            id="category-select"
+                            value={currentItem.category}
+                            label="category" 
+                            disabled
+                            variant="filled"   
+                          >
+                            {
+                              categoryList.map((category, i) => {
+                                return <MenuItem value={category}>{category}</MenuItem>
+                              })
+                            }
+
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+
+                    <TextField
+                      type="string"
+                      fullWidth
+                      label="Description"
+                      multiline
+                      rows={3}
+                      variant="filled"
+                      name="Description"
+                      value={currentItem.description}                     
+                    />
+                    <Box sx={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}>
+                      <Grid container direction={'column'} display={'flex'} >
+
+                        <Grid container direction={'column'} mt={2}  >
+                          <Grid item display={'flex'} >
+                            <LoadingButton
+                              loading={loading}
+                              type="submit" loadingPosition="start" loading={loading} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
+                              Claim
+                            </LoadingButton>
+                          </Grid>
+                          {/* <Grid item display={'flex'} >
+                                    <Button fullWidth variant="contained" color="primary" href="/" startIcon={<AddIcon />} LinkComponent={Link} to="/register">Register</Button>
+                                </Grid> */}
+
+
+
+                        </Grid>
+
+
+                      </Grid>
+
+
+                      {/* <Button sx={{ marginTop: 1, fontSize: "0.8rem" }} variant="outlined" color="primary" onClick={handleResetPasswordDialog}>Reset Password</Button> */}
+
+                    </Box>                    
+                  </Stack>
+                </Grid>
+
+
+
+              </Grid>
+            </Card>
+
+          
+
+
+
+
+
+
+
+        </Box>
+      </Dialog>
       <Dialog open={qrOpen} onClose={handleCloseQR} PaperProps={{
         style: {
 
@@ -538,11 +770,10 @@ function Homepage() {
                 return (
                   <>
 
-
                     <Grid item xs={12} md={6} lg={3.5} sx={{ height: 330, mb: 10 }} >
 
 
-                      <Link style={{ textDecoration: 'none' }}>
+                      <Link style={{ textDecoration: 'none' }} onClick={() => handleItemDialogOpen(item)}>
 
 
 
