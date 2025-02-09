@@ -98,7 +98,25 @@ function Homepage() {
           console.log(`filteredItemList:${JSON.stringify(filteredItemList)}`)
         }
       }
-    } else {
+    } else if(dateRange.length == 1){
+      // only 1 value
+      var startDate = new Date(dateRange[0]);
+      var endDate = new Date(dateRange[0]);
+      if (categorySelected == 'All Items') {
+        let allItems = mainItemList
+        allItems = allItems.filter((item) => new Date(item.dateFound).getDate() >= new Date(startDate).getDate() && new Date(item.dateFound).getDate() <= new Date(endDate).getDate())
+        setitemList(allItems)
+        console.log(`allItems:${JSON.stringify(allItems)}`)
+      }
+      else {
+        let filteredItemList = mainItemList.filter((item) => item.category == categorySelected)
+        // allDates = [startDate,endDate]
+        filteredItemList = filteredItemList.filter((item) => new Date(item.dateFound).getDate() >= new Date(startDate).getDate() && new Date(item.dateFound).getDate() <= new Date(endDate).getDate())
+        setitemList(filteredItemList)
+        console.log(`filteredItemList:${JSON.stringify(filteredItemList)}`)
+      }
+    }
+    else {
       console.log("dont have anything in daterange")
       if (categorySelected == 'All Items') {
         let allItems = mainItemList
@@ -430,7 +448,7 @@ function Homepage() {
 
 
 
-                        <Card sx={{ position: "relative", borderColor: '#D3D3D3', borderStyle: 'solid', borderWidth: 0.3, minHeight: 420, maxHeight: 420, borderRadius: 4 }}>
+                        <Card sx={{ position: "relative", borderColor: '#D3D3D3', borderStyle: 'solid', borderWidth: 0.3, minHeight: 390, maxHeight: 390, borderRadius: 4 }}>
 
                           <Box sx={{ borderColor: '#D3D3D3', borderBottomStyle: 'solid', borderWidth: 0.3, justifyContent: "center", display: "flex", alignItems: "center", height: "100%" }}>
 
@@ -484,7 +502,7 @@ function Homepage() {
                                 {item.category}
                               </Typography>
                             </Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}
+                            <Box sx={{ display: 'flex', alignItems: 'center'}}
                               color="text.secondary">
                               <CalendarToday sx={{ mr: 1 }} />
 
@@ -493,15 +511,7 @@ function Homepage() {
 
 
                             </Box>
-                            <Box sx={{ display: 'flex', alignItems: 'center' }}
-                              color="text.secondary" >
-                              <LocationOn sx={{ mr: 1 }} />
-
-                              <Typography noWrap>
-                                location
-                              </Typography>
-                            </Box>
-
+                          
 
 
                           </CardContent>
