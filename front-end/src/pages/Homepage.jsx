@@ -297,7 +297,8 @@ function Homepage() {
       title: itemInfo.title,
       category: itemInfo.category,
       description: itemInfo.description,
-      image_url: itemInfo.image_url
+      image_url: itemInfo.image_url,
+      itemStatus: itemInfo.itemStatus
     }
     console.log(myNewInfo)
     const image = await qrcode.toDataURL(JSON.stringify(myNewInfo))

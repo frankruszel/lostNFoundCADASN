@@ -90,7 +90,8 @@ function ClaimScanner() {
                     UpdateItemApi(newItem).then((res) => {
                         console.log(`res.data: ${JSON.stringify(res)}`)
                         // toast.success('Form submitted successfully');
-
+                        setCurrentItem(res.updatedData)
+                        
                         enqueueSnackbar("Claimed item succesfully.", { variant: "success" });
                         setLoading(false)
                     }).catch((error) => {
@@ -348,7 +349,9 @@ ItemId:
                                                 <Grid item display={'flex'} >
                                                     <LoadingButton
                                                         loading={loading}
-                                                         loadingPosition="start" onClick={()=> handleClaim(currentItem)} fullWidth variant="contained" sx={{ backgroundColor: 'primaryColor', height: 45 }} >
+                                                         loadingPosition="start" onClick={()=> handleClaim(currentItem)} fullWidth variant="claimit_primary" 
+                                                         disabled={currentItem.itemStatus != "claimed" ? false : true}
+                                                         >
                                                         Claim
                                                     </LoadingButton>
                                                 </Grid>
