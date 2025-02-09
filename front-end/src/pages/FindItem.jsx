@@ -126,7 +126,7 @@ const sortBasedOnTitleCosineDifference = async (mainTitle, itemList) => {
 
 function compareLabels(currentLabels, itemList) {
   const result = {};
-
+  itemList = itemList.filter((item) => "image_labels" in item )
   itemList.forEach(item => {
     const matched = [];
 
