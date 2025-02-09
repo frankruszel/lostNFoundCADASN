@@ -322,6 +322,13 @@ function StaffListItems() {
         console.log("handleAddItem")
         navigate("/staff/list/add")
     }
+    
+    const handlePending = () => {
+        console.log("handlePending")
+        console.log(itemList.filter((item) => item.itemStatus != "claimed"))
+        setItemList(itemList.filter((item) => item.itemStatus != "claimed"))
+        setTabState("Pending")
+    }
     const handleCompleted = () => {
         console.log("handleCompleted")
         console.log(itemList.filter((item) => item.itemStatus == "claimed"))
@@ -368,7 +375,9 @@ function StaffListItems() {
 
                                         >
                                             <Tab value="All" label="All" onClick={() => handleAll()} />
+                                            <Tab value="Pending" label="Pending" onClick={() => handlePending()} />
                                             <Tab value="Completed" label="Completed" onClick={() => handleCompleted()} />
+                                                
                                         </Tabs>
                                     </Grid>
                                     <Grid >
