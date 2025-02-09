@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, TextField, Button, Paper, Typography, Grid, List, ListItem, ListItemIcon, ListItemText, IconButton, InputAdornment, Divider } from '@mui/material';
+import { Box, TextField, Button,Card,CardContent,Stack, Paper, Typography, Grid, List, ListItem, ListItemIcon, ListItemText, IconButton, InputAdornment, Divider } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import ErrorIcon from '@mui/icons-material/Error';
 import Visibility from '@mui/icons-material/Visibility';
@@ -128,105 +128,91 @@ function PasswordResetPage() {
     ];
 
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                marginTop: '3rem',
-                marginBottom: '3rem',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-            <Paper elevation={6}
-                sx={{
-                    display: 'flex',
-                    width: {
-                        xs: '90%',
-                        sm: '70%',
-                        md: '60%',
-                        lg: '50%',
-                        xl: '50%'
-                    }
-                }}>
-                <Grid container>
-                    <Grid item xs={12} md={6} sx={{
-                        backgroundImage: `url(/images/registerPage.webp)`,
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center'
-                    }} />
-                    <Grid item xs={12} md={6} sx={{ padding: 3 }}>
-                        <CardTitle title="Reset Password" icon={<PersonAddIcon />} />
-                        <Divider />
+        <>
+            <Grid mt={-7} mb={2}>
+                <a href="/">
+                    <Box sx={{ margin: "auto", backgroundColor: "secondaryColor", height: 100, boxShadow: 5, maxWidth: 459 }} container direction={'row'} display={'flex'} justifyContent={'center'}  >
+                        <img src="https://i.ibb.co/HTD2T9gF/image-removebg-preview-5.png" alt="Claimit" height={'32'} style={{ margin: 'auto' }} />
+
+                    </Box>
+                </a>
+                <Card sx={{ margin: "auto", boxShadow: 5, maxWidth: 459 }}>
+                    <CardContent>
                         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                            {Object.keys(formData).map(key => (
-                                <TextField
-                                    key={key}
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id={key}
-                                    label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim()}
-                                    name={key}
-                                    type={(key === "password" && !showPassword) || (key === "confirmPassword" && !showConfirmPassword) ? "password" : "text"}
-                                    value={formData[key]}
-                                    onChange={handleChange}
-                                    error={!!errors[key]}
-                                    helperText={errors[key]}
-                                    autoComplete={key}
-                                    InputProps={{
-                                        endAdornment: (key === "password" || key === "confirmPassword") ? (
-                                            <InputAdornment position="end">
-                                                <IconButton
-                                                    onClick={key === "password" ? togglePasswordVisibility : toggleConfirmPasswordVisibility}
-                                                    edge="end"
-                                                >
-                                                    {(key === "password" && showPassword) || (key === "confirmPassword" && showConfirmPassword) ? <VisibilityOff /> : <Visibility />}
-                                                </IconButton>
-                                            </InputAdornment>
-                                        ) : null
-                                    }}
-                                    sx={{
-                                        '& .MuiInputBase-root': {
-                                            height: '40px'
-                                        },
-                                        '& .MuiFormLabel-root': {
-                                            fontSize: '0.9rem',
-                                            top: '-7px'
-                                        },
-                                    }}
-                                />
-                            ))}
-                            <List dense sx={{ marginTop: -2 }}>
-                                {passwordValidationCriteria.map((criteria, index) => (
-                                    <ListItem key={index}
-                                        sx={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            fontSize: '0.5rem',
-                                            '& .MuiTypography-root': {
-                                                fontSize: '0.7rem',
-                                                marginLeft: '-35px'
-                                            },
-                                            '& .MuiSvgIcon-root': {
-                                                fontSize: '0.7rem'
-                                            }
+                            <Stack spacing={2} sx={{ marginTop: 2 }}>
+
+                                {Object.keys(formData).map(key => (
+                                    <TextField
+                                        key={key}
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        id={key}
+                                        label={key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1').trim()}
+                                        name={key}
+                                        type={(key === "password" && !showPassword) || (key === "confirmPassword" && !showConfirmPassword) ? "password" : "text"}
+                                        value={formData[key]}
+                                        onChange={handleChange}
+                                        error={!!errors[key]}
+                                        helperText={errors[key]}
+                                        autoComplete={key}
+                                        InputProps={{
+                                            endAdornment: (key === "password" || key === "confirmPassword") ? (
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        onClick={key === "password" ? togglePasswordVisibility : toggleConfirmPasswordVisibility}
+                                                        edge="end"
+                                                    >
+                                                        {(key === "password" && showPassword) || (key === "confirmPassword" && showConfirmPassword) ? <VisibilityOff /> : <Visibility />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            ) : null
                                         }}
-                                    >
-                                        <ListItemIcon>
-                                            {criteria.test(formData.password) ? <CheckIcon color="success" /> : <ErrorIcon color="error" />}
-                                        </ListItemIcon>
-                                        <ListItemText primary={criteria.text} sx={{ color: criteria.test(formData.password) ? 'green' : 'red' }} />
-                                    </ListItem>
+                                        sx={{
+                                            '& .MuiInputBase-root': {
+                                                height: '40px'
+                                            },
+                                            '& .MuiFormLabel-root': {
+                                                fontSize: '0.9rem',
+                                                top: '-7px'
+                                            },
+                                        }}
+                                    />
                                 ))}
-                            </List>
-                            <LoadingButton type="submit" loadingPosition="start" fullWidth loading={loading} variant="contained" color="primary" sx={{ mt: 3, mb: 2,}} >Reset Password</LoadingButton>
+                                <List dense sx={{ marginTop: -2 }}>
+                                    {passwordValidationCriteria.map((criteria, index) => (
+                                        <ListItem key={index}
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                fontSize: '0.5rem',
+                                                '& .MuiTypography-root': {
+                                                    fontSize: '0.7rem',
+                                                    marginLeft: '-35px'
+                                                },
+                                                '& .MuiSvgIcon-root': {
+                                                    fontSize: '0.7rem'
+                                                }
+                                            }}
+                                        >
+                                            <ListItemIcon>
+                                                {criteria.test(formData.password) ? <CheckIcon color="success" /> : <ErrorIcon color="error" />}
+                                            </ListItemIcon>
+                                            <ListItemText primary={criteria.text} sx={{ color: criteria.test(formData.password) ? 'green' : 'red' }} />
+                                        </ListItem>
+                                    ))}
+                                </List>
+                                <LoadingButton type="submit" loadingPosition="start" fullWidth loading={loading} variant="claimit_primary"  sx={{ mt: 3, mb: 2, }} >Reset Password</LoadingButton>
+                            </Stack>
                         </Box>
-                    </Grid>
-                </Grid>
-            </Paper>
-        </Box>
+                    </CardContent>
+                    
+                </Card>
+            </Grid>
+
+
+        </>
+
     );
 }
 

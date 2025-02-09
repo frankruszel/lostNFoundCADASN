@@ -175,6 +175,8 @@ function LoginPage() {
         onSubmit: (data) => {
             data.email = data.email.trim();
             data.otp = data.otp.trim();
+            console.log('submit')
+            navigate(`/password-reset/${data.email}/${data.otp}`);
         }
     }
     )
@@ -320,7 +322,7 @@ function LoginPage() {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={handleOtpDialogClose} startIcon={<CloseIcon />} color="error" variant="contained">Cancel</Button>
-                        <LoadingButton type="submit" loadingPosition="start" loading={resetLoading} variant="claimit_primary" >Reset</LoadingButton>
+                        <LoadingButton type="submit" loadingPosition="start" variant="claimit_primary" onClick={()=> navigate(`/password-reset/${otpEmail}/${otpFormik.values.otp}`)}>Submit</LoadingButton>
                     </DialogActions>
                 </Box>
             </Dialog>
