@@ -28,6 +28,7 @@ import { Uploader } from '../components/Uploader';
 import { findBestMatch } from 'string-similarity'
 import * as tf from '@tensorflow/tfjs';
 import * as sentenceEncoder from "@tensorflow-models/universal-sentence-encoder";
+import { useUserContext } from '../contexts/UserContext';
 
 
 const model = sentenceEncoder.load()
@@ -66,11 +67,12 @@ const getSimilarity = async (mainString, stringListToCompare) => {
 const categoryList = ["Personal Belongings", "Electronics", "Health", "Recreational", "Miscellaneous"]
 
 function StaffAddItem() {
+          const { user, accessToken, refreshToken, RefreshUser, SessionRefreshError, DeleteUser } = useUserContext();
+    
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [rowID, setRowID] = useState();
     const [search, setSearch] = useState('');
-    const [user, setUser] = useState(null);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [activateOpen, setActivateOpen] = useState(false);
     const [imageQR, setImageQR] = useState();
@@ -256,7 +258,7 @@ function StaffAddItem() {
             // create a new object for submission
 
             let dataToSubmit = {};
-            dataToSubmit["userId"] = "testUser" // user
+            dataToSubmit["userId_CreatedBy"] = user.Username // user
             dataToSubmit["item"] = { ...data };
 
             dataToSubmit["item"]["title"] = data.title.trim();
@@ -330,9 +332,9 @@ function StaffAddItem() {
 
             let formData = new FormData();
             formData.append('file', file);
-            formData.append('userId', "testUser1");
+            formData.append('userId_CreatedBy', user.Username);
             console.log("OUTOUTE HERE")
-            console.log(formData.get('userId'))
+            console.log(formData.get('userId_CreatedBy'))
 
             // UploadImageApi(formData)
             //     .then((res) => {
@@ -347,8 +349,8 @@ function StaffAddItem() {
 
             //         enqueueSnackbar('Failed to upload image', { variant: "error" })
             //     });
-            // uplaod function to s3 with userId 
-            //userId + formData
+            // uplaod function to s3 with userId_CreatedBy 
+            //userId_CreatedBy + formData
 
 
 

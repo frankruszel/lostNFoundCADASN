@@ -15,6 +15,7 @@ import { enqueueSnackbar } from "notistack";
 import { GetItemApi } from '../api/item/GetItemApi';
 import { UpdateItemApi } from '../api/item/UpdateItemApi';
 import { useZxing } from "react-zxing";
+import { useUserContext } from '../contexts/UserContext';
 
 import {
     BrowserQRCodeReader,
@@ -24,6 +25,7 @@ import {
 } from "@zxing/library";
 function ClaimScanner() {
     // bookingId
+  const { user, accessToken, refreshToken, RefreshUser, SessionRefreshError, DeleteUser } = useUserContext();
 
     const [webcamResult, setWebcamResult] = useState()
     const [result, setResult] = useState("");
@@ -34,6 +36,7 @@ function ClaimScanner() {
             ...item
         }
         newItem.itemStatus = "claimed"
+        newItem.userId_HandledClaim = user.Username
         console.log(`newItem: ${newItem.itemStatus}`)
 
         GetItemApi()
