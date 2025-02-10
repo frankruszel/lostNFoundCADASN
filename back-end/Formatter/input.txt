@@ -1,10 +1,10 @@
 ReactAppClaimitAPIURL
-https://zfvvh6gzua.execute-api.us-east-1.amazonaws.com/Prod/
+https://lt0nq5bs95.execute-api.us-east-1.amazonaws.com/Prod/
 ReactAppCognitoClientId
-2ubbpv6ch5io2ps2svpch66pg
+7712dcqh22lpbq0ukm46pd1j8u
 ReactAppCognitoOAuthDomain
 https://prod-frankcad-claimit.auth.us-east-1.amazoncognito.com
 ReactAppCognitoRedirectURI
-https://main.d1dp6reji9vvj9.amplifyapp.com/login
+https://main.d2niigwk2m2a29.amplifyapp.com/login
 ReactAppUserPoolID
-us-east-1_U9DtU88YP
+us-east-1_EYYXC6tBG

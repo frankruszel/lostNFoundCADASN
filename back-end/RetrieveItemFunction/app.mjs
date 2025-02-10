@@ -4,7 +4,7 @@ const dynamoDB = new AWS.DynamoDB.DocumentClient();
 const tableName = 'ItemTable';
 
 // Function to query data from DynamoDB, now with conditional query based on uuid
-const scanItemDataFromDynamoDB = async ( itemId, userId ) => {
+const scanItemDataFromDynamoDB = async ( itemId, userId_CreatedBy ) => {
   try {
     let params = {
       TableName: tableName,
@@ -20,13 +20,13 @@ const scanItemDataFromDynamoDB = async ( itemId, userId ) => {
     params.FilterExpression = 'itemId = :itemId';
     params.ExpressionAttributeValues[':itemId'] = itemId;
   }
-  if (userId) {
+  if (userId_CreatedBy) {
     if ("FilterExpression" in params){
-      params.FilterExpression += ' AND userId = :userId';
+      params.FilterExpression += ' AND userId_CreatedBy = :userId_CreatedBy';
     }else{
-      params.FilterExpression = 'userId = :userId';
+      params.FilterExpression = 'userId_CreatedBy = :userId_CreatedBy';
     }
-    params.ExpressionAttributeValues[':userId'] = userId;
+    params.ExpressionAttributeValues[':userId_CreatedBy'] = userId_CreatedBy;
 
   }
 
@@ -44,7 +44,7 @@ const queryItemDataFromDynamoDB = async (itemId) => {
   try {
     let params = {
       TableName: tableName,
-      KeyConditionExpression: 'itemId = :itemId', // Query only by userId initially
+      KeyConditionExpression: 'itemId = :itemId', // Query only by userId_CreatedBy initially
       ExpressionAttributeValues: {
         ':itemId': itemId,
       },
@@ -64,17 +64,17 @@ export const lambdaHandler = async (event, context) => {
   console.log('Lambda context:', JSON.stringify(context));
 
   try {
-    // Extract userId and uuid from query parameters
-    const userId = event.queryStringParameters && event.queryStringParameters.userId ? event.queryStringParameters.userId : null;
+    // Extract userId_CreatedBy and uuid from query parameters
+    const userId_CreatedBy = event.queryStringParameters && event.queryStringParameters.userId_CreatedBy ? event.queryStringParameters.userId_CreatedBy : null;
     const itemId = event.queryStringParameters && event.queryStringParameters.itemId ? event.queryStringParameters.itemId : null;
 
     // Query DynamoDB for Item data with or without uuid based on its presence
     let ItemData
-    if (!userId && itemId){
+    if (!userId_CreatedBy && itemId){
       ItemData = await queryItemDataFromDynamoDB(itemId);
     }
     else {
-      ItemData = await scanItemDataFromDynamoDB(itemId, userId);
+      ItemData = await scanItemDataFromDynamoDB(itemId, userId_CreatedBy);
     }
     
 
@@ -88,7 +88,7 @@ export const lambdaHandler = async (event, context) => {
           "Access-Control-Allow-Headers": "Content-Type, Authorization", 
         },
         body: JSON.stringify({
-          message: 'Item data not found for the specified userId and/or uuid.',
+          message: 'Item data not found for the specified userId_CreatedBy and/or uuid.',
         }),
       };
     }

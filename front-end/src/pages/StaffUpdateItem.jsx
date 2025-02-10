@@ -29,6 +29,7 @@ import { findBestMatch } from 'string-similarity'
 import * as tf from '@tensorflow/tfjs';
 import * as sentenceEncoder from "@tensorflow-models/universal-sentence-encoder";
 import { GetItemApi } from '../api/item/GetItemApi';
+import { useUserContext } from '../contexts/UserContext';
 
 const IMAGE_BUCKET_NAME = process.env.IMAGE_BUCKET_NAME ? process.env.IMAGE_BUCKET_NAME : "prod-lostnfound-store-item-images"
 
@@ -70,11 +71,12 @@ const categoryList = ["Personal Belongings", "Electronics", "Health", "Recreatio
 
 function StaffUpdateItem() {
     const { id } = useParams();
+      const { user, accessToken, refreshToken, RefreshUser, SessionRefreshError, DeleteUser } = useUserContext();
+    
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
     const [rowID, setRowID] = useState();
     const [search, setSearch] = useState('');
-    const [user, setUser] = useState(null);
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [activateOpen, setActivateOpen] = useState(false);
     const [imageQR, setImageQR] = useState();
@@ -199,7 +201,7 @@ function StaffUpdateItem() {
             // create a new object for submission
 
             let dataToSubmit = {};
-            dataToSubmit["userId"] = "testUser" // user
+            dataToSubmit["userId_UpdatedBy"] = user.Username // user
             dataToSubmit = { ...data };
             dataToSubmit["itemId"] = id;
             dataToSubmit["title"] = data.title.trim();
@@ -257,9 +259,9 @@ function StaffUpdateItem() {
 
             let formData = new FormData();
             formData.append('file', file);
-            formData.append('userId', "testUser1");
+            formData.append('userId_UpdatedBy', user.Username);
             console.log("OUTOUTE HERE")
-            console.log(formData.get('userId'))
+            console.log(formData.get('userId_UpdatedBy'))
 
             // UploadImageApi(formData)
             //     .then((res) => {
@@ -274,8 +276,8 @@ function StaffUpdateItem() {
 
             //         enqueueSnackbar('Failed to upload image', { variant: "error" })
             //     });
-            // uplaod function to s3 with userId 
-            //userId + formData
+            // uplaod function to s3 with userId_UpdatedBy 
+            //userId_UpdatedBy + formData
 
 
 

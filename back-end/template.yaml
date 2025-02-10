@@ -23,7 +23,7 @@ Parameters:
     Default: "claimit"
   PipelineUserSecretKey:
     Type: String
-    Default: "PipelineUserSecretKey-YkMEtZUF6cQS"
+    Default: "PipelineUserSecretKey-a9YDIsNBBFce"
 
 Globals:
   Function:
@@ -409,7 +409,7 @@ Resources:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Delete
     Properties:
-      BucketName: !Sub "${Environment}-${S3StoreItemImagesName}"
+      BucketName: !Sub "${S3StoreItemImagesName}-${Environment}"
       PublicAccessBlockConfiguration:
         BlockPublicAcls: false
         BlockPublicPolicy: false
@@ -427,7 +427,7 @@ Resources:
             Action:
               - s3:GetObject
             Resource:
-              - !Sub arn:aws:s3:::${Environment}-${S3StoreItemImagesName}/*
+              - !Sub arn:aws:s3:::${S3StoreItemImagesName}-${Environment}/*
 #  RoleForS3:
 #     Type: AWS::IAM::Role
 #     Properties:
@@ -454,6 +454,9 @@ Resources:
         - RekognitionLabelsPolicy: {}
       Handler: app.lambdaHandler
       Runtime: nodejs22.x
+      Environment:
+        Variables:
+          IMAGE_BUCKET_NAME: !Ref S3StoreItemImages #So that can retrieve Arn from env , and not hardcode it
       Architectures:
         - x86_64
       Events:
@@ -654,7 +657,7 @@ Resources:
         - Name: REACT_APP_COGNITO_SMS_MFA_CHALLENGE
           Value: SMS_MFA
         - Name: IMAGE_BUCKET_NAME
-          Value: !Ref S3StoreItemImagesName
+          Value: !Ref S3StoreItemImages
         - Name: REACT_APP_REDIRECT_URI #start comment here
           Value: !ImportValue ReactAppCognitoRedirectURI #start comment here
         - Name: REACT_APP_CLAIMIT_API_URL #start comment here

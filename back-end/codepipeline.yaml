@@ -40,15 +40,15 @@ Parameters:
     Default: "1"
   ProdPipelineExecutionRole:
     Type: String
-    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-BNuy1UNwUXyO"
+    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod-pipe-PipelineExecutionRole-U45rKMFKJJYs"
   ProdCloudFormationExecutionExeRole:
     Type: String
-    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-RJlbQROn1wiP"
+    Default: "arn:aws:iam::273354638471:role/aws-sam-cli-managed-prod--CloudFormationExecutionRo-IRFbrWIgMNqt"
   GithubOwner:
     AllowedPattern: ".+"
     Type: String
     Description: "Github repo owner"
-    Default: "frankruszel"
+    Default: "EcoWiseTech"
   AppRepositoryName:
     Description: Name of the Github Repository
     Type: String

@@ -1,19 +1,19 @@
 import ClaimItApi from "../ClaimItAPIRequest";
 
-export const GetItemApi = async (userId, itemId) => {
+export const GetItemApi = async (userId_CreatedBy, itemId) => {
     try {
         let response 
-        if (!userId && !itemId) {
+        if (!userId_CreatedBy && !itemId) {
             response = await ClaimItApi.get(`/Item/RetrieveItem/`);
         }
-        if (itemId && !userId) {
+        if (itemId && !userId_CreatedBy) {
             response = await ClaimItApi.get(`/Item/RetrieveItem/?itemId=${itemId}`);
         }
-        if (userId && !itemId) {
-            response = await ClaimItApi.get(`/Item/RetrieveItem/?userId=${userId}`);
+        if (userId_CreatedBy && !itemId) {
+            response = await ClaimItApi.get(`/Item/RetrieveItem/?userId_CreatedBy=${userId_CreatedBy}`);
         }
-        if (itemId && userId) {
-            response = await ClaimItApi.get(`/Item/RetrieveItem/?userId=${userId}&itemId=${itemId}`);
+        if (itemId && userId_CreatedBy) {
+            response = await ClaimItApi.get(`/Item/RetrieveItem/?userId_CreatedBy=${userId_CreatedBy}&itemId=${itemId}`);
         }
         // Return the successful response
         return response.data;

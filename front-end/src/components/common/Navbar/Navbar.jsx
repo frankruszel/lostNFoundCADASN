@@ -26,7 +26,7 @@ export function Navbar() {
                     <Toolbar>
                         <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
                             <IconButton color="inherit" sx={{ marginRight: "1rem", display: ["flex", "flex", "none"] }} onClick={() => setIsDrawerOpen(true)}><MenuIcon /></IconButton>
-                            <Button color="inherit" variant="text" LinkComponent={Link} to="/" sx={{ marginRight: "1rem", fontFamily: "'caveat brush'", textTransform: "none", fontSize: "18px", padding: "0" }}>EcoWise</Button>
+                            <Button color="inherit" variant="text" LinkComponent={Link} to="/" sx={{ marginRight: "1rem", fontFamily: "'caveat brush'", textTransform: "none", fontSize: "18px", padding: "0" }}>Claimit</Button>
                             <Divider orientation="vertical" flexItem sx={{ marginRight: "1rem", display: ["none", "none", "flex"] }} />
                             <Stack spacing={2} direction="row" sx={{ display: ["none", "none", "flex"] }}>
                                 <Button startIcon={<HomeIcon />} LinkComponent={Link} variant="text" color="inherit" to="/">Home</Button>
@@ -45,7 +45,7 @@ export function Navbar() {
                     <Toolbar>
                         <Box sx={{ flexGrow: 1, display: "flex", alignItems: "center" }}>
                             <IconButton color="inherit" sx={{ marginRight: "1rem", display: ["flex", "flex", "none"] }} onClick={() => setIsAdminDrawerOpen(true)}><MenuIcon /></IconButton>
-                            <Button color="inherit" variant="text" LinkComponent={Link} to="/" sx={{ marginRight: "1rem", fontFamily: "'caveat brush'", textTransform: "none", fontSize: "18px", padding: "0" }}>EcoWise</Button>
+                            <Button color="inherit" variant="text" LinkComponent={Link} to="/" sx={{ marginRight: "1rem", fontFamily: "'caveat brush'", textTransform: "none", fontSize: "18px", padding: "0" }}>Claimit</Button>
                             <Divider orientation="vertical" flexItem sx={{ marginRight: "1rem" }} />
                             <Typography variant="h6" component="div" sx={{ marginRight: "1rem" }}>Admin Panel</Typography>
                         </Box>

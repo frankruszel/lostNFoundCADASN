@@ -154,7 +154,7 @@ export default function SideNav() {
                             <img src="https://jobtech-images.s3-ap-southeast-1.amazonaws.com/logo/nyp/nyp-white.png" alt="ClaimIt" height={'32'} />
                         </a>
                         {/*} <Typography variant="h6" noWrap component="div">
-              Uplay
+              Claimit
             </Typography>*/}
                         <Box sx={{ flexGrow: 1 }}></Box>
                         {user && (

@@ -23,6 +23,7 @@ function StaffListItems() {
 
     const componentRef = useRef();
     const [userList, setUserList] = useState([]);
+    const [init, setInit] = useState(false);
     const [itemList, setItemList] = useState([]);
     const [open, setOpen] = useState(false);
     const [rowID, setRowID] = useState();
@@ -58,6 +59,7 @@ function StaffListItems() {
         DeleteItemApi(id).then((res) => {
             console.log(`res.data: ${JSON.stringify(res.data)}`)
             // toast.success('Form submitted successfully');
+            setItemList(itemList.filter((item) => item.itemId != id))
             enqueueSnackbar("Deleted item succesfully.", { variant: "success" });
             setDeleteOpen(false)
 
@@ -115,8 +117,12 @@ function StaffListItems() {
                 console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
                 setItemList(res.data)
             }).catch((error) => {
-                console.error("Error fetching Items:", error);
-                enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+                if (error.response.status != 404) {
+                    console.error("Error fetching Items:", error);
+                    enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+                }
+                setInit(true)
+
             })
     }, []);
     useEffect(() => {
@@ -176,9 +182,13 @@ function StaffListItems() {
                     console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
                     setItemList(res.data)
                 }).catch((error) => {
-                    console.error("Error fetching Items:", error);
-                    enqueueSnackbar('Failed to fetch Items', { variant: "error" })
-                })
+                    if (error.response.status != 404) {
+                      console.error("Error fetching Items:", error);
+                      enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+                    }
+                    setInit(true)
+            
+                  })
         }).catch((error) => {
             console.error("Error claiming Item:", error);
             enqueueSnackbar('Failed to claim item', { variant: "error" })
@@ -291,12 +301,12 @@ function StaffListItems() {
 
                     {
                         dayjs().isBefore(dayjs(params.row.timeSlot.event_StartTime))
-                            ? <Button variant="uplay_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
+                            ? <Button variant="claimit_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
                             : dayjs().isAfter(dayjs(params.row.timeSlot.event_EndTime))
                                 ? <Button variant="claimit_primary" href={`/event/${params.row.event.id}/rate/${params.row.id}`}>Rate</Button>
                                 : params.row.attended
                                     ? <Button variant="claimit_primary" href={`/event/${params.row.event.id}/rate/${params.row.id}`}>{console.log("attended")}Rate</Button>
-                                    : <Button variant="uplay_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
+                                    : <Button variant="claimit_secondary" onClick={() => generateQRCode(params.row)}> View Ticket</Button>
                     }
                     {/* : dayjs("2024-02-29").hour(1).minute(0).second(0).isBetween(dayjs(params.row.timeSlot.event_StartTime),dayjs(params.row.timeSlot.event_EndTime)) 
                             ? <Typography>Its NOW</Typography>
@@ -312,6 +322,13 @@ function StaffListItems() {
         console.log("handleAddItem")
         navigate("/staff/list/add")
     }
+    
+    const handlePending = () => {
+        console.log("handlePending")
+        console.log(itemList.filter((item) => item.itemStatus != "claimed"))
+        setItemList(itemList.filter((item) => item.itemStatus != "claimed"))
+        setTabState("Pending")
+    }
     const handleCompleted = () => {
         console.log("handleCompleted")
         console.log(itemList.filter((item) => item.itemStatus == "claimed"))
@@ -324,9 +341,13 @@ function StaffListItems() {
                 console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
                 setItemList(res.data)
             }).catch((error) => {
-                console.error("Error fetching Items:", error);
-                enqueueSnackbar('Failed to fetch Items', { variant: "error" })
-            })
+                if (error.response.status != 404) {
+                  console.error("Error fetching Items:", error);
+                  enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+                }
+                setInit(true)
+        
+              })
         setTabState("All")
     }
 
@@ -354,7 +375,9 @@ function StaffListItems() {
 
                                         >
                                             <Tab value="All" label="All" onClick={() => handleAll()} />
+                                            <Tab value="Pending" label="Pending" onClick={() => handlePending()} />
                                             <Tab value="Completed" label="Completed" onClick={() => handleCompleted()} />
+                                                
                                         </Tabs>
                                     </Grid>
                                     <Grid >
@@ -367,26 +390,26 @@ function StaffListItems() {
                             </Grid>
                             <Divider sx={{ borderBottomWidth: 3, py: 0 }} />
                             <Dialog open={deleteOpen} onClose={handleCloseDelete}>
-                                                                <DialogTitle>
-                                                                    Delete item?
-                                                                </DialogTitle>
-                                                                <DialogContent>
-                                                                    <DialogContentText>
-                                                                        Are you sure you want to delete this item?
+                                <DialogTitle>
+                                    Delete item?
+                                </DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Are you sure you want to delete this item?
 
-                                                                    </DialogContentText>
-                                                                </DialogContent>
-                                                                <DialogActions>
-                                                                    <Button variant="contained" color="inherit"
-                                                                        onClick={handleCloseDelete}>
-                                                                        Cancel
-                                                                    </Button>
-                                                                    <Button variant="contained" color="error"
-                                                                        onClick={() => deleteItem(rowID)}>
-                                                                        Delete
-                                                                    </Button>
-                                                                </DialogActions>
-                                                            </Dialog>
+                                    </DialogContentText>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button variant="contained" color="inherit"
+                                        onClick={handleCloseDelete}>
+                                        Cancel
+                                    </Button>
+                                    <Button variant="contained" color="error"
+                                        onClick={() => deleteItem(rowID)}>
+                                        Delete
+                                    </Button>
+                                </DialogActions>
+                            </Dialog>
                             <Card sx={{ minHeight: 450, maxHeight: 450, overflow: "auto", pt: 2, border: "0px solid", boxShadow: 0 }}>
 
 
@@ -462,7 +485,7 @@ function StaffListItems() {
 
                                                                 </Paper>
                                                             </Link>
-                                                            
+
                                                             <Paper style={{ boxShadow: "0px 3px 10px -2px rgba(0,0,0,0.2), 0px 3px 1px 1px rgba(0,0,0,0.0.3), 0px 1px 3px 3px rgba(0,0,0,0.12)" }} sx={{ borderRadius: 3.5, borderTopLeftRadius: 0, borderTopRightRadius: 0, }}>
                                                                 <Grid container display={"flex"} sx={{ height: "50px", }} >
                                                                     {
@@ -471,7 +494,7 @@ function StaffListItems() {
                                                                         <>
                                                                             <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
                                                                                 <a
-                                                                                   onClick={() => handleOpenDelete(item.itemId)}
+                                                                                    onClick={() => handleOpenDelete(item.itemId)}
                                                                                     style={{ textDecoration: 'none' }} ><Typography sx={{ fontWeight: "", fontSize: 16, color: "#dc3545" }}>Delete Item</Typography></a> </Grid>
                                                                             <Grid item flexGrow={0} align={'end'} pl={4} pt={1.7} >
                                                                                 <a

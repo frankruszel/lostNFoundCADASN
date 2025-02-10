@@ -50,8 +50,8 @@ function ActualNavbar() {
                     <Grid sx={{ padding: 0, mr: 0, width: "inherit" }}>
                         <Toolbar disableGutters={true}>
                             <Link to="/" style={{ marginLeft: 150 }}>
-                                {/* <img src="https://i.ibb.co/gMrcy0cr/download-10.png" alt="UPlay" width="110px" /> */}
-                                <img src="https://i.ibb.co/tPcdxFmH/image-removebg-preview-4.png" alt="UPlay" width="80px" />
+                                {/* <img src="https://i.ibb.co/gMrcy0cr/download-10.png" alt="Claimit" width="110px" /> */}
+                                <img src="./images/NYP_white.png" alt="Claimit" width="80px" />
 
                             </Link>
                             {
@@ -131,7 +131,7 @@ function ActualNavbar() {
                 }
 
             </AppBar>
-            <Box ><img sx={{ display: 'flex' }} src="https://i.ibb.co/GfSFJZLY/image.png" alt="" height='62px' width='100%' /></Box>
+            <Box ><img sx={{ display: 'flex' }} src="./images/blue_background.png" alt="" height='62px' width='100%' /></Box>
 
 
         </>

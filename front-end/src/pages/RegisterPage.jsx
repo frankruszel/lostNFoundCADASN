@@ -129,7 +129,7 @@ function RegisterPage() {
             <Grid mt={-7} mb={2}>
                 <a href="/">
                     <Box sx={{ margin: "auto",backgroundColor: "secondaryColor", height: 100, boxShadow: 5,maxWidth: 459 }} container direction={'row'} display={'flex'} justifyContent={'center'}  >
-                        <img src="https://i.ibb.co/HTD2T9gF/image-removebg-preview-5.png" alt="EcoWise" height={'32'} style={{ margin: 'auto' }} />
+                        <img src="https://i.ibb.co/HTD2T9gF/image-removebg-preview-5.png" alt="Claimit" height={'32'} style={{ margin: 'auto' }} />
 
                     </Box>
                 </a>

@@ -14,7 +14,7 @@ const AuthGuard = (props) => {
         if (type === 1 && !IsLoggedIn() && !redirected) {
             navigate('/login');
             setRedirected(true);  // update redirected status after redirection
-            enqueueSnackbar("You have to be logged in to access this page. Please log in first.", { variant: "warning " });
+            enqueueSnackbar("You have to be logged in to access this page. Please log in first.", { variant: "error " });
         }
     }, []);
     // Avoid rendering children if not logged in

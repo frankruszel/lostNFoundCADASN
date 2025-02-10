@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { Box, Paper, Divider, Typography, Grid, Card, Button,Chip } from '@mui/material';
+import { Box, Paper, Divider, Typography, Grid, Card, Button, Chip } from '@mui/material';
 import { AccessTime } from '@mui/icons-material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import { jwtDecode } from 'jwt-decode';
@@ -16,11 +16,13 @@ const IMAGE_BUCKET_NAME = process.env.IMAGE_BUCKET_NAME ? process.env.IMAGE_BUCK
 function StaffDashboard() {
     const squareMeasurement = 48
     const [itemList, setItemList] = useState([])
+    const [mainItemList, setMainItemList] = useState([])
     useEffect(() => {
         GetItemApi()
             .then((res) => {
                 console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
                 setItemList(res.data.filter((item) => item.itemStatus == "claimed"))
+                setMainItemList(res.data)
             }).catch((error) => {
                 console.error("Error fetching Items:", error);
                 enqueueSnackbar('Failed to fetch Items', { variant: "error" })
@@ -29,34 +31,34 @@ function StaffDashboard() {
     const [tabState, setTabState] = useState('All')
 
     function handleClaim(item) {
-            // console.log(`handleClaim: ${JSON.stringify(item)}`)
-            let newItem = {
-                ...item
-            }
-            newItem.itemStatus = "claimed"
-            console.log(`newItem: ${newItem.itemStatus}`)
-            UpdateItemApi(newItem).then((res) => {
-                console.log(`res.data: ${JSON.stringify(res)}`)
-                // toast.success('Form submitted successfully');
-                enqueueSnackbar("Claimed item succesfully.", { variant: "success" });
-                GetItemApi()
-                    .then((res) => {
-                        console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
-                        setItemList(res.data)
-                    }).catch((error) => {
-                        console.error("Error fetching Items:", error);
-                        enqueueSnackbar('Failed to fetch Items', { variant: "error" })
-                    })
-            }).catch((error) => {
-                console.error("Error claiming Item:", error);
-                enqueueSnackbar('Failed to claim item', { variant: "error" })
-            });
-            // CreateItemApi(data)
-            //     .then((res) => {
-            //         console.log(`res.data: ${JSON.stringify(res.data)}`)
-            //         // toast.success('Form submitted successfully');
-            //         enqueueSnackbar("Created item succesfully.", { variant: "success" });
+        // console.log(`handleClaim: ${JSON.stringify(item)}`)
+        let newItem = {
+            ...item
         }
+        newItem.itemStatus = "claimed"
+        console.log(`newItem: ${newItem.itemStatus}`)
+        UpdateItemApi(newItem).then((res) => {
+            console.log(`res.data: ${JSON.stringify(res)}`)
+            // toast.success('Form submitted successfully');
+            enqueueSnackbar("Claimed item succesfully.", { variant: "success" });
+            GetItemApi()
+                .then((res) => {
+                    console.log(`res.data ITEM LIST:${JSON.stringify(res.data)}`)
+                    setItemList(res.data)
+                }).catch((error) => {
+                    console.error("Error fetching Items:", error);
+                    enqueueSnackbar('Failed to fetch Items', { variant: "error" })
+                })
+        }).catch((error) => {
+            console.error("Error claiming Item:", error);
+            enqueueSnackbar('Failed to claim item', { variant: "error" })
+        });
+        // CreateItemApi(data)
+        //     .then((res) => {
+        //         console.log(`res.data: ${JSON.stringify(res.data)}`)
+        //         // toast.success('Form submitted successfully');
+        //         enqueueSnackbar("Created item succesfully.", { variant: "success" });
+    }
     return (
         <>
             <Box sx={{ mt: 10, ml: 1 }}>
@@ -83,10 +85,10 @@ function StaffDashboard() {
                                 <Grid container direction="column">
                                     <Grid container direction="row" sx={{ marginTop: 3 }}>
                                         <Grid item lg={2}>
-                                            <img style={{ width: 45, marginLeft: 24, }} src="https://cdn-icons-png.flaticon.com/128/1565/1565813.png" alt="" />
+                                            <img style={{ width: 45, marginLeft: 18, }} src="https://cdn-icons-png.flaticon.com/128/6521/6521815.png" alt="" />
                                         </Grid>
-                                        <Grid item lg={9}>
-                                            <Typography fontSize={22} marginTop={1} marginLeft={3}> Lost Requests </Typography>
+                                        <Grid item lg={10}>
+                                            <Typography fontSize={20} marginTop={1} marginLeft={5}> Scan Item </Typography>
                                         </Grid>
 
                                     </Grid>
@@ -99,7 +101,83 @@ function StaffDashboard() {
                                     }} direction="row" display={'flex'} justifyContent={'space-between'} >
                                         <Grid>
                                             <Typography fontSize={36}>
-                                                12
+                                                {itemList.length != null ? itemList.length : 0}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid sx={{ pt: 1 }}>
+                                            <Link to="/staff/list/scan">
+                                                <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                            </Link>
+                                        </Grid>
+
+
+                                    </Grid>
+
+
+
+                                </Grid>
+                            </Card>
+                        </Grid>
+                        <Grid item lg={3} sx={{ position: "relative" }}>
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 170, borderRadius: 5, px: 2 }}>
+                                <Grid container direction="column">
+                                    <Grid container direction="row" sx={{ marginTop: 3 }}>
+                                        <Grid item lg={2}>
+                                            <img style={{ width: 45, marginLeft: 18, }} src="https://cdn-icons-png.flaticon.com/128/4426/4426201.png" alt="" />
+                                        </Grid>
+                                        <Grid item lg={10}>
+                                            <Typography fontSize={20} marginTop={1} marginLeft={3}> Total Items </Typography>
+                                        </Grid>
+
+                                    </Grid>
+                                    <Grid container sx={{
+                                        position: "absolute",
+                                        bottom: 10,
+                                        pb: 2.4,
+                                        pl: 4,
+                                        pr: 9
+                                    }} direction="row" display={'flex'} justifyContent={'space-between'} >
+                                        <Grid>
+                                            <Typography fontSize={36}>
+                                                {mainItemList?.length != null ? mainItemList.length : 0}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid sx={{ pt: 1 }}>
+                                            <Link to={`/staff/list`}>
+                                                <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
+                                            </Link>
+                                        </Grid>
+
+
+                                    </Grid>
+
+
+
+                                </Grid>
+                            </Card>
+                        </Grid>
+                        <Grid item lg={3} sx={{ position: "relative" }}>
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 170, borderRadius: 5, px: 2 }}>
+                                <Grid container direction="column">
+                                    <Grid container direction="row" sx={{ marginTop: 3 }}>
+                                        <Grid item lg={2}>
+                                            <img style={{ width: 45, marginLeft: 18, }} src="https://cdn-icons-png.flaticon.com/128/18564/18564217.png" alt="" />
+                                        </Grid>
+                                        <Grid item lg={10}>
+                                            <Typography fontSize={19} marginTop={1} marginLeft={3}>  Current Inventory  </Typography>
+                                        </Grid>
+
+                                    </Grid>
+                                    <Grid container sx={{
+                                        position: "absolute",
+                                        bottom: 10,
+                                        pb: 2.4,
+                                        pl: 4,
+                                        pr: 9
+                                    }} direction="row" display={'flex'} justifyContent={'space-between'} >
+                                        <Grid>
+                                            <Typography fontSize={36}>
+                                                {mainItemList?.length != null ? mainItemList.filter((item) => item.itemStatus != "claimed").length : 0}
                                             </Typography>
                                         </Grid>
                                         <Grid sx={{ pt: 1 }}>
@@ -121,48 +199,10 @@ function StaffDashboard() {
                                 <Grid container direction="column">
                                     <Grid container direction="row" sx={{ marginTop: 3 }}>
                                         <Grid item lg={2}>
-                                            <img style={{ width: 45, marginLeft: 24, }} src="https://cdn-icons-png.flaticon.com/128/4426/4426201.png" alt="" />
+                                            <img style={{ width: 45, marginLeft: 13, }} src="https://cdn-icons-png.flaticon.com/128/595/595018.png" alt="" />
                                         </Grid>
-                                        <Grid item lg={9}>
-                                            <Typography fontSize={22} marginTop={1} marginLeft={3}> Items Inventory </Typography>
-                                        </Grid>
-
-                                    </Grid>
-                                    <Grid container sx={{
-                                        position: "absolute",
-                                        bottom: 10,
-                                        pb: 2.4,
-                                        pl: 4,
-                                        pr: 9
-                                    }} direction="row" display={'flex'} justifyContent={'space-between'} >
-                                        <Grid>
-                                            <Typography fontSize={36}>
-                                                12
-                                            </Typography>
-                                        </Grid>
-                                        <Grid sx={{ pt: 1 }}>
-                                            <Link>
-                                                <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
-                                            </Link>
-                                        </Grid>
-
-
-                                    </Grid>
-
-
-
-                                </Grid>
-                            </Card>
-                        </Grid>
-                        <Grid item lg={3} sx={{ position: "relative" }}>
-                            <Card sx={{ borderRadius: 5, width: "100%", height: 170, borderRadius: 5, px: 2 }}>
-                                <Grid container direction="column">
-                                    <Grid container direction="row" sx={{ marginTop: 3 }}>
-                                        <Grid item lg={2}>
-                                            <img style={{ width: 45, marginLeft: 24, }} src="https://cdn-icons-png.flaticon.com/128/18564/18564217.png" alt="" />
-                                        </Grid>
-                                        <Grid item lg={9}>
-                                            <Typography fontSize={22} marginTop={1} marginLeft={3}> Claim Requests </Typography>
+                                        <Grid item lg={10}>
+                                            <Typography fontSize={20} marginTop={1} marginLeft={3}> Items Returned </Typography>
                                         </Grid>
 
                                     </Grid>
@@ -175,45 +215,7 @@ function StaffDashboard() {
                                     }} direction="row" display={'flex'} justifyContent={'space-between'} >
                                         <Grid>
                                             <Typography fontSize={36}>
-                                                12
-                                            </Typography>
-                                        </Grid>
-                                        <Grid sx={{ pt: 1 }}>
-                                            <Link>
-                                                <img style={{ width: 35, opacity: "65%" }} src="https://cdn-icons-png.flaticon.com/128/54/54382.png" alt="" />
-                                            </Link>
-                                        </Grid>
-
-
-                                    </Grid>
-
-
-
-                                </Grid>
-                            </Card>
-                        </Grid>
-                        <Grid item lg={3} sx={{ position: "relative" }}>
-                            <Card sx={{ borderRadius: 5, width: "100%", height: 170, borderRadius: 5, px: 2 }}>
-                                <Grid container direction="column">
-                                    <Grid container direction="row" sx={{ marginTop: 3 }}>
-                                        <Grid item lg={2}>
-                                            <img style={{ width: 45, marginLeft: 24, }} src="https://cdn-icons-png.flaticon.com/128/595/595018.png" alt="" />
-                                        </Grid>
-                                        <Grid item lg={9}>
-                                            <Typography fontSize={22} marginTop={1} marginLeft={3}> Items Returned </Typography>
-                                        </Grid>
-
-                                    </Grid>
-                                    <Grid container sx={{
-                                        position: "absolute",
-                                        bottom: 10,
-                                        pb: 2.4,
-                                        pl: 4,
-                                        pr: 9
-                                    }} direction="row" display={'flex'} justifyContent={'space-between'} >
-                                        <Grid>
-                                            <Typography fontSize={36}>
-                                                12
+                                                {itemList.length != null ? itemList.length : 0}
                                             </Typography>
                                         </Grid>
                                         <Grid sx={{ pt: 1 }}>
@@ -233,45 +235,21 @@ function StaffDashboard() {
                         </Grid>
                     </Grid>
                     <Grid lg={6} item container direction="row" spacing={2}>
-                        <Grid lg={6} item>
-                            <Link style={{ textDecoration: "none" }} to="/staff/list/scan">
-                                <Card sx={{ borderRadius: 5, width: "100%", height: 295 }}>
-                                    <Grid container direction={"row"}>
-                                        <Grid lg={4} md={3} sm={5} sx={{ display: "flex", pt: "11%", ml: "14%" }} item>
-                                            <img style={{ width: 100, height: 100, marginRight: 11 }} src="https://cdn-icons-png.flaticon.com/128/6521/6521815.png" alt="" />
-                                            <Divider orientation="vertical" flexItem />
-                                        </Grid>
 
-                                        <Grid lg={6} md={3} sm={5} sx={{ display: "flex", pt: "11%" }} item>
-                                            <Box >
-
-                                            <Typography sx={{ fontSize: 40, fontWeight: 'bold' }}>
-                                                    Scan  
-                                                </Typography><Typography sx={{ fontSize: 40, fontWeight: 'bold' }}>
-                                                    Item  
-                                                </Typography>
-
-                                                <Typography >
-
-                                                </Typography>
-
-                                            </Box>
-
-
-
-                                        </Grid>
-                                    </Grid>
-                                </Card>
-                            </Link>
-                        </Grid>
-                        <Grid item lg={6}>
-                            <Card sx={{ borderRadius: 5, width: "100%",maxHeight: 340,overflow: "auto", }}>
+                        <Grid item lg={12}>
+                            <Card sx={{ borderRadius: 5, width: "100%", height: 295, maxHeight: 340, overflow: "auto", }}>
                                 <Grid container direction={"column"} >
-                                    <Grid>
+                                    <Grid container direction={"row"} >
                                         {/* title */}
-                                        <Typography fontSize={24} sx={{ ml: 2, mt: 2 }}>
-                                            Returned Today
-                                        </Typography>
+                                        <Grid>
+                                            <Typography fontSize={24} sx={{ ml: 5, mt: 2 }}>
+                                                Returned Today
+                                            </Typography>
+                                        </Grid>
+                                        <Grid sx={{display: "flex", flexGrow:1,alignItems: "end", justifyContent: "end", mr:4}}>
+<Button variant="claimit_primary" href='/staff/list'>View</Button>
+                                        </Grid>
+
 
                                     </Grid>
                                     <Divider sx={{ mx: 2, mr: 5, mt: 1 }} />
@@ -347,7 +325,7 @@ function StaffDashboard() {
                                                                 </Link>
                                                                 <Paper style={{ boxShadow: "0px 3px 10px -2px rgba(0,0,0,0.2), 0px 3px 1px 1px rgba(0,0,0,0.0.3), 0px 1px 3px 3px rgba(0,0,0,0.12)" }} sx={{ borderRadius: 3.5, borderTopLeftRadius: 0, borderTopRightRadius: 0, }}>
                                                                     <Grid container display={"flex"} sx={{ height: "50px", }} >
-                                                                       
+
 
                                                                         <Grid item flexGrow={1} align={'end'} px={3} pt={1} >
                                                                             {
@@ -367,7 +345,7 @@ function StaffDashboard() {
                                                 })
                                                 : <> <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', mt: "05%" }}>
                                                     <Box>
-                                                        <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center'}}>
+                                                        <Grid sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center' }}>
                                                             <img style={{ opacity: 0.3, pt: 0 }} width="100px" src="https://cdn-icons-png.flaticon.com/128/2298/2298173.png" />
                                                         </Grid>
                                                         <Grid><Typography sx={{ fontSize: 26, opacity: 0.7, textAlign: "center", mb: 1, mt: 1 }}>There is no items</Typography></Grid>
